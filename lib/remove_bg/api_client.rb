@@ -1,6 +1,7 @@
 require "faraday"
 require "json"
 require_relative "error"
+require_relative "upload"
 
 module RemoveBg
   class ApiClient
@@ -16,7 +17,7 @@ module RemoveBg
 
     def post_image(image_path, api_key)
       data = {
-        image_file: Faraday::UploadIO.new(image_path, "image/jpeg"),
+        image_file: Upload.for_file(image_path),
         size: "auto",
       }
 
