@@ -1,4 +1,6 @@
 require "faraday"
+require "json"
+require_relative "error"
 
 module RemoveBg
   class ApiClient
@@ -18,9 +20,16 @@ module RemoveBg
         size: "auto",
       }
 
-      connection.post(V1_REMOVE_BG, data) do |req|
+      response = connection.post(V1_REMOVE_BG, data) do |req|
         req.headers[HEADER_API_KEY] = api_key
       end
+
+      if response.status == 403
+        error_message = parse_errors(response).first["title"]
+        raise RemoveBg::HttpError.new(error_message, response)
+      end
+
+      response
     end
 
     private
@@ -32,5 +41,9 @@ module RemoveBg
 
     HEADER_API_KEY = "X-Api-Key"
     private_constant :HEADER_API_KEY
+
+    def parse_errors(response)
+      JSON.parse(response.body)["errors"] || []
+    end
   end
 end
