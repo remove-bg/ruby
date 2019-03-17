@@ -21,16 +21,16 @@ module RemoveBg
         size: "auto",
       }
 
-      response = connection.post(V1_REMOVE_BG, data) do |req|
-        req.headers[HEADER_API_KEY] = api_key
-      end
+      request_remove_bg(data, api_key)
+    end
 
-      if response.status == 403
-        error_message = parse_errors(response).first["title"]
-        raise RemoveBg::HttpError.new(error_message, response)
-      end
+    def post_image_url(image_url, api_key)
+      data = {
+        image_url: image_url,
+        size: "auto",
+      }
 
-      response
+      request_remove_bg(data, api_key)
     end
 
     private
@@ -42,6 +42,19 @@ module RemoveBg
 
     HEADER_API_KEY = "X-Api-Key"
     private_constant :HEADER_API_KEY
+
+    def request_remove_bg(data, api_key)
+      response = connection.post(V1_REMOVE_BG, data) do |req|
+        req.headers[HEADER_API_KEY] = api_key
+      end
+
+      if response.status == 403
+        error_message = parse_errors(response).first["title"]
+        raise RemoveBg::HttpError.new(error_message, response)
+      end
+
+      response
+    end
 
     def parse_errors(response)
       JSON.parse(response.body)["errors"] || []
