@@ -1,17 +1,16 @@
 require "faraday"
 require "json"
+require_relative "api"
 require_relative "error"
 require_relative "result"
 require_relative "upload"
+require_relative "version"
 
 module RemoveBg
   class ApiClient
-    DEFAULT_API_URL = "https://api.remove.bg"
-    HTTP_OPTIONS = {
-      headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" }
-    }
+    include RemoveBg::Api
 
-    def initialize(api_url = DEFAULT_API_URL, http_options = HTTP_OPTIONS)
+    def initialize(api_url = API_URL, http_options = HTTP_OPTIONS)
       @connection = Faraday.new(api_url, **http_options) do |f|
         f.request :multipart
         f.request :url_encoded
@@ -39,22 +38,13 @@ module RemoveBg
 
     private
 
+    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
+    private_constant :USER_AGENT
+
+    HTTP_OPTIONS = { headers: { "User-Agent" => USER_AGENT } }
+    private_constant :HTTP_OPTIONS
+
     attr_reader :connection
-
-    V1_REMOVE_BG = "/v1.0/removebg"
-    private_constant :V1_REMOVE_BG
-
-    HEADER_API_KEY = "X-Api-Key"
-    private_constant :HEADER_API_KEY
-
-    HEADER_WIDTH = "X-Width"
-    private_constant :HEADER_WIDTH
-
-    HEADER_HEIGHT = "X-Height"
-    private_constant :HEADER_HEIGHT
-
-    HEADER_CREDITS_CHARGED = "X-Credits-Charged"
-    private_constant :HEADER_CREDITS_CHARGED
 
     def request_remove_bg(data, api_key)
       response = connection.post(V1_REMOVE_BG, data) do |req|
