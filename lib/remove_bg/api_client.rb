@@ -1,6 +1,7 @@
 require "faraday"
 require "json"
 require_relative "error"
+require_relative "result"
 require_relative "upload"
 
 module RemoveBg
@@ -43,6 +44,15 @@ module RemoveBg
     HEADER_API_KEY = "X-Api-Key"
     private_constant :HEADER_API_KEY
 
+    HEADER_WIDTH = "X-Width"
+    private_constant :HEADER_WIDTH
+
+    HEADER_HEIGHT = "X-Height"
+    private_constant :HEADER_HEIGHT
+
+    HEADER_CREDITS_CHARGED = "X-Credits-Charged"
+    private_constant :HEADER_CREDITS_CHARGED
+
     def request_remove_bg(data, api_key)
       response = connection.post(V1_REMOVE_BG, data) do |req|
         req.headers[HEADER_API_KEY] = api_key
@@ -58,7 +68,12 @@ module RemoveBg
         raise RemoveBg::ServerHttpError.new(error_message, response)
       end
 
-      response
+      RemoveBg::Result.new(
+        data: response.body,
+        width: response.headers[HEADER_WIDTH]&.to_i,
+        height: response.headers[HEADER_HEIGHT]&.to_i,
+        credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_i,
+      )
     end
 
     def parse_error_message(response)

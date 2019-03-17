@@ -9,9 +9,11 @@ RSpec.describe "removing the background from a URL" do
       RemoveBg.from_url(image_url, api_key)
     end
 
-    expect(result).to be_a_success
-    expect(result.headers["content-type"]).to eq "image/png"
-    expect(result.body).to_not be_empty
+    expect(result).to be_a RemoveBg::Result
+    expect(result.data).to_not be_empty
+    expect(result.height).to eq 438
+    expect(result.width).to eq 500
+    expect(result.credits_charged).to be >= 0
   end
 
   context "image doesn't exist" do
