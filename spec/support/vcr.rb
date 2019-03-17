@@ -8,3 +8,13 @@ VCR.configure do |config|
     interaction.request.headers["X-Api-Key"].first
   end
 end
+
+RSpec.configure do |config|
+  config.before(:example, :disable_vcr) do
+    VCR.turn_off!
+  end
+
+  config.after(:example, :disable_vcr) do
+    VCR.turn_on!
+  end
+end

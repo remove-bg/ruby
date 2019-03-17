@@ -27,3 +27,23 @@ RSpec.describe RemoveBg::ApiClient, "with an invalid API key" do
     end
   end
 end
+
+RSpec.describe RemoveBg::ApiClient, "with a non-JSON response" do
+  it "raises a server error", :disable_vcr do
+    stub_request(:post, %r{api.remove.bg}).to_return(
+      body: "<html>Bad gateway</html>",
+      status: 502,
+      headers: { "Content-Type" => "text/html" },
+    )
+
+    make_request = Proc.new do
+      subject.remove_from_url("http://example.image.jpg", "api-key")
+    end
+
+    expect(make_request).to raise_error do |exception|
+      expect(exception).to be_a(RemoveBg::ServerHttpError)
+      expect(exception.message).to eq "Unable to parse response"
+      expect(exception.http_response.body).to include "Bad gateway"
+    end
+  end
+end

@@ -1,6 +1,5 @@
 module RemoveBg
-  class Error < StandardError
-  end
+  class Error < StandardError; end
 
   class HttpError < Error
     attr_reader :http_response
@@ -11,6 +10,6 @@ module RemoveBg
     end
   end
 
-  class ClientHttpError < HttpError
-  end
+  class ClientHttpError < HttpError; end
+  class ServerHttpError < HttpError; end
 end

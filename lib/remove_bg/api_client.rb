@@ -49,15 +49,26 @@ module RemoveBg
       end
 
       if response.status.between?(400, 499)
-        error_message = parse_errors(response).first["title"]
+        error_message = parse_error_message(response)
         raise RemoveBg::ClientHttpError.new(error_message, response)
+      end
+
+      if response.status.between?(500, 599)
+        error_message = parse_error_message(response)
+        raise RemoveBg::ServerHttpError.new(error_message, response)
       end
 
       response
     end
 
+    def parse_error_message(response)
+      parse_errors(response).first["title"]
+    end
+
     def parse_errors(response)
       JSON.parse(response.body)["errors"] || []
+    rescue JSON::ParserError
+      [{ "title" => "Unable to parse response" }]
     end
   end
 end
