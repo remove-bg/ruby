@@ -10,4 +10,7 @@ module RemoveBg
       super(message)
     end
   end
+
+  class ClientHttpError < HttpError
+  end
 end

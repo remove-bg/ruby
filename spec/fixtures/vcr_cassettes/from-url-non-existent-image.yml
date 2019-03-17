@@ -1,0 +1,45 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.remove.bg/v1.0/removebg
+    body:
+      encoding: UTF-8
+      string: image_url=http%3A%2F%2Fexample.com%2F404.png&size=auto
+    headers:
+      User-Agent:
+      - Faraday v0.15.4
+      X-Api-Key:
+      - "<REMOVE-BG-API-KEY>"
+      Content-Type:
+      - application/x-www-form-urlencoded
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '114'
+      Etag:
+      - W/"72-bu35bw7bzLlsi7zAfUjkHmgWY8s"
+      Date:
+      - Sun, 17 Mar 2019 16:37:46 GMT
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - clear
+    body:
+      encoding: UTF-8
+      string: '{"errors":[{"title":"Failed to download image from given image_url:
+        Error: Request failed with status code 404"}]}'
+    http_version: 
+  recorded_at: Sun, 17 Mar 2019 16:37:48 GMT
+recorded_with: VCR 4.0.0

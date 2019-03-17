@@ -48,9 +48,9 @@ module RemoveBg
         req.headers[HEADER_API_KEY] = api_key
       end
 
-      if response.status == 403
+      if response.status.between?(400, 499)
         error_message = parse_errors(response).first["title"]
-        raise RemoveBg::HttpError.new(error_message, response)
+        raise RemoveBg::ClientHttpError.new(error_message, response)
       end
 
       response
