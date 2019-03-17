@@ -47,3 +47,15 @@ RSpec.describe RemoveBg::ApiClient, "with a non-JSON response" do
     end
   end
 end
+
+RSpec.describe RemoveBg::ApiClient, "when a response has no content" do
+  it "raises an error", :disable_vcr do
+    stub_request(:post, %r{api.remove.bg}).to_return(status: 204)
+
+    make_request = Proc.new do
+      subject.remove_from_url("http://example.image.jpg", "api-key")
+    end
+
+    expect(make_request).to raise_error RemoveBg::HttpError, /unknown error/
+  end
+end

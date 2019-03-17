@@ -58,16 +58,21 @@ module RemoveBg
         req.headers[HEADER_API_KEY] = api_key
       end
 
-      if response.status.between?(400, 499)
+      case response.status
+      when 200
+        parse_result(response)
+      when 400..499
         error_message = parse_error_message(response)
         raise RemoveBg::ClientHttpError.new(error_message, response)
-      end
-
-      if response.status.between?(500, 599)
+      when 500..599
         error_message = parse_error_message(response)
         raise RemoveBg::ServerHttpError.new(error_message, response)
+      else
+        raise RemoveBg::HttpError.new("An unknown error occurred", response)
       end
+    end
 
+    def parse_result(response)
       RemoveBg::Result.new(
         data: response.body,
         width: response.headers[HEADER_WIDTH]&.to_i,
