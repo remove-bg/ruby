@@ -7,9 +7,12 @@ require_relative "upload"
 module RemoveBg
   class ApiClient
     DEFAULT_API_URL = "https://api.remove.bg"
+    HTTP_OPTIONS = {
+      headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" }
+    }
 
-    def initialize(api_url = DEFAULT_API_URL)
-      @connection = Faraday.new(api_url) do |f|
+    def initialize(api_url = DEFAULT_API_URL, http_options = HTTP_OPTIONS)
+      @connection = Faraday.new(api_url, **http_options) do |f|
         f.request :multipart
         f.request :url_encoded
         f.adapter :net_http

@@ -59,3 +59,14 @@ RSpec.describe RemoveBg::ApiClient, "when a response has no content" do
     expect(make_request).to raise_error RemoveBg::HttpError, /unknown error/
   end
 end
+
+RSpec.describe RemoveBg::ApiClient, "client version" do
+  it "is included in the request", :disable_vcr do
+    stub_request(:post, %r{api.remove.bg}).to_return(status: 200, body: "")
+
+    subject.remove_from_url("http://example.image.jpg", "api-key")
+
+    expect(WebMock).to have_requested(:post, %r{api.remove.bg}).
+      with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
+  end
+end
