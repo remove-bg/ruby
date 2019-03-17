@@ -8,7 +8,7 @@ RSpec.describe RemoveBg::ApiClient, "with an invalid API key" do
   it "raises an error with a helpful message" do
     make_request = Proc.new do
       VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-        RemoveBg.from_file(image_path, "invalid-api-key")
+        subject.remove_from_file(image_path, "invalid-api-key")
       end
     end
 
@@ -18,7 +18,7 @@ RSpec.describe RemoveBg::ApiClient, "with an invalid API key" do
   it "includes the HTTP response for further debugging" do
     make_request = Proc.new do
       VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-        RemoveBg.from_file(image_path, "invalid-api-key")
+        subject.remove_from_file(image_path, "invalid-api-key")
       end
     end
 

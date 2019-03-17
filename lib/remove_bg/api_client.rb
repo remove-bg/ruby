@@ -15,7 +15,7 @@ module RemoveBg
       end
     end
 
-    def post_image(image_path, api_key)
+    def remove_from_file(image_path, api_key)
       data = {
         image_file: Upload.for_file(image_path),
         size: "auto",
@@ -24,7 +24,7 @@ module RemoveBg
       request_remove_bg(data, api_key)
     end
 
-    def post_image_url(image_url, api_key)
+    def remove_from_url(image_url, api_key)
       data = {
         image_url: image_url,
         size: "auto",
