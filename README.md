@@ -1,5 +1,7 @@
 # RemoveBg
 
+[![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master)
+
 ## Installation
 
 Add this line to your application's Gemfile:
