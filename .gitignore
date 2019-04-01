@@ -14,3 +14,5 @@ spec/examples.txt
 
 # CircleCI / RSpec JUnit formatter
 test-results
+
+gemfiles/*.gemfile.lock

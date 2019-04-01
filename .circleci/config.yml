@@ -25,6 +25,12 @@ base_job: &base_job
                             --format RspecJunitFormatter \
                             --out test-results/rspec.xml
 
+    - run:
+        name: run appraisals
+        command: |
+          bundle exec appraisal install --jobs 4 --retry 3
+          bundle exec appraisal rspec
+
     - store_test_results:
         path: test-results
 
