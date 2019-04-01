@@ -19,7 +19,7 @@ module RemoveBg
     attr_reader :api_key, :size, :type, :channels
 
     def initialize(raw_options = {})
-      @api_key = raw_options[:api_key]
+      @api_key = raw_options.fetch(:api_key) { global_api_key }
       @size = raw_options.fetch(:size, SIZE_DEFAULT)
       @type = raw_options.fetch(:type, FOREGROUND_TYPE_DEFAULT)
       @channels = raw_options.fetch(:channels, CHANNELS_DEFAULT)
@@ -31,6 +31,12 @@ module RemoveBg
         type: type,
         channels: channels,
       }
+    end
+
+    private
+
+    def global_api_key
+      RemoveBg::Configuration.configuration.api_key
     end
   end
 end
