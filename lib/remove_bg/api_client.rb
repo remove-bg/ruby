@@ -18,22 +18,14 @@ module RemoveBg
       end
     end
 
-    def remove_from_file(image_path, api_key)
-      data = {
-        image_file: Upload.for_file(image_path),
-        size: "auto",
-      }
-
-      request_remove_bg(data, api_key)
+    def remove_from_file(image_path, options)
+      data = options.data.merge(image_file: Upload.for_file(image_path))
+      request_remove_bg(data, options.api_key)
     end
 
-    def remove_from_url(image_url, api_key)
-      data = {
-        image_url: image_url,
-        size: "auto",
-      }
-
-      request_remove_bg(data, api_key)
+    def remove_from_url(image_url, options)
+      data = options.data.merge(image_url: image_url)
+      request_remove_bg(data, options.api_key)
     end
 
     private

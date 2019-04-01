@@ -1,72 +1,82 @@
 require "remove_bg"
 
-RSpec.describe RemoveBg::ApiClient, "with an invalid API key" do
-  let(:image_path) do
-    File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
-  end
+RSpec.describe RemoveBg::ApiClient do
+  describe "with an invalid API key" do
+    let(:image_path) do
+      File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
+    end
 
-  it "raises an error with a helpful message" do
-    make_request = Proc.new do
-      VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-        subject.remove_from_file(image_path, "invalid-api-key")
+    let(:request_options) { build_options(api_key: "invalid-api-key") }
+
+    it "raises an error with a helpful message" do
+      make_request = Proc.new do
+        VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
+          subject.remove_from_file(image_path, request_options)
+        end
+      end
+
+      expect(make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
+    end
+
+    it "includes the HTTP response for further debugging" do
+      make_request = Proc.new do
+        VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
+          subject.remove_from_file(image_path, request_options)
+        end
+      end
+
+      expect(make_request).to raise_error RemoveBg::HttpError do |exception|
+        expect(exception.http_response).to be_a Faraday::Response
       end
     end
-
-    expect(make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
   end
 
-  it "includes the HTTP response for further debugging" do
-    make_request = Proc.new do
-      VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-        subject.remove_from_file(image_path, "invalid-api-key")
+  describe "with a non-JSON response" do
+    it "raises a server error", :disable_vcr do
+      stub_request(:post, %r{api.remove.bg}).to_return(
+        body: "<html>Bad gateway</html>",
+        status: 502,
+        headers: { "Content-Type" => "text/html" },
+      )
+
+      make_request = Proc.new do
+        subject.remove_from_url("http://example.image.jpg", build_options)
+      end
+
+      expect(make_request).to raise_error do |exception|
+        expect(exception).to be_a(RemoveBg::ServerHttpError)
+        expect(exception.message).to eq "Unable to parse response"
+        expect(exception.http_response.body).to include "Bad gateway"
       end
     end
+  end
 
-    expect(make_request).to raise_error RemoveBg::HttpError do |exception|
-      expect(exception.http_response).to be_a Faraday::Response
+  describe "when a response has no content" do
+    it "raises an error", :disable_vcr do
+      stub_request(:post, %r{api.remove.bg}).to_return(status: 204)
+
+      make_request = Proc.new do
+        subject.remove_from_url("http://example.image.jpg", build_options)
+      end
+
+      expect(make_request).to raise_error RemoveBg::HttpError, /unknown error/
     end
   end
-end
 
-RSpec.describe RemoveBg::ApiClient, "with a non-JSON response" do
-  it "raises a server error", :disable_vcr do
-    stub_request(:post, %r{api.remove.bg}).to_return(
-      body: "<html>Bad gateway</html>",
-      status: 502,
-      headers: { "Content-Type" => "text/html" },
-    )
+  describe "client version" do
+    it "is included in the request", :disable_vcr do
+      stub_request(:post, %r{api.remove.bg}).to_return(status: 200, body: "")
 
-    make_request = Proc.new do
-      subject.remove_from_url("http://example.image.jpg", "api-key")
-    end
+      subject.remove_from_url("http://example.image.jpg", build_options)
 
-    expect(make_request).to raise_error do |exception|
-      expect(exception).to be_a(RemoveBg::ServerHttpError)
-      expect(exception.message).to eq "Unable to parse response"
-      expect(exception.http_response.body).to include "Bad gateway"
+      expect(WebMock).to have_requested(:post, %r{api.remove.bg}).
+        with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
     end
   end
-end
 
-RSpec.describe RemoveBg::ApiClient, "when a response has no content" do
-  it "raises an error", :disable_vcr do
-    stub_request(:post, %r{api.remove.bg}).to_return(status: 204)
+  private
 
-    make_request = Proc.new do
-      subject.remove_from_url("http://example.image.jpg", "api-key")
-    end
-
-    expect(make_request).to raise_error RemoveBg::HttpError, /unknown error/
-  end
-end
-
-RSpec.describe RemoveBg::ApiClient, "client version" do
-  it "is included in the request", :disable_vcr do
-    stub_request(:post, %r{api.remove.bg}).to_return(status: 200, body: "")
-
-    subject.remove_from_url("http://example.image.jpg", "api-key")
-
-    expect(WebMock).to have_requested(:post, %r{api.remove.bg}).
-      with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
+  def build_options(options = { api_key: "api-key" })
+    RemoveBg::RequestOptions.new(options)
   end
 end

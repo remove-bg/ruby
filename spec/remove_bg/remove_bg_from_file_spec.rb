@@ -1,20 +1,38 @@
 require "remove_bg"
 
 RSpec.describe "RemoveBg::from_file" do
+  let(:image_path) { "image.png" }
+
   describe "using global API key" do
     before(:each) { RemoveBg::Configuration.reset }
 
     it "allows the inline API key to omitted" do
       api_key = "an-api_key"
-      image_path = "image.png"
       api_client = spy_on_api_client
 
       RemoveBg.configure { |config| config.api_key = api_key }
       RemoveBg.from_file(image_path)
 
-      expect(api_client).
-        to have_received(:remove_from_file).with(image_path, api_key)
+      expected_request_options = having_attributes(api_key: api_key)
+
+      expect(api_client).to have_received(:remove_from_file).
+        with(image_path, expected_request_options)
     end
+  end
+
+  it "allows options to be overriden" do
+    options = {
+      api_key: "an-api-key",
+      size: "4k",
+      type: "product",
+      channels: "alpha",
+    }
+
+    api_client = spy_on_api_client
+    RemoveBg.from_file(image_path, options)
+
+    expect(api_client).to have_received(:remove_from_file).
+      with(anything, having_attributes(options))
   end
 
   private

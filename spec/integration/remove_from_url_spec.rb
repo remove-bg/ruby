@@ -6,7 +6,7 @@ RSpec.describe "removing the background from a URL" do
 
   it "succeeds with a valid API key" do
     result = VCR.use_cassette("from-url-back-jpg") do
-      RemoveBg.from_url(image_url, api_key)
+      RemoveBg.from_url(image_url, api_key: api_key)
     end
 
     expect(result).to be_a RemoveBg::Result
@@ -20,7 +20,7 @@ RSpec.describe "removing the background from a URL" do
     it "raises an error with a helpful message" do
       make_request = Proc.new do
         VCR.use_cassette("from-url-non-existent-image") do
-          RemoveBg.from_url("http://example.com/404.png", api_key)
+          RemoveBg.from_url("http://example.com/404.png", api_key: api_key)
         end
       end
 
