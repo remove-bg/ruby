@@ -1,3 +1,5 @@
+require_relative "error"
+
 module RemoveBg
   class Result
     attr_reader :data, :width, :height, :credits_charged
@@ -7,6 +9,14 @@ module RemoveBg
       @width = width
       @height = height
       @credits_charged = credits_charged
+    end
+
+    def save(filepath, overwrite: false)
+      if File.exist?(filepath) && !overwrite
+        raise FileExistsError.new(filepath)
+      end
+
+      File.write(filepath, data)
     end
   end
 end
