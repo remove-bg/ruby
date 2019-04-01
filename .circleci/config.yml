@@ -1,0 +1,55 @@
+---
+version: 2
+
+base_job: &base_job
+  steps:
+    - checkout
+
+    - restore_cache:
+        keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+    - run:
+        name: install dependencies
+        command: bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+    - save_cache:
+        paths:
+          - ./vendor/bundle
+        key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+    - run:
+        name: run tests
+        command: |
+          bundle exec rspec --format progress \
+                            --format RspecJunitFormatter \
+                            --out test-results/rspec.xml
+
+    - store_test_results:
+        path: test-results
+
+################################################################################
+
+jobs:
+  ruby-2.4:
+    <<: *base_job
+    docker:
+      - image: circleci/ruby:2.4
+  ruby-2.5:
+    <<: *base_job
+    docker:
+      - image: circleci/ruby:2.5
+  ruby-2.6:
+    <<: *base_job
+    docker:
+      - image: circleci/ruby:2.6
+
+################################################################################
+
+workflows:
+  version: 2
+  multiple-rubies:
+    jobs:
+      - ruby-2.4
+      - ruby-2.5
+      - ruby-2.6

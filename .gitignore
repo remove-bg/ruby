@@ -11,3 +11,6 @@
 spec/examples.txt
 
 .env.*.local
+
+# CircleCI / RSpec JUnit formatter
+test-results
