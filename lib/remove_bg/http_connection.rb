@@ -7,10 +7,7 @@ module RemoveBg
     USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
     private_constant :USER_AGENT
 
-    HTTP_OPTIONS = { headers: { "User-Agent" => USER_AGENT } }
-    private_constant :HTTP_OPTIONS
-
-    def self.build(api_url = RemoveBg::Api::URL, http_options = HTTP_OPTIONS)
+    def self.build(api_url = RemoveBg::Api::URL)
       retry_options = {
         max: 2,
         interval: 0.2,
@@ -18,6 +15,17 @@ module RemoveBg
         methods: [:post],
         exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
           [Faraday::ConnectionFailed]
+      }
+
+      request_options = Faraday::RequestOptions.new.tap do |req_options|
+        req_options.timeout = 10
+        req_options.open_timeout = 10
+        req_options.write_timeout = 120
+      end
+
+      http_options = {
+        headers: { "User-Agent" => USER_AGENT },
+        request: request_options,
       }
 
       Faraday.new(api_url, **http_options) do |f|
