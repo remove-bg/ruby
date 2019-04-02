@@ -22,7 +22,7 @@ RSpec.describe RemoveBg::Result, "#save" do
       new_result(data: "test-data").save(filepath)
     end
 
-    expect(attempt_overwrite).to raise_error RemoveBg::FileExistsError do |ex|
+    expect(attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
       expect(ex.message).to include "file already exists"
       expect(ex.filepath).to eq filepath
     end

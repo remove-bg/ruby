@@ -13,7 +13,7 @@ module RemoveBg
 
     def save(filepath, overwrite: false)
       if File.exist?(filepath) && !overwrite
-        raise FileExistsError.new(filepath)
+        raise FileOverwriteError.new(filepath)
       end
 
       File.write(filepath, data)

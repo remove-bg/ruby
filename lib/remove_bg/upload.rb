@@ -4,6 +4,10 @@ require_relative "error"
 module RemoveBg
   class Upload
     def self.for_file(file_path)
+      if !File.exist?(file_path)
+        raise RemoveBg::FileMissingError.new(file_path)
+      end
+
       content_type = determine_content_type(file_path)
       Faraday::UploadIO.new(file_path, content_type)
     end

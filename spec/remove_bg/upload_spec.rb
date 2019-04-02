@@ -1,5 +1,6 @@
 require "remove_bg/upload"
 require "tempfile"
+require "securerandom"
 
 RSpec.describe RemoveBg::Upload do
   it "determines the content type from the file extension" do
@@ -14,6 +15,18 @@ RSpec.describe RemoveBg::Upload do
     end
 
     expect(upload_doc).to raise_error RemoveBg::Error, /Unsupported file type/
+  end
+
+  it "raises an error when the file doesn't exist" do
+    image_path = "./#{SecureRandom.urlsafe_base64}.png"
+
+    upload_doc = Proc.new do
+      upload_for_file(image_path)
+    end
+
+    expect(upload_doc).to raise_error RemoveBg::FileMissingError do |ex|
+      expect(ex.filepath).to eq image_path
+    end
   end
 
   private
