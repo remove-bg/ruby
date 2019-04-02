@@ -22,17 +22,16 @@ RSpec.describe "RemoveBg::from_file" do
 
   it "allows options to be overriden" do
     options = {
-      api_key: "an-api-key",
       size: "4k",
       type: "product",
       channels: "alpha",
     }
 
     api_client = spy_on_api_client
-    RemoveBg.from_file(image_path, options)
+    RemoveBg.from_file(image_path, options.merge({ api_key: "an-api-key" }))
 
     expect(api_client).to have_received(:remove_from_file).
-      with(anything, having_attributes(options))
+      with(anything, satisfy { |arg| arg.data == options })
   end
 
   private

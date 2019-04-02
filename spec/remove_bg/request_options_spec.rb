@@ -1,12 +1,21 @@
 require "remove_bg"
 
 RSpec.describe RemoveBg::RequestOptions do
-  it "has sensible defaults" do
-    options = described_class.new(api_key: "xyz")
+  describe "size options" do
+    it "defaults the size to 'auto'" do
+      request_options = described_class.new(api_key: "xyz").data
+      expect(request_options[:size]).to eq described_class::FOREGROUND_TYPE_AUTO
+    end
 
-    expect(options.size).to eq described_class::SIZE_DEFAULT
-    expect(options.type).to eq described_class::FOREGROUND_TYPE_DEFAULT
-    expect(options.channels).to eq described_class::CHANNELS_DEFAULT
+    it "allows the size to be overriden" do
+      request_options = described_class.new(api_key: "xyz", size: "4k").data
+      expect(request_options[:size]).to eq "4k"
+    end
+  end
+
+  it "forwards extra parameters for future flexibility" do
+    request_options = described_class.new(api_key: "xyz", foo: "bar").data
+    expect(request_options[:foo]).to eq "bar"
   end
 
   context "invalid API key configuration" do
