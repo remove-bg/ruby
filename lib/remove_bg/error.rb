@@ -33,4 +33,13 @@ module RemoveBg
       super("The file already exists: '#{file_path}' (specify #save(overwrite: true) to ignore)", file_path)
     end
   end
+
+  class InvalidUrlError < Error
+    attr_reader :url
+
+    def initialize(url)
+      @url = url
+      super("Invalid URL: #{url.inspect}")
+    end
+  end
 end

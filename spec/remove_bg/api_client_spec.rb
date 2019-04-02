@@ -1,7 +1,7 @@
 require "remove_bg"
 
 RSpec.describe RemoveBg::ApiClient do
-  describe "with an invalid API key" do
+  context "with an invalid API key" do
     let(:image_path) do
       File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
     end
@@ -28,6 +28,13 @@ RSpec.describe RemoveBg::ApiClient do
       expect(make_request).to raise_error RemoveBg::HttpError do |exception|
         expect(exception.http_response).to be_a Faraday::Response
       end
+    end
+  end
+
+  context "invalid image URL" do
+    it "raises an error" do
+      expect{ subject.remove_from_url("", build_options) }.
+        to raise_error RemoveBg::InvalidUrlError
     end
   end
 

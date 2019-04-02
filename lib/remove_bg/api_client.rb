@@ -1,9 +1,10 @@
 require "json"
 require_relative "api"
 require_relative "error"
+require_relative "http_connection"
 require_relative "result"
 require_relative "upload"
-require_relative "http_connection"
+require_relative "url_validator"
 
 module RemoveBg
   class ApiClient
@@ -19,6 +20,7 @@ module RemoveBg
     end
 
     def remove_from_url(image_url, options)
+      RemoveBg::UrlValidator.validate(image_url)
       data = options.data.merge(image_url: image_url)
       request_remove_bg(data, options.api_key)
     end
