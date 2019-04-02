@@ -1,8 +1,6 @@
 require "remove_bg"
 
-RSpec.describe "Remove BG configuration"  do
-  before(:each) { RemoveBg::Configuration.reset }
-
+RSpec.describe "Remove BG configuration" do
   describe "::configure" do
     it "provides a convenient way to update configuration" do
       RemoveBg.configure do |config|
