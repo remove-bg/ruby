@@ -14,23 +14,23 @@ module RemoveBg
   class ServerHttpError < HttpError; end
 
   class FileError < Error
-    attr_reader :filepath
+    attr_reader :file_path
 
-    def initialize(message, filepath)
-      @filepath = filepath
+    def initialize(message, file_path)
+      @file_path = file_path
       super(message)
     end
   end
 
   class FileMissingError < FileError
-    def initialize(filepath)
-      super("The file doesn't exist: '#{filepath}'", filepath)
+    def initialize(file_path)
+      super("The file doesn't exist: '#{file_path}'", file_path)
     end
   end
 
   class FileOverwriteError < FileError
-    def initialize(filepath)
-      super("The file already exists: '#{filepath}' (specify #save(overwrite: true) to ignore)", filepath)
+    def initialize(file_path)
+      super("The file already exists: '#{file_path}' (specify #save(overwrite: true) to ignore)", file_path)
     end
   end
 end

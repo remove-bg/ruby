@@ -4,38 +4,38 @@ require "tmpdir"
 
 RSpec.describe RemoveBg::Result, "#save" do
   let(:tmp_dir) { Dir.mktmpdir("remove_bg") }
-  let(:filepath) { File.join(tmp_dir, "#{SecureRandom.urlsafe_base64}.txt") }
+  let(:file_path) { File.join(tmp_dir, "#{SecureRandom.urlsafe_base64}.txt") }
 
   it "writes the data to the specified path" do
-    expect(File.exist?(filepath)).to be false
+    expect(File.exist?(file_path)).to be false
 
-    new_result(data: "test-data").save(filepath)
+    new_result(data: "test-data").save(file_path)
 
-    expect(File.exist?(filepath)).to be true
-    expect(File.read(filepath)).to include "test-data"
+    expect(File.exist?(file_path)).to be true
+    expect(File.read(file_path)).to include "test-data"
   end
 
   it "raises an error if the file already exists" do
-    File.write(filepath, "existing-data")
+    File.write(file_path, "existing-data")
 
     attempt_overwrite = Proc.new do
-      new_result(data: "test-data").save(filepath)
+      new_result(data: "test-data").save(file_path)
     end
 
     expect(attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
       expect(ex.message).to include "file already exists"
-      expect(ex.filepath).to eq filepath
+      expect(ex.file_path).to eq file_path
     end
 
-    expect(File.read(filepath)).to include "existing-data"
+    expect(File.read(file_path)).to include "existing-data"
   end
 
   it "allows the file to be overwritten" do
-    File.write(filepath, "existing-data")
+    File.write(file_path, "existing-data")
 
-    new_result(data: "test-data").save(filepath, overwrite: true)
+    new_result(data: "test-data").save(file_path, overwrite: true)
 
-    expect(File.read(filepath)).to include "test-data"
+    expect(File.read(file_path)).to include "test-data"
   end
 
   private

@@ -25,7 +25,7 @@ RSpec.describe RemoveBg::Upload do
     end
 
     expect(upload_doc).to raise_error RemoveBg::FileMissingError do |ex|
-      expect(ex.filepath).to eq image_path
+      expect(ex.file_path).to eq image_path
     end
   end
 

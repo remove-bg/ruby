@@ -11,12 +11,12 @@ module RemoveBg
       @credits_charged = credits_charged
     end
 
-    def save(filepath, overwrite: false)
-      if File.exist?(filepath) && !overwrite
-        raise FileOverwriteError.new(filepath)
+    def save(file_path, overwrite: false)
+      if File.exist?(file_path) && !overwrite
+        raise FileOverwriteError.new(file_path)
       end
 
-      File.write(filepath, data)
+      File.write(file_path, data)
     end
   end
 end
