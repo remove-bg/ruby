@@ -1,6 +1,6 @@
 module RemoveBg
   module Api
-    API_URL = "https://api.remove.bg"
+    URL = "https://api.remove.bg"
 
     V1_REMOVE_BG = "/v1.0/removebg"
     private_constant :V1_REMOVE_BG

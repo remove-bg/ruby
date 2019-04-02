@@ -1,31 +1,16 @@
-require "faraday"
 require "json"
 require_relative "api"
 require_relative "error"
 require_relative "result"
 require_relative "upload"
-require_relative "version"
+require_relative "http_connection"
 
 module RemoveBg
   class ApiClient
     include RemoveBg::Api
 
-    def initialize(api_url = API_URL, http_options = HTTP_OPTIONS)
-      retry_options = {
-        max: 2,
-        interval: 0.2,
-        backoff_factor: 2,
-        methods: [:post],
-        exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-          [Faraday::ConnectionFailed]
-      }
-
-      @connection = Faraday.new(api_url, **http_options) do |f|
-        f.request :multipart
-        f.request :url_encoded
-        f.request :retry, retry_options
-        f.adapter :net_http
-      end
+    def initialize(connection: RemoveBg::HttpConnection.build)
+      @connection = connection
     end
 
     def remove_from_file(image_path, options)
@@ -39,12 +24,6 @@ module RemoveBg
     end
 
     private
-
-    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
-    private_constant :USER_AGENT
-
-    HTTP_OPTIONS = { headers: { "User-Agent" => USER_AGENT } }
-    private_constant :HTTP_OPTIONS
 
     attr_reader :connection
 
