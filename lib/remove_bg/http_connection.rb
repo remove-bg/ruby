@@ -5,7 +5,8 @@ require_relative "version"
 module RemoveBg
   class HttpConnection
     USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
-    private_constant :USER_AGENT
+    HTTP_BASE_TIMEOUT = 10
+    HTTP_WRITE_TIMEOUT = 120
 
     def self.build(api_url = RemoveBg::Api::URL)
       retry_options = {
@@ -18,9 +19,9 @@ module RemoveBg
       }
 
       request_options = Faraday::RequestOptions.new.tap do |req_options|
-        req_options.timeout = 10
-        req_options.open_timeout = 10
-        req_options.write_timeout = 120
+        req_options.timeout = HTTP_BASE_TIMEOUT
+        req_options.open_timeout = HTTP_BASE_TIMEOUT
+        req_options.write_timeout = HTTP_WRITE_TIMEOUT
       end
 
       http_options = {
