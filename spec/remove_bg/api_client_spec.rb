@@ -74,6 +74,32 @@ RSpec.describe RemoveBg::ApiClient do
     end
   end
 
+  describe "retrying a request", :disable_vcr do
+    let(:image_url) { "http://example.image.jpg" }
+
+    it "makes 3 attempts in total" do
+      stub_request(:post, %r{api.remove.bg}).
+        to_timeout.
+        to_timeout.
+        to_return(status: 200, body: "data")
+
+      result = subject.remove_from_url(image_url, build_options)
+
+      expect(result.data).to eq "data"
+    end
+
+    it "stops retrying after the 3rd attempt" do
+      stub_request(:post, %r{api.remove.bg}).to_timeout
+
+      make_request = Proc.new do
+        subject.remove_from_url(image_url, build_options)
+      end
+
+      expect(make_request).to raise_error Faraday::ConnectionFailed
+      expect(WebMock).to have_requested(:post, %r{api.remove.bg}).times(3)
+    end
+  end
+
   private
 
   def build_options(options = { api_key: "api-key" })

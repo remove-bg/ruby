@@ -11,9 +11,19 @@ module RemoveBg
     include RemoveBg::Api
 
     def initialize(api_url = API_URL, http_options = HTTP_OPTIONS)
+      retry_options = {
+        max: 2,
+        interval: 0.2,
+        backoff_factor: 2,
+        methods: [:post],
+        exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
+          [Faraday::ConnectionFailed]
+      }
+
       @connection = Faraday.new(api_url, **http_options) do |f|
         f.request :multipart
         f.request :url_encoded
+        f.request :retry, retry_options
         f.adapter :net_http
       end
     end
