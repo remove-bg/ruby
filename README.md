@@ -1,4 +1,6 @@
-# RemoveBg
+![RemoveBG](resources/logo_black.png)
+
+# Ruby library
 
 [![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master)
 
