@@ -1,4 +1,4 @@
-![RemoveBG](resources/logo_black.png)
+[![RemoveBG](resources/logo_black.png)](https://www.remove.bg/)
 
 # Ruby library
 
