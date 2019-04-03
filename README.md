@@ -69,6 +69,12 @@ result.save("processed/image.png")
 result.save("image.png", overwrite: true) # Careful!
 ```
 
+## Examples
+
+- [Bulk processing][bulk-processing] a directory of JPG and PNG files
+
+[bulk-processing]: https://github.com/remove-bg/ruby/blob/master/examples/bulk_process.rb
+
 ## License
 
 The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
