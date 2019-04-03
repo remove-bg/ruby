@@ -16,3 +16,5 @@ spec/examples.txt
 test-results
 
 gemfiles/*.gemfile.lock
+
+examples/output
