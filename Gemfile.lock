@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remove_bg (1.0.0)
+    remove_bg (1.1.0)
       faraday (~> 0.14)
 
 GEM
@@ -22,7 +22,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     hashdiff (0.3.8)
     method_source (0.9.2)
-    multipart-post (2.0.0)
+    multipart-post (2.1.1)
     pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)

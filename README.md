@@ -59,7 +59,7 @@ result = RemoveBg.from_file("image.png")
 result.data             # => "\x89PNG..."
 result.height           # => 333
 result.width            # => 500
-result.credits_charged  # => 1
+result.credits_charged  # => 1.0
 ```
 
 There's also a `#save` convenience method:
