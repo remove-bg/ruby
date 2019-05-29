@@ -29,7 +29,7 @@ module RemoveBg
         request: request_options,
       }
 
-      Faraday.new(api_url, **http_options) do |f|
+      Faraday.new(api_url, http_options) do |f|
         f.request :multipart
         f.request :url_encoded
         f.request :retry, retry_options
