@@ -53,7 +53,7 @@ module RemoveBg
         data: response.body,
         width: response.headers[HEADER_WIDTH]&.to_i,
         height: response.headers[HEADER_HEIGHT]&.to_i,
-        credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_i,
+        credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_f,
       )
     end
 

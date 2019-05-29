@@ -15,6 +15,6 @@ RSpec.describe "removing the background from a file" do
     expect(result.data).to_not be_empty
     expect(result.height).to eq 333
     expect(result.width).to eq 500
-    expect(result.credits_charged).to be >= 0
+    expect(result.credits_charged).to be_a(Float).and(be >= 0)
   end
 end
