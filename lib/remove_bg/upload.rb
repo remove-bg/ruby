@@ -13,7 +13,7 @@ module RemoveBg
     end
 
     def self.determine_content_type(file_path)
-      case File.extname(file_path)
+      case File.extname(file_path).downcase
       when ".jpg", ".jpeg" then "image/jpeg"
       when ".png" then "image/png"
       else

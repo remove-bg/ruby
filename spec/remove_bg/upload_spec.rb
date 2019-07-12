@@ -1,12 +1,24 @@
 require "remove_bg/upload"
-require "tempfile"
+require "rspec/with_params/dsl"
 require "securerandom"
+require "tempfile"
 
 RSpec.describe RemoveBg::Upload do
-  it "determines the content type from the file extension" do
-    expect(upload_for_file(tmp_file(".jpg"))).to have_content_type "image/jpeg"
-    expect(upload_for_file(tmp_file(".jpeg"))).to have_content_type "image/jpeg"
-    expect(upload_for_file(tmp_file(".png"))).to have_content_type "image/png"
+  extend RSpec::WithParams::DSL
+
+  with_params(
+    [:extension,  :expected_content_type],
+    [".jpg",      "image/jpeg"],
+    [".jpeg",     "image/jpeg"],
+    [".png",      "image/png"],
+    [".JPG",      "image/jpeg"],
+    [".JPEG",     "image/jpeg"],
+    [".PNG",      "image/png"],
+  ) do
+    it "determines the content type from the file extension" do
+      upload = upload_for_file(tmp_file(extension))
+      expect(upload).to have_content_type expected_content_type
+    end
   end
 
   it "raises an error for unsupported file types" do

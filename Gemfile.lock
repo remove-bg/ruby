@@ -41,6 +41,8 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.8.0)
     rspec-support (3.8.0)
+    rspec-with_params (0.2.0)
+      rspec (~> 3.0)
     rspec_junit_formatter (0.4.1)
       rspec-core (>= 2, < 4, != 2.12.0)
     safe_yaml (1.0.5)
@@ -62,6 +64,7 @@ DEPENDENCIES
   rake (~> 12.0)
   remove_bg!
   rspec (~> 3.8)
+  rspec-with_params
   rspec_junit_formatter
   vcr
   webmock
