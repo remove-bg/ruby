@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remove_bg (1.1.0)
+    remove_bg (1.2.0)
       faraday (>= 0.14, < 2)
 
 GEM
