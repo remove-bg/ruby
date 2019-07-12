@@ -2,7 +2,7 @@ PATH
   remote: .
   specs:
     remove_bg (1.1.0)
-      faraday (~> 0.14)
+      faraday (>= 0.14, < 2)
 
 GEM
   remote: https://rubygems.org/
