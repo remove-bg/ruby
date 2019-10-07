@@ -51,6 +51,7 @@ module RemoveBg
     def parse_result(response)
       RemoveBg::Result.new(
         data: response.body,
+        type: response.headers[HEADER_TYPE],
         width: response.headers[HEADER_WIDTH]&.to_i,
         height: response.headers[HEADER_HEIGHT]&.to_i,
         credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_f,

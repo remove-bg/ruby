@@ -43,6 +43,7 @@ RSpec.describe RemoveBg::Result, "#save" do
   def new_result(data:)
     described_class.new(
       data: data,
+      type: nil,
       width: nil,
       height: nil,
       credits_charged: nil,

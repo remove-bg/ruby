@@ -13,6 +13,7 @@ RSpec.describe "removing the background from a file" do
 
     expect(result).to be_a RemoveBg::Result
     expect(result.data).to_not be_empty
+    expect(result.type).to eq "person"
     expect(result.height).to eq 333
     expect(result.width).to eq 500
     expect(result.credits_charged).to be_a(Float).and(be >= 0)
