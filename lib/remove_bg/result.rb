@@ -2,10 +2,11 @@ require_relative "error"
 
 module RemoveBg
   class Result
-    attr_reader :data, :width, :height, :credits_charged
+    attr_reader :data, :type, :width, :height, :credits_charged
 
-    def initialize(data:, width:, height:, credits_charged:)
+    def initialize(data:, type:, width:, height:, credits_charged:)
       @data = data
+      @type = type
       @width = width
       @height = height
       @credits_charged = credits_charged

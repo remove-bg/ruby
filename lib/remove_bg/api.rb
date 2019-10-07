@@ -8,6 +8,9 @@ module RemoveBg
     HEADER_API_KEY = "X-Api-Key"
     private_constant :HEADER_API_KEY
 
+    HEADER_TYPE = "X-Type"
+    private_constant :HEADER_TYPE
+
     HEADER_WIDTH = "X-Width"
     private_constant :HEADER_WIDTH
 
