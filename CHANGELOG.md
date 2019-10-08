@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Add `type` attribute to result object (`X-Type` header from API) - via [#2](https://github.com/remove-bg/ruby/pull/2)
+
 ## 1.2.0
 
 - Support uppercase file extensions (e.g. `.JPG`)
