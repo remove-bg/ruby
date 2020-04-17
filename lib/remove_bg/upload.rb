@@ -1,4 +1,4 @@
-require "faraday/upload_io"
+require "faraday"
 require_relative "error"
 
 module RemoveBg
@@ -9,7 +9,7 @@ module RemoveBg
       end
 
       content_type = determine_content_type(file_path)
-      Faraday::UploadIO.new(file_path, content_type)
+      FARADAY_FILE.new(file_path, content_type)
     end
 
     def self.determine_content_type(file_path)
@@ -22,5 +22,9 @@ module RemoveBg
     end
 
     private_class_method :determine_content_type
+
+    # UploadIO for Faraday < 0.16.0
+    FARADAY_FILE = defined?(Faraday::FilePart) ? Faraday::FilePart : Faraday::UploadIO
+    private_constant :FARADAY_FILE
   end
 end
