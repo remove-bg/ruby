@@ -107,6 +107,22 @@ RSpec.describe RemoveBg::ApiClient do
     end
   end
 
+  describe "#account" do
+    context "with an invalid API key" do
+      it "raises an error with a helpful message" do
+        request_options = RemoveBg::BaseRequestOptions.new(api_key: "invalid-api-key")
+
+        make_request = Proc.new do
+          VCR.use_cassette("account-invalid-api-key") do
+            subject.account(request_options)
+          end
+        end
+
+        expect(make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
+      end
+    end
+  end
+
   private
 
   def build_options(options = { api_key: "api-key" })
