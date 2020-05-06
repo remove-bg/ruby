@@ -107,14 +107,14 @@ RSpec.describe RemoveBg::ApiClient do
     end
   end
 
-  describe "#account" do
+  describe "#account_info" do
     context "with an invalid API key" do
       it "raises an error with a helpful message" do
         request_options = RemoveBg::BaseRequestOptions.new(api_key: "invalid-api-key")
 
         make_request = Proc.new do
           VCR.use_cassette("account-invalid-api-key") do
-            subject.account(request_options)
+            subject.account_info(request_options)
           end
         end
 

@@ -77,9 +77,9 @@ API key:
 [account-info]: https://www.remove.bg/api#operations-tag-Fetch_account_info
 
 ```ruby
-account = RemoveBg.account # If an API key is set via RemoveBg.configuration
+account = RemoveBg.account_info # If an API key is set via RemoveBg.configuration
 # or
-account = RemoveBg.account(api_key: "<api_key>")
+account = RemoveBg.account_info(api_key: "<api_key>")
 
 account.api.free_calls # => 50
 account.credits.total  # => 200

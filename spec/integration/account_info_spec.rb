@@ -8,7 +8,7 @@ RSpec.describe "fetching account information" do
 
   it "succeeds with a valid API key" do
     account = VCR.use_cassette("account") do
-      RemoveBg.account(api_key: api_key)
+      RemoveBg.account_info(api_key: api_key)
     end
 
     expect(account.api).to have_attributes(

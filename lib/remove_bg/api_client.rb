@@ -1,5 +1,5 @@
 require "json"
-require_relative "account"
+require_relative "account_info"
 require_relative "api"
 require_relative "error"
 require_relative "http_connection"
@@ -26,7 +26,7 @@ module RemoveBg
       request_remove_bg(data, options.api_key)
     end
 
-    def account(options)
+    def account_info(options)
       request_account_info(options.api_key)
     end
 
@@ -86,10 +86,7 @@ module RemoveBg
         .fetch(:data)
         .fetch(:attributes)
 
-      RemoveBg::Account.new(
-        api: RemoveBg::Account::ApiInfo.new(**attributes.fetch(:api)),
-        credits: RemoveBg::Account::CreditsInfo.new(**attributes.fetch(:credits))
-      )
+      RemoveBg::AccountInfo.new(attributes)
     end
 
     def parse_error_message(response)
