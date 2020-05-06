@@ -69,6 +69,22 @@ result.save("processed/image.png")
 result.save("image.png", overwrite: true) # Careful!
 ```
 
+### Fetching account information
+
+To display the [account information][account-info] for the currently configured
+API key:
+
+[account-info]: https://www.remove.bg/api#operations-tag-Fetch_account_info
+
+```ruby
+account = RemoveBg.account_info # If an API key is set via RemoveBg.configuration
+# or
+account = RemoveBg.account_info(api_key: "<api_key>")
+
+account.api.free_calls # => 50
+account.credits.total  # => 200
+```
+
 ## Examples
 
 - [Bulk processing][bulk-processing] a directory of JPG and PNG files

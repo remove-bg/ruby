@@ -1,0 +1,42 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.remove.bg/v1.0/account
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - remove-bg-ruby-1.2.1
+      X-Api-Key:
+      - "<REMOVE-BG-API-KEY>"
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Access-Control-Allow-Origin:
+      - "*"
+      Content-Type:
+      - application/json; charset=utf-8
+      Content-Length:
+      - '132'
+      Etag:
+      - W/"84-INkA6jLq02tsWK7vl9f8niXJcXI"
+      Date:
+      - Wed, 06 May 2020 15:45:39 GMT
+      Via:
+      - 1.1 google
+      Alt-Svc:
+      - clear
+    body:
+      encoding: UTF-8
+      string: '{"data":{"attributes":{"credits":{"subscription":5000,"payg":0,"enterprise":0,"total":5000},"api":{"free_calls":50,"sizes":"all"}}}}'
+    http_version: 
+  recorded_at: Wed, 06 May 2020 15:45:39 GMT
+recorded_with: VCR 4.0.0

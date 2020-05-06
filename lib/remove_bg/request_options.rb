@@ -1,7 +1,7 @@
-require_relative "error"
+require_relative "base_request_options"
 
 module RemoveBg
-  class RequestOptions
+  class RequestOptions < BaseRequestOptions
     SIZE_REGULAR = "regular"
     SIZE_MEDIUM = "medium"
     SIZE_HD = "hd"
@@ -15,32 +15,10 @@ module RemoveBg
     CHANNELS_RGBA = "rgba"
     CHANNELS_ALPHA = "alpha"
 
-    attr_reader :api_key, :data
-
     def initialize(raw_options = {})
       options = raw_options.dup
       options[:size] ||= SIZE_AUTO
-      @api_key = resolve_api_key(options.delete(:api_key))
-      @data = options
-    end
-
-    private
-
-    def resolve_api_key(request_api_key)
-      api_key = request_api_key || global_api_key
-
-      if api_key.nil? || api_key.empty?
-        raise RemoveBg::Error, <<~MSG
-          Please configure an API key or specify one per request. API key was:
-          #{api_key.inspect}
-        MSG
-      end
-
-      api_key
-    end
-
-    def global_api_key
-      RemoveBg::Configuration.configuration.api_key
+      super(options)
     end
   end
 end

@@ -14,6 +14,11 @@ module RemoveBg
     ApiClient.new.remove_from_url(image_url, options)
   end
 
+  def self.account_info(raw_options = {})
+    options = RemoveBg::BaseRequestOptions.new(raw_options)
+    ApiClient.new.account_info(options)
+  end
+
   def self.configure
     yield RemoveBg::Configuration.configuration
   end

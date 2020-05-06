@@ -1,4 +1,5 @@
 require "json"
+require_relative "account_info"
 require_relative "api"
 require_relative "error"
 require_relative "http_connection"
@@ -25,6 +26,10 @@ module RemoveBg
       request_remove_bg(data, options.api_key)
     end
 
+    def account_info(options)
+      request_account_info(options.api_key)
+    end
+
     private
 
     attr_reader :connection
@@ -34,9 +39,27 @@ module RemoveBg
         req.headers[HEADER_API_KEY] = api_key
       end
 
+      if response.status == 200
+        parse_image_result(response)
+      else
+        handle_http_error(response)
+      end
+    end
+
+    def request_account_info(api_key)
+      response = connection.get(V1_ACCOUNT) do |req|
+        req.headers[HEADER_API_KEY] = api_key
+      end
+
+      if response.status == 200
+        parse_account_result(response)
+      else
+        handle_http_error(response)
+      end
+    end
+
+    def handle_http_error(response)
       case response.status
-      when 200
-        parse_result(response)
       when 400..499
         error_message = parse_error_message(response)
         raise RemoveBg::ClientHttpError.new(error_message, response)
@@ -48,7 +71,7 @@ module RemoveBg
       end
     end
 
-    def parse_result(response)
+    def parse_image_result(response)
       RemoveBg::Result.new(
         data: response.body,
         type: response.headers[HEADER_TYPE],
@@ -56,6 +79,14 @@ module RemoveBg
         height: response.headers[HEADER_HEIGHT]&.to_i,
         credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_f,
       )
+    end
+
+    def parse_account_result(response)
+      attributes = JSON.parse(response.body, symbolize_names: true)
+        .fetch(:data)
+        .fetch(:attributes)
+
+      RemoveBg::AccountInfo.new(attributes)
     end
 
     def parse_error_message(response)
