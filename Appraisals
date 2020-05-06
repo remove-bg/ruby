@@ -6,6 +6,6 @@ appraise "faraday-0-15" do
   gem "faraday", "~> 0.15"
 end
 
-appraise "faraday-1rc1" do
-  gem "faraday", "1.0.0.pre.rc1"
+appraise "faraday-1-x" do
+  gem "faraday", "~> 1.0"
 end
