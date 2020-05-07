@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Add `RemoveBg.account_info` which includes available credits - via [#9](https://github.com/remove-bg/ruby/pull/9)
+- Fix support for Faraday `1.0` - via [#7](https://github.com/remove-bg/ruby/pull/7)
+- Raise minimum Faraday version to `0.15.0`
+
 ## 1.2.1
 
 - Add `type` attribute to result object (`X-Type` header from API) - via [#2](https://github.com/remove-bg/ruby/pull/2)
