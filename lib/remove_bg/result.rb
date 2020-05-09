@@ -1,11 +1,12 @@
+require "fileutils"
 require_relative "error"
 
 module RemoveBg
   class Result
-    attr_reader :data, :type, :width, :height, :credits_charged
+    attr_reader :type, :width, :height, :credits_charged
 
-    def initialize(data:, type:, width:, height:, credits_charged:)
-      @data = data
+    def initialize(download:, type:, width:, height:, credits_charged:)
+      @download = download
       @type = type
       @width = width
       @height = height
@@ -17,7 +18,16 @@ module RemoveBg
         raise FileOverwriteError.new(file_path)
       end
 
-      File.write(file_path, data)
+      FileUtils.cp(download, file_path)
     end
+
+    def data
+      download.rewind
+      download.read
+    end
+
+    private
+
+    attr_reader :download
   end
 end

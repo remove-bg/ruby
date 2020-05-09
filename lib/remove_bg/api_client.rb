@@ -1,4 +1,6 @@
 require "json"
+require "tempfile"
+
 require_relative "account_info"
 require_relative "api"
 require_relative "error"
@@ -35,14 +37,24 @@ module RemoveBg
     attr_reader :connection
 
     def request_remove_bg(data, api_key)
+      download = Tempfile.new("remove-bg-download")
+
       response = connection.post(V1_REMOVE_BG, data) do |req|
         req.headers[HEADER_API_KEY] = api_key
+        req.options.on_data = Proc.new do |chunk, _|
+          download.write(chunk)
+        end
       end
 
+      download.rewind
+
       if response.status == 200
-        parse_image_result(response)
+        parse_image_result(headers: response.headers, download: download)
       else
-        handle_http_error(response)
+        response_body = download.read
+        download.close
+        download.unlink
+        handle_http_error(response: response, body: response_body)
       end
     end
 
@@ -54,30 +66,30 @@ module RemoveBg
       if response.status == 200
         parse_account_result(response)
       else
-        handle_http_error(response)
+        handle_http_error(response: response, body: response.body)
       end
     end
 
-    def handle_http_error(response)
+    def handle_http_error(response:, body:)
       case response.status
       when 400..499
-        error_message = parse_error_message(response)
-        raise RemoveBg::ClientHttpError.new(error_message, response)
+        error_message = parse_error_message(body)
+        raise RemoveBg::ClientHttpError.new(error_message, response, body)
       when 500..599
-        error_message = parse_error_message(response)
-        raise RemoveBg::ServerHttpError.new(error_message, response)
+        error_message = parse_error_message(body)
+        raise RemoveBg::ServerHttpError.new(error_message, response, body)
       else
-        raise RemoveBg::HttpError.new("An unknown error occurred", response)
+        raise RemoveBg::HttpError.new("An unknown error occurred", response, body)
       end
     end
 
-    def parse_image_result(response)
+    def parse_image_result(headers:, download:)
       RemoveBg::Result.new(
-        data: response.body,
-        type: response.headers[HEADER_TYPE],
-        width: response.headers[HEADER_WIDTH]&.to_i,
-        height: response.headers[HEADER_HEIGHT]&.to_i,
-        credits_charged: response.headers[HEADER_CREDITS_CHARGED]&.to_f,
+        download: download,
+        type: headers[HEADER_TYPE],
+        width: headers[HEADER_WIDTH]&.to_i,
+        height: headers[HEADER_HEIGHT]&.to_i,
+        credits_charged: headers[HEADER_CREDITS_CHARGED]&.to_f,
       )
     end
 
@@ -89,12 +101,12 @@ module RemoveBg
       RemoveBg::AccountInfo.new(attributes)
     end
 
-    def parse_error_message(response)
-      parse_errors(response).first["title"]
+    def parse_error_message(response_body)
+      parse_errors(response_body).first["title"]
     end
 
-    def parse_errors(response)
-      JSON.parse(response.body)["errors"] || []
+    def parse_errors(response_body)
+      JSON.parse(response_body)["errors"] || []
     rescue JSON::ParserError
       [{ "title" => "Unable to parse response" }]
     end
