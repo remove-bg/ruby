@@ -24,6 +24,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency "faraday", ">= 0.15", "< 2"
+  spec.add_dependency "image_processing", ">= 1.9", "< 2"
+  spec.add_dependency "rubyzip", ">= 2.0", "< 3"
 
   spec.add_development_dependency "appraisal"
   spec.add_development_dependency "bundler", "~> 1.17"

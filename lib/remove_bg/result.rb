@@ -1,5 +1,7 @@
 require "fileutils"
+require "zip"
 require_relative "error"
+require_relative "image_composer"
 
 module RemoveBg
   class Result
@@ -18,16 +20,20 @@ module RemoveBg
         raise FileOverwriteError.new(file_path)
       end
 
-      FileUtils.cp(download, file_path)
+      FileUtils.cp(image_file, file_path)
     end
 
     def data
-      download.rewind
-      download.read
+      image_file.rewind
+      image_file.read
     end
 
     private
 
     attr_reader :download
+
+    def image_file
+      download
+    end
   end
 end

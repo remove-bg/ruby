@@ -3,6 +3,7 @@ require "tempfile"
 
 require_relative "account_info"
 require_relative "api"
+require_relative "composite_result"
 require_relative "error"
 require_relative "http_connection"
 require_relative "result"
@@ -95,13 +96,21 @@ module RemoveBg
     end
 
     def parse_image_result(headers:, download:)
-      RemoveBg::Result.new(
+      result_for_content_type(headers["Content-Type"]).new(
         download: download,
         type: headers[HEADER_TYPE],
         width: headers[HEADER_WIDTH]&.to_i,
         height: headers[HEADER_HEIGHT]&.to_i,
         credits_charged: headers[HEADER_CREDITS_CHARGED]&.to_f,
       )
+    end
+
+    def result_for_content_type(content_type)
+      if content_type&.include?("application/zip")
+        CompositeResult
+      else
+        Result
+      end
     end
 
     def parse_account_result(response)
