@@ -69,6 +69,36 @@ result.save("processed/image.png")
 result.save("image.png", overwrite: true) # Careful!
 ```
 
+#### Processing images over 10 megapixels
+
+The Remove.bg API provides a [ZIP format](https://www.remove.bg/api#zip-format)
+which includes all the information required to efficiently composite a large
+image with transparency.
+
+The gem can handle this composition for you, but you'll need
+[ImageMagick]/[GraphicsMagick] or [libvips] available on your computer.
+
+[ImageMagick]: https://www.imagemagick.org
+[GraphicsMagick]: http://www.graphicsmagick.org
+[libvips]: http://libvips.github.io/libvips/
+
+Please configure the image processing library you'd like to use:
+
+```ruby
+RemoveBg.configure do |config|
+  config.image_processor = :minimagick # For ImageMagick or GraphicsMagick
+  # or
+  config.image_processor = :vips
+end
+```
+
+Then process images specifying the `zip` format:
+
+```ruby
+result = RemoveBg.from_file("large-image.jpg", format: "zip")
+result.save("result-with-transparency.png")
+```
+
 ### Fetching account information
 
 To display the [account information][account-info] for the currently configured
