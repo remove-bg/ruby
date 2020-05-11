@@ -3,8 +3,6 @@ require "image_processing/vips"
 
 module RemoveBg
   class ImageComposer
-    DEFAULT_PROCESSOR = :minimagick
-
     def compose(color_file:, alpha_file:, destination_path:)
       image = case configured_image_processor
         when :vips

@@ -8,18 +8,22 @@ RSpec.describe RemoveBg::ImageComposer do
   let(:color_file) { instance_double(File, "color") }
   let(:destination_path) { double("Destination path") }
 
-  it "uses MiniMagick by default" do
-    processing_spy = spy_on_image_processing(ImageProcessing::MiniMagick)
+  context "configured to use MiniMagick" do
+    before(:each) { RemoveBg::Configuration.configuration.image_processor = :minimagick }
 
-    perform_composition
+    it "uses MiniMagick by default" do
+      processing_spy = spy_on_image_processing(ImageProcessing::MiniMagick)
 
-    expect(processing_spy).to have_received(:call).with(destination: destination_path)
+      perform_composition
+
+      expect(processing_spy).to have_received(:call).with(destination: destination_path)
+    end
   end
 
   context "configured to use Vips" do
-    it "uses Vips" do
-      RemoveBg::Configuration.configuration.image_processor = :vips
+    before(:each) { RemoveBg::Configuration.configuration.image_processor = :vips }
 
+    it "uses Vips" do
       processing_spy = spy_on_image_processing(ImageProcessing::Vips)
 
       perform_composition
