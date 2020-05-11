@@ -38,12 +38,23 @@ module RemoveBg
 
     def request_remove_bg(data, api_key)
       download = Tempfile.new("remove-bg-download")
+      streaming = false
 
       response = connection.post(V1_REMOVE_BG, data) do |req|
         req.headers[HEADER_API_KEY] = api_key
-        req.options.on_data = Proc.new do |chunk, _|
-          download.write(chunk)
+
+        # Faraday v0.16 & v1.0+ support streaming, v0.17 did not (rollback release)
+        if req.options.respond_to?(:on_data)
+          streaming = true
+          req.options.on_data = Proc.new do |chunk, _|
+            download.write(chunk)
+          end
         end
+      end
+
+      # Faraday v0.15 / v0.17
+      if !streaming
+        download.write(response.body)
       end
 
       download.rewind
