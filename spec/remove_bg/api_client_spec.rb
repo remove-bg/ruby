@@ -53,7 +53,7 @@ RSpec.describe RemoveBg::ApiClient do
       expect(make_request).to raise_error do |exception|
         expect(exception).to be_a(RemoveBg::ServerHttpError)
         expect(exception.message).to eq "Unable to parse response"
-        expect(exception.http_response.body).to include "Bad gateway"
+        expect(exception.http_response_body).to include "Bad gateway"
       end
     end
   end

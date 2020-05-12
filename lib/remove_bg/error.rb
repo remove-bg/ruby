@@ -2,10 +2,11 @@ module RemoveBg
   class Error < StandardError; end
 
   class HttpError < Error
-    attr_reader :http_response
+    attr_reader :http_response, :http_response_body
 
-    def initialize(message, http_response)
+    def initialize(message, http_response, http_response_body)
       @http_response = http_response
+      @http_response_body = http_response_body
       super(message)
     end
   end
