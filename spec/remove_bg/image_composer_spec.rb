@@ -1,4 +1,5 @@
 require "remove_bg/configuration"
+require "remove_bg/error"
 require "remove_bg/image_composer"
 
 RSpec.describe RemoveBg::ImageComposer do
@@ -33,6 +34,24 @@ RSpec.describe RemoveBg::ImageComposer do
       perform_composition
 
       expect(processing_spy).to have_received(:call).with(destination: destination_path)
+    end
+  end
+
+  context "configured with an unknown processor" do
+    before(:each) { RemoveBg::Configuration.configuration.image_processor = :foo }
+
+    it "raises an error" do
+      expect { perform_composition }
+        .to raise_exception(RemoveBg::Error, "Unsupported image processor: :foo")
+    end
+  end
+
+  context "not configured" do
+    before(:each) { RemoveBg::Configuration.configuration.image_processor = nil }
+
+    it "raises an error" do
+      expect { perform_composition }
+        .to raise_exception(RemoveBg::Error, "Please configure an image processor to use image composition")
     end
   end
 

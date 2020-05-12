@@ -1,3 +1,5 @@
+require_relative "error"
+
 module RemoveBg
   class ImageComposer
     def compose(color_file:, alpha_file:, destination_path:)
@@ -6,8 +8,10 @@ module RemoveBg
           then vips_compose(color_file: color_file, alpha_file: alpha_file)
         when :minimagick
           then minimagick_compose(color_file: color_file, alpha_file: alpha_file)
+        when nil
+          raise RemoveBg::Error, "Please configure an image processor to use image composition"
         else
-          raise "Unsupported image processor: #{configured_image_processor.inspect}"
+          raise RemoveBg::Error, "Unsupported image processor: #{configured_image_processor.inspect}"
         end
 
       image.call(destination: destination_path)
