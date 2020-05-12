@@ -96,7 +96,10 @@ Then process images specifying the `zip` format:
 
 ```ruby
 result = RemoveBg.from_file("large-image.jpg", format: "zip")
+
 result.save("result-with-transparency.png")
+# or
+result.save_zip("result.zip") # If you want to handle composition yourself
 ```
 
 ### Fetching account information

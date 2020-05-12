@@ -2,6 +2,14 @@ require_relative "result"
 
 module RemoveBg
   class CompositeResult < Result
+    def save_zip(file_path, overwrite: false)
+      if File.exist?(file_path) && !overwrite
+        raise FileOverwriteError.new(file_path)
+      end
+
+      FileUtils.cp(download, file_path)
+    end
+
     private
 
     def image_file
