@@ -1,6 +1,6 @@
 module RemoveBg
   class Configuration
-    attr_accessor :api_key
+    attr_accessor :api_key, :image_processor
 
     def self.configuration
       @configuration ||= Configuration.new

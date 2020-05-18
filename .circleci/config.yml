@@ -13,6 +13,12 @@ base_job: &base_job
         name: install dependencies
         command: bundle install --jobs=4 --retry=3 --path vendor/bundle
 
+    - run:
+        name: install image processsing dependencies
+        command: |
+          sudo apt-get update
+          sudo apt install imagemagick libvips
+
     - save_cache:
         paths:
           - ./vendor/bundle
