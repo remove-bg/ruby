@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- Adds support for images up to 25 megapixels ([documentation](https://github.com/remove-bg/ruby#processing-images-over-10-megapixels))
+  - Requires an image processing library to be configured (ImageMagick, GraphicsMagick or libvips)
+
 ## 1.3.0
 
 - Add `RemoveBg.account_info` which includes available credits - via [#9](https://github.com/remove-bg/ruby/pull/9)
