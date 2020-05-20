@@ -18,6 +18,15 @@ module RemoveBg
       Time.at(reset_timestamp).utc
     end
 
+    def to_s
+      "<RateLimit"\
+      " reset_at='#{reset_at.iso8601}'"\
+      " retry_after_seconds=#{retry_after_seconds}"\
+      " total=#{total}"\
+      " remaining=#{remaining}"\
+      ">"
+    end
+
     private
 
     attr_reader :reset_timestamp
