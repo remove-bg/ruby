@@ -43,10 +43,6 @@ base_job: &base_job
 ################################################################################
 
 jobs:
-  ruby-2.4:
-    <<: *base_job
-    docker:
-      - image: circleci/ruby:2.4
   ruby-2.5:
     <<: *base_job
     docker:
@@ -55,6 +51,10 @@ jobs:
     <<: *base_job
     docker:
       - image: circleci/ruby:2.6
+  ruby-2.7:
+    <<: *base_job
+    docker:
+      - image: circleci/ruby:2.7
 
 ################################################################################
 
@@ -62,6 +62,6 @@ workflows:
   version: 2
   multiple-rubies:
     jobs:
-      - ruby-2.4
       - ruby-2.5
       - ruby-2.6
+      - ruby-2.7

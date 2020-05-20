@@ -18,3 +18,5 @@ test-results
 gemfiles/*.gemfile.lock
 
 examples/output
+
+.ruby-version
