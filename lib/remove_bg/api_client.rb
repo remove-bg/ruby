@@ -89,7 +89,8 @@ module RemoveBg
 
       case response.status
       when 429
-        raise RemoveBg::RateLimitError.new(error_message, response, body)
+        rate_limit = RateLimitInfo.new(response.headers)
+        raise RemoveBg::RateLimitError.new(error_message, response, body, rate_limit)
       when 400..499
         raise RemoveBg::ClientHttpError.new(error_message, response, body)
       when 500..599

@@ -39,14 +39,40 @@ RSpec.describe RemoveBg::ApiClient do
   end
 
   context "rate limit exceeded", :disable_vcr do
+    let(:request) do
+      Proc.new { subject.remove_from_file(image_path, build_options) }
+    end
+
     it "raises a specific error, to aid rate limit implementations" do
       stub_request(:post, %r{api.remove.bg}).to_return(
         status: 429,
         body: '{ "errors": [{"title": "Rate limit exceeded"}] }',
       )
 
-      expect{ subject.remove_from_file(image_path, build_options) }.
-        to raise_error RemoveBg::RateLimitError
+      expect(request).to raise_error RemoveBg::RateLimitError, "Rate limit exceeded"
+    end
+
+    it "includes the parsed rate limit information" do
+      moment = Time.now.utc
+
+      stub_request(:post, %r{api.remove.bg}).to_return(
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit" => "500",
+          "X-RateLimit-Remaining" => "0",
+          "X-RateLimit-Reset" => moment.to_i,
+          "Retry-After" => "32",
+        }
+      )
+
+      expect(request).to raise_error RemoveBg::RateLimitError do |ex|
+        rate_limit = ex.rate_limit
+
+        expect(rate_limit.total).to eq 500
+        expect(rate_limit.remaining).to eq 0
+        expect(rate_limit.reset_at).to be_within(1).of(moment)
+        expect(rate_limit.retry_after_seconds).to eq 32
+      end
     end
   end
 
