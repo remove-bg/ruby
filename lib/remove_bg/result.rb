@@ -5,14 +5,15 @@ require_relative "image_composer"
 
 module RemoveBg
   class Result
-    attr_reader :type, :width, :height, :credits_charged
+    attr_reader :type, :width, :height, :credits_charged, :rate_limit
 
-    def initialize(download:, type:, width:, height:, credits_charged:)
+    def initialize(download:, type:, width:, height:, credits_charged:, rate_limit:)
       @download = download
       @type = type
       @width = width
       @height = height
       @credits_charged = credits_charged
+      @rate_limit = rate_limit
     end
 
     def save(file_path, overwrite: false)

@@ -61,6 +61,7 @@ RSpec.describe RemoveBg::Result, "#save" do
       width: nil,
       height: nil,
       credits_charged: nil,
+      rate_limit: nil,
     )
   end
 end

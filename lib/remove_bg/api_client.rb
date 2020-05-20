@@ -6,6 +6,7 @@ require_relative "api"
 require_relative "composite_result"
 require_relative "error"
 require_relative "http_connection"
+require_relative "rate_limit_info"
 require_relative "result"
 require_relative "upload"
 require_relative "url_validator"
@@ -104,6 +105,7 @@ module RemoveBg
         width: headers[HEADER_WIDTH]&.to_i,
         height: headers[HEADER_HEIGHT]&.to_i,
         credits_charged: headers[HEADER_CREDITS_CHARGED]&.to_f,
+        rate_limit: RateLimitInfo.new(headers)
       )
     end
 
