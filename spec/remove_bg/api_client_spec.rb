@@ -1,11 +1,11 @@
 require "remove_bg"
 
 RSpec.describe RemoveBg::ApiClient do
-  context "with an invalid API key" do
-    let(:image_path) do
-      File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
-    end
+  let(:image_path) do
+    File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
+  end
 
+  context "with an invalid API key" do
     let(:request_options) { build_options(api_key: "invalid-api-key") }
 
     it "raises an error with a helpful message" do
@@ -35,6 +35,44 @@ RSpec.describe RemoveBg::ApiClient do
     it "raises an error" do
       expect{ subject.remove_from_url("", build_options) }.
         to raise_error RemoveBg::InvalidUrlError
+    end
+  end
+
+  context "rate limit exceeded", :disable_vcr do
+    let(:request) do
+      Proc.new { subject.remove_from_file(image_path, build_options) }
+    end
+
+    it "raises a specific error, to aid rate limit implementations" do
+      stub_request(:post, %r{api.remove.bg}).to_return(
+        status: 429,
+        body: '{ "errors": [{"title": "Rate limit exceeded"}] }',
+      )
+
+      expect(request).to raise_error RemoveBg::RateLimitError, "Rate limit exceeded"
+    end
+
+    it "includes the parsed rate limit information" do
+      moment = Time.now.utc
+
+      stub_request(:post, %r{api.remove.bg}).to_return(
+        status: 429,
+        headers: {
+          "X-RateLimit-Limit" => "500",
+          "X-RateLimit-Remaining" => "0",
+          "X-RateLimit-Reset" => moment.to_i,
+          "Retry-After" => "32",
+        }
+      )
+
+      expect(request).to raise_error RemoveBg::RateLimitError do |ex|
+        rate_limit = ex.rate_limit
+
+        expect(rate_limit.total).to eq 500
+        expect(rate_limit.remaining).to eq 0
+        expect(rate_limit.reset_at).to be_within(1).of(moment)
+        expect(rate_limit.retry_after_seconds).to eq 32
+      end
     end
   end
 

@@ -6,6 +6,8 @@ require_relative "api"
 require_relative "composite_result"
 require_relative "error"
 require_relative "http_connection"
+require_relative "rate_limit_info"
+require_relative "result_metadata"
 require_relative "result"
 require_relative "upload"
 require_relative "url_validator"
@@ -83,12 +85,15 @@ module RemoveBg
     end
 
     def handle_http_error(response:, body:)
+      error_message = parse_error_message(body)
+
       case response.status
+      when 429
+        rate_limit = RateLimitInfo.new(response.headers)
+        raise RemoveBg::RateLimitError.new(error_message, response, body, rate_limit)
       when 400..499
-        error_message = parse_error_message(body)
         raise RemoveBg::ClientHttpError.new(error_message, response, body)
       when 500..599
-        error_message = parse_error_message(body)
         raise RemoveBg::ServerHttpError.new(error_message, response, body)
       else
         raise RemoveBg::HttpError.new("An unknown error occurred", response, body)
@@ -98,10 +103,8 @@ module RemoveBg
     def parse_image_result(headers:, download:)
       result_for_content_type(headers["Content-Type"]).new(
         download: download,
-        type: headers[HEADER_TYPE],
-        width: headers[HEADER_WIDTH]&.to_i,
-        height: headers[HEADER_HEIGHT]&.to_i,
-        credits_charged: headers[HEADER_CREDITS_CHARGED]&.to_f,
+        metadata: ResultMetadata.new(headers),
+        rate_limit: RateLimitInfo.new(headers)
       )
     end
 

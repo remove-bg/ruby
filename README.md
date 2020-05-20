@@ -102,6 +102,22 @@ result.save("result-with-transparency.png")
 result.save_zip("result.zip") # If you want to handle composition yourself
 ```
 
+#### Rate limits
+
+The [API has rate limits][rate-limits]. Image processing results include the
+rate limit information:
+
+```ruby
+result = RemoveBg.from_file("image.jpg")
+result.rate_limit.to_s
+# => <RateLimit reset_at='2020-05-20T12:00:00Z' total=500 remaining=499 retry_after_seconds=nil>
+```
+
+If you exceed the rate limit a `RemoveBg::RateLimitError` exception will be
+raised. This also contains further information via the `#rate_limit` method.
+
+[rate-limits]: https://www.remove.bg/api#rate-limit
+
 ### Fetching account information
 
 To display the [account information][account-info] for the currently configured

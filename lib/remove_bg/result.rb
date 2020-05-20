@@ -1,18 +1,21 @@
 require "fileutils"
+require "forwardable"
 require "zip"
 require_relative "error"
 require_relative "image_composer"
 
 module RemoveBg
   class Result
-    attr_reader :type, :width, :height, :credits_charged
+    extend ::Forwardable
 
-    def initialize(download:, type:, width:, height:, credits_charged:)
+    attr_reader :metadata, :rate_limit
+
+    def_delegators :metadata, :type, :width, :height, :credits_charged
+
+    def initialize(download:, metadata:, rate_limit:)
       @download = download
-      @type = type
-      @width = width
-      @height = height
-      @credits_charged = credits_charged
+      @metadata = metadata
+      @rate_limit = rate_limit
     end
 
     def save(file_path, overwrite: false)

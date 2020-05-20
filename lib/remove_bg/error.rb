@@ -14,6 +14,15 @@ module RemoveBg
   class ClientHttpError < HttpError; end
   class ServerHttpError < HttpError; end
 
+  class RateLimitError < ClientHttpError
+    attr_reader :rate_limit
+
+    def initialize(message, http_response, http_response_body, rate_limit)
+      @rate_limit = rate_limit
+      super(message, http_response, http_response_body)
+    end
+  end
+
   class FileError < Error
     attr_reader :file_path
 

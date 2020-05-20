@@ -57,12 +57,6 @@ RSpec.describe RemoveBg::CompositeResult do
   private
 
   def new_result(download:)
-    described_class.new(
-      download: download,
-      type: nil,
-      width: nil,
-      height: nil,
-      credits_charged: nil,
-    )
+    described_class.new(download: download, metadata: nil, rate_limit: nil)
   end
 end
