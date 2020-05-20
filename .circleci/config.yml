@@ -11,7 +11,10 @@ base_job: &base_job
 
     - run:
         name: install dependencies
-        command: bundle install --jobs=4 --retry=3 --path vendor/bundle
+        command: |
+          gem install bundler --version '~> 2.0'
+          bundle config set path vendor/bundle
+          bundle install --jobs=4 --retry=3
 
     - run:
         name: install image processsing dependencies

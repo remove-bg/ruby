@@ -68,7 +68,7 @@ PLATFORMS
 
 DEPENDENCIES
   appraisal
-  bundler (~> 1.17)
+  bundler (~> 2.0)
   dotenv
   pry
   rake
@@ -80,4 +80,4 @@ DEPENDENCIES
   webmock
 
 BUNDLED WITH
-   1.17.3
+   2.1.4
