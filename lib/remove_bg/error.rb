@@ -13,6 +13,7 @@ module RemoveBg
 
   class ClientHttpError < HttpError; end
   class ServerHttpError < HttpError; end
+  class RateLimitError < ClientHttpError; end
 
   class FileError < Error
     attr_reader :file_path

@@ -83,12 +83,14 @@ module RemoveBg
     end
 
     def handle_http_error(response:, body:)
+      error_message = parse_error_message(body)
+
       case response.status
+      when 429
+        raise RemoveBg::RateLimitError.new(error_message, response, body)
       when 400..499
-        error_message = parse_error_message(body)
         raise RemoveBg::ClientHttpError.new(error_message, response, body)
       when 500..599
-        error_message = parse_error_message(body)
         raise RemoveBg::ServerHttpError.new(error_message, response, body)
       else
         raise RemoveBg::HttpError.new("An unknown error occurred", response, body)

@@ -1,11 +1,11 @@
 require "remove_bg"
 
 RSpec.describe RemoveBg::ApiClient do
-  context "with an invalid API key" do
-    let(:image_path) do
-      File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
-    end
+  let(:image_path) do
+    File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
+  end
 
+  context "with an invalid API key" do
     let(:request_options) { build_options(api_key: "invalid-api-key") }
 
     it "raises an error with a helpful message" do
@@ -35,6 +35,18 @@ RSpec.describe RemoveBg::ApiClient do
     it "raises an error" do
       expect{ subject.remove_from_url("", build_options) }.
         to raise_error RemoveBg::InvalidUrlError
+    end
+  end
+
+  context "rate limit exceeded", :disable_vcr do
+    it "raises a specific error, to aid rate limit implementations" do
+      stub_request(:post, %r{api.remove.bg}).to_return(
+        status: 429,
+        body: '{ "errors": [{"title": "Rate limit exceeded"}] }',
+      )
+
+      expect{ subject.remove_from_file(image_path, build_options) }.
+        to raise_error RemoveBg::RateLimitError
     end
   end
 
