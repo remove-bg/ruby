@@ -41,6 +41,8 @@ module RemoveBg
 
     def request_remove_bg(data, api_key)
       download = Tempfile.new("remove-bg-download")
+      download.binmode
+
       streaming = false
 
       response = connection.post(V1_REMOVE_BG, data) do |req|
