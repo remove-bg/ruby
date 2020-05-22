@@ -18,18 +18,17 @@ module RemoveBg
 
     def composite_file
       @composite_file ||= begin
-        Tempfile.new(["composed", ".png"]).tap do |file|
-          compose_to_file(file)
-        end
+        binary_tempfile(["composed", ".png"])
+          .tap { |file| compose_to_file(file) }
       end
     end
 
     def color_file
-      @color_file ||= Tempfile.new(["color", ".jpg"])
+      @color_file ||= binary_tempfile(["color", ".jpg"])
     end
 
     def alpha_file
-      @alpha_file ||= Tempfile.new(["alpha", ".png"])
+      @alpha_file ||= binary_tempfile(["alpha", ".png"])
     end
 
     def compose_to_file(destination)
@@ -47,6 +46,10 @@ module RemoveBg
         zf.find_entry("color.jpg").extract(color_file.path) { true }
         zf.find_entry("alpha.png").extract(alpha_file.path) { true }
       end
+    end
+
+    def binary_tempfile(basename)
+      Tempfile.new(basename).tap { |file| file.binmode }
     end
   end
 end
