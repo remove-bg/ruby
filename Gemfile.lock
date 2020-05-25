@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    remove_bg (1.4.0)
+    remove_bg (1.4.1)
       faraday (>= 0.15, < 2)
       image_processing (>= 1.9, < 2)
       rubyzip (>= 2.0, < 3)

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Fixes binary encoding issue - via [#15](https://github.com/remove-bg/ruby/pull/15)
+
 ## 1.4.0
 
 - Adds support for images up to 25 megapixels ([documentation](https://github.com/remove-bg/ruby#processing-images-over-10-megapixels))
