@@ -145,6 +145,22 @@ RSpec.describe RemoveBg::ApiClient do
     end
   end
 
+  describe "handling binary data" do
+    let(:image_url) { "http://example.image.jpg" }
+    let(:response_data) { "\xFF".force_encoding(Encoding::BINARY) }
+
+    it "handles the encoding correctly" do
+      stub_request(:post, %r{api.remove.bg})
+        .to_return(status: 200, body: response_data)
+
+      expect(response_data.encoding).to eq(Encoding::BINARY)
+
+      result = subject.remove_from_url(image_url, build_options)
+
+      expect(result.data.encoding).to eq(Encoding::BINARY)
+    end
+  end
+
   describe "#account_info" do
     context "with an invalid API key" do
       it "raises an error with a helpful message" do

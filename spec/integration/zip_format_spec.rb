@@ -18,7 +18,8 @@ RSpec.describe "using the ZIP format" do
       end
 
       expect(result).to be_a RemoveBg::CompositeResult
-      expect(result.data).to start_with("\x89PNG")
+      expect(result.data.encoding).to eq(Encoding::BINARY)
+      expect(result.data).to be_a_binary_png
       expect(result.height).to eq 333
       expect(result.width).to eq 500
     end
@@ -33,9 +34,16 @@ RSpec.describe "using the ZIP format" do
       end
 
       expect(result).to be_a RemoveBg::CompositeResult
-      expect(result.data).to start_with("\x89PNG")
+      expect(result.data.encoding).to eq(Encoding::BINARY)
+      expect(result.data).to be_a_binary_png
       expect(result.height).to eq 333
       expect(result.width).to eq 500
     end
+  end
+
+  private
+
+  def be_a_binary_png
+    start_with("\x89PNG".force_encoding(Encoding::BINARY))
   end
 end
