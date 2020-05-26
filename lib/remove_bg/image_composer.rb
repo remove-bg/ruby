@@ -3,14 +3,14 @@ require_relative "error"
 module RemoveBg
   class ImageComposer
     DEFAULT_BINARY_DETECTOR = lambda do |binary_name|
-      system("command", "-v", binary_name, out: File::NULL)
+      system("which", binary_name, out: File::NULL)
     end
 
-    def self.detect_image_processor(binary_detector: DEFAULT_BINARY_DETECTOR)
+    def self.detect_image_processor(detector: DEFAULT_BINARY_DETECTOR)
       case
-      when binary_detector.call("magick"), binary_detector.call("gm")
+      when detector.call("magick"), detector.call("convert"), detector.call("gm")
         :minimagick
-      when binary_detector.call("vips")
+      when detector.call("vips")
         :vips
       end
     end
