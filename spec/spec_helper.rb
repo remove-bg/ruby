@@ -2,6 +2,7 @@ require "dotenv"
 Dotenv.load(".env.test.local", ".env.test")
 
 require "webmock/rspec"
+require_relative "support/simplecov"
 require_relative "support/vcr"
 
 RSpec.configure do |config|
