@@ -59,7 +59,7 @@ RSpec.describe RemoveBg::ImageComposer do
     let(:binary_detector) { double("binary_detector", call: false) }
 
     let(:detected) do
-      described_class.detect_image_processor(binary_detector: binary_detector)
+      described_class.detect_image_processor(detector: binary_detector)
     end
 
     it "can detect Imagemagick" do
