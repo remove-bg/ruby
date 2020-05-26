@@ -2,7 +2,7 @@
 
 # Ruby library
 
-[![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master) [![Gem Version](https://badge.fury.io/rb/remove_bg.svg)](https://rubygems.org/gems/remove_bg)
+[![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master) [![Gem Version](https://badge.fury.io/rb/remove_bg.svg)](https://rubygems.org/gems/remove_bg) [![codecov](https://codecov.io/gh/remove-bg/ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/remove-bg/ruby)
 
 ## Installation
 
