@@ -64,7 +64,7 @@ RSpec.describe "using the ZIP format" do
 
     it "can be explicitly turned off" do
       RemoveBg::Configuration.configuration.image_processor = :minimagick
-      RemoveBg::Configuration.configuration.save_bandwidth = false
+      RemoveBg::Configuration.configuration.auto_upgrade_png_to_zip = false
 
       result = VCR.use_cassette("zip-upgrade-off") do
         RemoveBg.from_file(image_path, format: "png", api_key: api_key)

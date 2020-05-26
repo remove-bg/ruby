@@ -48,7 +48,7 @@ module RemoveBg
     end
 
     def optimization_enabled?
-      RemoveBg::Configuration.configuration.save_bandwidth
+      RemoveBg::Configuration.configuration.auto_upgrade_png_to_zip
     end
   end
 end
