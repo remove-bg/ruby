@@ -4,14 +4,54 @@
 
 [![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master) [![Gem Version](https://badge.fury.io/rb/remove_bg.svg)](https://rubygems.org/gems/remove_bg) [![codecov](https://codecov.io/gh/remove-bg/ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/remove-bg/ruby)
 
-## Installation
+## Quickstart installation
 
-- Add `gem "remove_bg"` to your application's Gemfile and then execute `bundle`.
-- Or install it yourself as: `gem install remove_bg`
+Add the gem to your `Gemfile` and run `bundle install`:
 
-## Usage
+```
+gem "remove_bg"
+```
 
-### Configuring an API key
+Or run `gem install remove_bg` to install globally.
+
+Please note the base configuration has the following resolution limits:
+
+| Output format | Resolution limit |
+|---------------|------------------|
+| PNG           | 10 megapixels    |
+| JPG           | 25 megapixels    |
+
+## Full installation
+
+For best performance and quality the gem requires an image processing library.
+Please install one of the following libraries:
+
+- [ImageMagick](https://www.imagemagick.org/)
+- [GraphicsMagick](http://www.graphicsmagick.org/)
+- [libvips](http://libvips.github.io/libvips/)
+
+The gem will auto-detect any image processing libraries present. However you may
+prefer to explicitly configure which library to use:
+
+```ruby
+RemoveBg.configure do |config|
+  config.image_processor = :minimagick # For ImageMagick or GraphicsMagick
+  # or
+  config.image_processor = :vips
+end
+```
+
+The full installation has the following resolution limits:
+
+| Output format | Resolution limit |
+|---------------|------------------|
+| PNG           | 25 megapixels    |
+| JPG           | 25 megapixels    |
+| ZIP           | 25 megapixels    |
+
+# Usage
+
+## Configuring an API key
 
 To configure a global API key (used by default unless overridden per request):
 
@@ -25,7 +65,7 @@ It's not recommended to commit your API key to version control. You may want to
 read the API key from an environment variable (e.g.
 `ENV.fetch("REMOVE_BG_API_KEY")`) or find an alternative method.
 
-### Removing the background from an image
+## Removing the background from an image
 
 Currently the gem supports removing the background from a file or a URL:
 
@@ -34,7 +74,7 @@ RemoveBg.from_file("image.png")
 RemoveBg.from_url("http://example.com/image.png")
 ```
 
-#### Request options
+## Request options
 
 The processing options outlined in the [API reference](https://www.remove.bg/api)
 can be specified per request:
@@ -49,7 +89,7 @@ The API key can also be specified per request:
 RemoveBg.from_file("image.png", api_key: "<api-key>")
 ```
 
-#### Handling the result
+## Handling the result
 
 Background removal requests return a result object which includes the processed
 image data and the metadata about the operation.
@@ -69,30 +109,13 @@ result.save("processed/image.png")
 result.save("image.png", overwrite: true) # Careful!
 ```
 
-#### Processing images over 10 megapixels
+## Producing transparent images over 10 megapixels
 
-The Remove.bg API provides a [ZIP format](https://www.remove.bg/api#zip-format)
-which includes all the information required to efficiently composite a large
-image with transparency.
+After configuring a full installation (detailed above) you can process images
+over 10 megapixels with a transparent output.
 
-The gem can handle this composition for you, but you'll need
-[ImageMagick]/[GraphicsMagick] or [libvips] available on your computer.
-
-[ImageMagick]: https://www.imagemagick.org
-[GraphicsMagick]: http://www.graphicsmagick.org
-[libvips]: http://libvips.github.io/libvips/
-
-Please configure the image processing library you'd like to use:
-
-```ruby
-RemoveBg.configure do |config|
-  config.image_processor = :minimagick # For ImageMagick or GraphicsMagick
-  # or
-  config.image_processor = :vips
-end
-```
-
-Then process images specifying the `zip` format:
+Process images with either the `png` or `zip` format. If you specify the `zip`
+format it's possible to save the archive and handle composition yourself.
 
 ```ruby
 result = RemoveBg.from_file("large-image.jpg", format: "zip")
@@ -102,7 +125,7 @@ result.save("result-with-transparency.png")
 result.save_zip("result.zip") # If you want to handle composition yourself
 ```
 
-#### Rate limits
+## Rate limits
 
 The [API has rate limits][rate-limits]. Image processing results include the
 rate limit information:
@@ -118,7 +141,7 @@ raised. This also contains further information via the `#rate_limit` method.
 
 [rate-limits]: https://www.remove.bg/api#rate-limit
 
-### Fetching account information
+## Fetching account information
 
 To display the [account information][account-info] for the currently configured
 API key:
