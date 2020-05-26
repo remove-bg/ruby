@@ -55,6 +55,36 @@ RSpec.describe RemoveBg::ImageComposer do
     end
   end
 
+  describe "::detect_image_processor" do
+    let(:binary_detector) { double("binary_detector", call: false) }
+
+    let(:detected) do
+      described_class.detect_image_processor(binary_detector: binary_detector)
+    end
+
+    it "can detect Imagemagick" do
+      allow(binary_detector).to receive(:call).with("magick").and_return(true)
+
+      expect(detected).to eq :minimagick
+    end
+
+    it "can detect Graphicsmagick" do
+      allow(binary_detector).to receive(:call).with("gm").and_return(true)
+
+      expect(detected).to eq :minimagick
+    end
+
+    it "can detect Vips" do
+      allow(binary_detector).to receive(:call).with("vips").and_return(true)
+
+      expect(detected).to eq :vips
+    end
+
+    it "returns nil if there are no matches" do
+      expect(detected).to be_nil
+    end
+  end
+
   private
 
   def spy_on_image_processing(klass)
