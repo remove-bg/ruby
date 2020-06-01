@@ -75,6 +75,8 @@ GEM
     thor (1.0.1)
     url (0.3.2)
     vcr (5.1.0)
+    vcr_better_binary (0.1.0)
+      vcr (~> 5.0)
     webmock (3.8.3)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
@@ -96,6 +98,7 @@ DEPENDENCIES
   rspec_junit_formatter
   simplecov
   vcr
+  vcr_better_binary
   webmock
 
 BUNDLED WITH

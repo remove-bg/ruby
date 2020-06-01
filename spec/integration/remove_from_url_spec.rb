@@ -2,7 +2,7 @@ require "remove_bg"
 
 RSpec.describe "removing the background from a URL" do
   let(:api_key) { ENV.fetch("REMOVE_BG_API_KEY") }
-  let(:image_url) { "https://www.remove.bg/images/samples/fg/back.jpg" }
+  let(:image_url) { "https://static.remove.bg/sample-gallery/people/adult-blue-boy-1438275-thumbnail.jpg" }
 
   it "succeeds with a valid API key" do
     result = VCR.use_cassette("from-url-back-jpg") do
@@ -13,8 +13,8 @@ RSpec.describe "removing the background from a URL" do
     expect(result.data).to_not be_empty
     expect(result.data.encoding).to eq(Encoding::BINARY)
     expect(result.type).to eq "person"
-    expect(result.height).to eq 438
-    expect(result.width).to eq 500
+    expect(result.height).to eq 1080
+    expect(result.width).to eq 720
     expect(result.credits_charged).to be_a(Float).and(be >= 0)
   end
 
