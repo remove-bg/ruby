@@ -8,7 +8,7 @@ http_interactions:
       string: ''
     headers:
       User-Agent:
-      - remove-bg-ruby-1.2.1
+      - remove-bg-ruby-1.4.1
       X-Api-Key:
       - "<REMOVE-BG-API-KEY>"
       Accept-Encoding:
@@ -25,18 +25,18 @@ http_interactions:
       Content-Type:
       - application/json; charset=utf-8
       Content-Length:
-      - '132'
+      - '131'
       Etag:
-      - W/"84-INkA6jLq02tsWK7vl9f8niXJcXI"
+      - W/"83-MenMYw+SiTSRWMxm+UQ4/0gLJi0"
       Date:
-      - Wed, 06 May 2020 15:45:39 GMT
+      - Mon, 01 Jun 2020 15:48:31 GMT
       Via:
       - 1.1 google
       Alt-Svc:
       - clear
     body:
       encoding: UTF-8
-      string: '{"data":{"attributes":{"credits":{"subscription":5000,"payg":0,"enterprise":0,"total":5000},"api":{"free_calls":50,"sizes":"all"}}}}'
-    http_version: 
-  recorded_at: Wed, 06 May 2020 15:45:39 GMT
-recorded_with: VCR 4.0.0
+      string: '{"data":{"attributes":{"credits":{"subscription":4943,"payg":0,"enterprise":0,"total":4943},"api":{"free_calls":0,"sizes":"all"}}}}'
+    http_version: null
+  recorded_at: Mon, 01 Jun 2020 15:48:31 GMT
+recorded_with: VCR 5.1.0
