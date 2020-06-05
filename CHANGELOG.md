@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Auto-detect any available image processing libraries
+- Reduce bandwidth usage by using ZIP format where possible
+
 ## 1.4.1
 
 - Fixes binary encoding issue - via [#15](https://github.com/remove-bg/ruby/pull/15)
