@@ -1,6 +1,11 @@
 require_relative "error"
 
 module RemoveBg
+  # Combines alpha.png and color.jpg files to produce a full-sized transparent PNG.
+  # An image processing library (ImageMagick, GraphicsMagick, or libvips) must
+  # be available on the system.
+  # @see RemoveBg::CompositeResult
+  #
   class ImageComposer
     DEFAULT_BINARY_DETECTOR = lambda do |binary_name|
       system("which", binary_name, out: File::NULL)

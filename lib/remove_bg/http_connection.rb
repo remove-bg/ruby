@@ -8,6 +8,8 @@ module RemoveBg
     HTTP_BASE_TIMEOUT = 10
     HTTP_WRITE_TIMEOUT = 120
 
+    # @return [Faraday::Connection]
+    #
     def self.build(api_url = RemoveBg::Api::URL)
       retry_options = {
         max: 2,

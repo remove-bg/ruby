@@ -1,7 +1,17 @@
 require_relative "result"
 
 module RemoveBg
+  # Handles image composition for larger images (over 10MP) where transparency is
+  # required.
+  # @see RemoveBg::Result
+  #
   class CompositeResult < Result
+    # Saves the ZIP archive containing the alpha.png and color.jpg files
+    # (useful if you want to handle composition yourself)
+    # @param file_path [string]
+    # @param overwrite [boolean] Overwrite any existing file at the specified path
+    # @return [nil]
+    #
     def save_zip(file_path, overwrite: false)
       if File.exist?(file_path) && !overwrite
         raise FileOverwriteError.new(file_path)
