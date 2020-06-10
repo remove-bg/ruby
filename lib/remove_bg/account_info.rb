@@ -1,6 +1,10 @@
 module RemoveBg
   class AccountInfo
-    attr_reader :api, :credits
+    # @return [RemoveBg::AccountInfo::ApiInfo]
+    attr_reader :api
+
+    # @return [RemoveBg::AccountInfo::CreditsInfo]
+    attr_reader :credits
 
     def initialize(attributes)
       @api = ApiInfo.new(**attributes.fetch(:api))

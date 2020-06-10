@@ -16,21 +16,40 @@ module RemoveBg
   class ApiClient
     include RemoveBg::Api
 
+    # @param connection [Faraday::Connection]
+    #
     def initialize(connection: RemoveBg::HttpConnection.build)
       @connection = connection
     end
 
+    # Removes the background from an image on the local file system
+    # @param image_path [String]
+    # @param options [RemoveBg::RequestOptions]
+    # @return [RemoveBg::Result|RemoveBg::CompositeResult]
+    # @raise [RemoveBg::Error]
+    #
     def remove_from_file(image_path, options)
       data = options.data.merge(image_file: Upload.for_file(image_path))
       request_remove_bg(data, options.api_key)
     end
 
+    # Removes the background from the image at the URL specified
+    # @param image_url [String]
+    # @param options [RemoveBg::RequestOptions]
+    # @return [RemoveBg::Result|RemoveBg::CompositeResult]
+    # @raise [RemoveBg::Error]
+    #
     def remove_from_url(image_url, options)
       RemoveBg::UrlValidator.validate(image_url)
       data = options.data.merge(image_url: image_url)
       request_remove_bg(data, options.api_key)
     end
 
+    # Fetches account information
+    # @param options [RemoveBg::BaseRequestOptions]
+    # @return [RemoveBg::AccountInfo]
+    # @raise [RemoveBg::Error]
+    #
     def account_info(options)
       request_account_info(options.api_key)
     end

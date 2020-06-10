@@ -2,7 +2,11 @@ module RemoveBg
   class Error < StandardError; end
 
   class HttpError < Error
-    attr_reader :http_response, :http_response_body
+    # @return [Faraday::Response]
+    attr_reader :http_response
+
+    # @return [String]
+    attr_reader :http_response_body
 
     def initialize(message, http_response, http_response_body)
       @http_response = http_response
@@ -11,9 +15,13 @@ module RemoveBg
     end
   end
 
+  # Raised for all HTTP 4XX errors
   class ClientHttpError < HttpError; end
+
+  # Raised for all HTTP 5XX errors
   class ServerHttpError < HttpError; end
 
+  # Raised for HTTP 429 status code
   class RateLimitError < ClientHttpError
     attr_reader :rate_limit
 
