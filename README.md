@@ -51,6 +51,8 @@ The full installation has the following resolution limits:
 
 # Usage
 
+For more in-depth documentation please see [RubyDoc](https://www.rubydoc.info/gems/remove_bg)
+
 ## Configuring an API key
 
 To configure a global API key (used by default unless overridden per request):
@@ -173,11 +175,22 @@ Bug reports and pull requests are welcome on GitHub at [remove-bg/ruby](https://
 
 ## Development
 
+### Setup
+
 After checking out the repo, run `bin/setup` to install dependencies. Then, run
 `rake spec` to run the tests.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To
-release a new version, update the version number in `version.rb`, and then run
+### Releasing a new version
+To release a new version, update the version number in `version.rb`, and then run
 `bundle exec rake release`, which will create a git tag for the version, push
 git commits and tags, and push the `.gem` file to
 [rubygems.org](https://rubygems.org).
+
+### Documentation
+
+To preview the [YARD documentation](https://yardoc.org/) locally run:
+
+```
+bundle exec yard server --reload
+open http://localhost:8808/
+```
