@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 1.5.0
+
 - Auto-detect any available image processing libraries
 - Reduce bandwidth usage by using ZIP format where possible
 

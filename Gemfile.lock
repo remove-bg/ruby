@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    remove_bg (1.4.1)
+    remove_bg (1.5.0)
       faraday (>= 0.15, < 2)
       image_processing (>= 1.9, < 2)
       rubyzip (>= 2.0, < 3)
@@ -33,7 +33,7 @@ GEM
     dotenv (2.7.5)
     faraday (1.0.1)
       multipart-post (>= 1.2, < 3)
-    ffi (1.12.2)
+    ffi (1.13.1)
     hashdiff (1.0.1)
     image_processing (1.11.0)
       mini_magick (>= 4.9.5, < 5)
