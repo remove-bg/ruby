@@ -48,7 +48,7 @@ module RemoveBg
 
   class FileOverwriteError < FileError
     def initialize(file_path)
-      super("The file already exists: '#{file_path}' (specify #save(overwrite: true) to ignore)", file_path)
+      super("The file already exists: '#{file_path}' (use #save! or #save_zip! to overwrite existing files)", file_path)
     end
   end
 
