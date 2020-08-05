@@ -35,6 +35,18 @@ module RemoveBg
         raise FileOverwriteError.new(file_path)
       end
 
+      if overwrite
+        warn('DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save! instead)')
+      end
+
+      FileUtils.cp(image_file, file_path)
+    end
+
+    # Saves the processed image to the path specified, overwriting any existing file at the specified path 
+    # @param file_path [string]
+    # @return [nil]
+    #
+    def save!(file_path)
       FileUtils.cp(image_file, file_path)
     end
 

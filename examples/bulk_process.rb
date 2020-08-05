@@ -20,7 +20,7 @@ input_images.each do |input_image|
 
   RemoveBg
     .from_file(input_image, api_key: api_key, size: "regular")
-    .save(output_path, overwrite: true)
+    .save!(output_path)
 
   puts "✅ Processed #{input_image} -> #{output_path}"
 end
