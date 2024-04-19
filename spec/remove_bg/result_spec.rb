@@ -47,7 +47,7 @@ RSpec.describe RemoveBg::Result, "#save" do
   it "allows the file to be overwritten" do
     File.write(file_path, "existing-data")
 
-    new_result(download: download).save(file_path, overwrite: true)
+    new_result(download: download).save!(file_path)
 
     expect(File.read(file_path)).to include "test-data"
   end

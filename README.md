@@ -108,7 +108,8 @@ There's also a `#save` convenience method:
 
 ```ruby
 result.save("processed/image.png")
-result.save("image.png", overwrite: true) # Careful!
+# Overwrite any existing file
+result.save!("processed/image.png") 
 ```
 
 ## Producing transparent images over 10 megapixels

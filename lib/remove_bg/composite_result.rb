@@ -17,6 +17,19 @@ module RemoveBg
         raise FileOverwriteError.new(file_path)
       end
 
+      if overwrite
+        warn('DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save_zip! instead)')
+      end
+
+      FileUtils.cp(download, file_path)
+    end
+
+    # Saves the ZIP archive containing the alpha.png and color.jpg files, overwriting any exisiting files
+    # (useful if you want to handle composition yourself)
+    # @param file_path [string]
+    # @return [nil]
+    #
+    def save_zip!(file_path)
       FileUtils.cp(download, file_path)
     end
 

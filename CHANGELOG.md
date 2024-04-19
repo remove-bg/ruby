@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+ - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
+
 ## 1.5.0
 
 - Auto-detect any available image processing libraries
