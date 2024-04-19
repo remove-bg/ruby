@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe "removing the background from a file" do

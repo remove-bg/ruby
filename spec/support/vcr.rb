@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "vcr"
 require "vcr_better_binary"
 

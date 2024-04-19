@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RemoveBg
   class AccountInfo
     # @return [RemoveBg::AccountInfo::ApiInfo]

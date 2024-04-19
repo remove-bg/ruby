@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/configuration"
 require "remove_bg/error"
 require "remove_bg/image_composer"

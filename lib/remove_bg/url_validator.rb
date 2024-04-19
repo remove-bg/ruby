@@ -1,16 +1,16 @@
+# frozen_string_literal: true
+
 require "uri"
 require_relative "error"
 
 module RemoveBg
   class UrlValidator
-    PERMITTED_SCHEMES = ["http", "https"].freeze
+    PERMITTED_SCHEMES = %w[http https].freeze
 
     def self.validate(url)
       parsed = URI.parse(url)
 
-      unless parsed.absolute? && PERMITTED_SCHEMES.include?(parsed.scheme)
-        raise RemoveBg::InvalidUrlError.new(url)
-      end
+      raise RemoveBg::InvalidUrlError.new(url) unless parsed.absolute? && PERMITTED_SCHEMES.include?(parsed.scheme)
     rescue URI::InvalidURIError
       raise RemoveBg::InvalidUrlError.new(url)
     end

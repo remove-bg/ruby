@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "faraday"
 require_relative "api"
 require_relative "version"
@@ -17,7 +19,7 @@ module RemoveBg
         backoff_factor: 2,
         methods: [:post],
         exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-          [Faraday::ConnectionFailed]
+                    [Faraday::ConnectionFailed],
       }
 
       request_options = Faraday::RequestOptions.new.tap do |req_options|

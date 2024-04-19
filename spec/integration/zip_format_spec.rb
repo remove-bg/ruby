@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 require "digest"
 
@@ -85,6 +87,6 @@ RSpec.describe "using the ZIP format" do
   end
 
   def be_a_binary_png
-    start_with("\x89PNG".force_encoding(Encoding::BINARY))
+    start_with((+"\x89PNG").force_encoding(Encoding::BINARY))
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe "Remove BG configuration" do
@@ -20,9 +22,9 @@ RSpec.describe "Remove BG configuration" do
       config.api_key = "an-api-key"
     end
 
-    expect{ RemoveBg::Configuration.reset }.
-      to change{ RemoveBg::Configuration.configuration.api_key }.
-      from("an-api-key").to(nil)
+    expect { RemoveBg::Configuration.reset }
+      .to change { RemoveBg::Configuration.configuration.api_key }
+      .from("an-api-key").to(nil)
   end
 
   describe "image processor" do

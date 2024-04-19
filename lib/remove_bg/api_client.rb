@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "json"
 require "tempfile"
 
@@ -70,16 +72,14 @@ module RemoveBg
         # Faraday v0.16 & v1.0+ support streaming, v0.17 did not (rollback release)
         if req.options.respond_to?(:on_data)
           streaming = true
-          req.options.on_data = Proc.new do |chunk, _|
+          req.options.on_data = proc do |chunk, _|
             download.write(chunk)
           end
         end
       end
 
       # Faraday v0.15 / v0.17
-      if !streaming
-        download.write(response.body)
-      end
+      download.write(response.body) unless streaming
 
       download.rewind
 
@@ -139,8 +139,8 @@ module RemoveBg
 
     def parse_account_result(response)
       attributes = JSON.parse(response.body, symbolize_names: true)
-        .fetch(:data)
-        .fetch(:attributes)
+                       .fetch(:data)
+                       .fetch(:attributes)
 
       RemoveBg::AccountInfo.new(attributes)
     end
