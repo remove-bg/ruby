@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/version"
 require "remove_bg/api_client"
 require "remove_bg/configuration"

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "base_request_options"
 
 module RemoveBg
@@ -25,9 +27,7 @@ module RemoveBg
       options = raw_options.dup
       options[:size] ||= SIZE_AUTO
 
-      if options.key?(:format)
-        options[:format] = optimize_format(options[:format])
-      end
+      options[:format] = optimize_format(options[:format]) if options.key?(:format)
 
       super(options)
     end

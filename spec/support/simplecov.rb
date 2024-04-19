@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "simplecov"
 
 SimpleCov.start do
@@ -7,8 +9,5 @@ end
 if ENV.key?("UPLOAD_COVERAGE")
   require "codecov"
 
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-    SimpleCov::Formatter::SimpleFormatter,
-    SimpleCov::Formatter::Codecov
-  ])
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::SimpleFormatter, SimpleCov::Formatter::Codecov])
 end

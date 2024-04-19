@@ -7,6 +7,9 @@
 /spec/reports/
 /tmp/
 
+# Rubocop
+.rubocop-*
+
 # rspec failure tracking
 spec/examples.txt
 

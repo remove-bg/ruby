@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe "RemoveBg::from_url" do
@@ -15,8 +17,8 @@ RSpec.describe "RemoveBg::from_url" do
 
       expected_request_options = having_attributes(api_key: api_key)
 
-      expect(api_client).to have_received(:remove_from_url).
-        with(image_url, expected_request_options)
+      expect(api_client).to have_received(:remove_from_url)
+        .with(image_url, expected_request_options)
     end
   end
 
@@ -30,8 +32,8 @@ RSpec.describe "RemoveBg::from_url" do
     api_client = spy_on_api_client
     RemoveBg.from_url(image_url, options.merge({ api_key: "an-api-key" }))
 
-    expect(api_client).to have_received(:remove_from_url).
-      with(anything, satisfy { |arg| arg.data == options })
+    expect(api_client).to have_received(:remove_from_url)
+      .with(anything, satisfy { |arg| arg.data == options })
   end
 
   private

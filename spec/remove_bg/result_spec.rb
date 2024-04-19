@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/result"
 require "securerandom"
 require "tempfile"
@@ -32,7 +34,7 @@ RSpec.describe RemoveBg::Result, "#save" do
   it "raises an error if the file already exists" do
     File.write(file_path, "existing-data")
 
-    attempt_overwrite = Proc.new do
+    attempt_overwrite = proc do
       new_result(download: download).save(file_path)
     end
 

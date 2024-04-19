@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "result"
 
 module RemoveBg
@@ -13,13 +15,9 @@ module RemoveBg
     # @return [nil]
     #
     def save_zip(file_path, overwrite: false)
-      if File.exist?(file_path) && !overwrite
-        raise FileOverwriteError.new(file_path)
-      end
+      raise FileOverwriteError.new(file_path) if File.exist?(file_path) && !overwrite
 
-      if overwrite
-        warn('DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save_zip! instead)')
-      end
+      warn("DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save_zip! instead)") if overwrite
 
       FileUtils.cp(download, file_path)
     end
@@ -40,10 +38,8 @@ module RemoveBg
     end
 
     def composite_file
-      @composite_file ||= begin
-        binary_tempfile(["composed", ".png"])
-          .tap { |file| compose_to_file(file) }
-      end
+      @composite_file ||= binary_tempfile(["composed", ".png"])
+                          .tap { |file| compose_to_file(file) }
     end
 
     def color_file
@@ -72,7 +68,7 @@ module RemoveBg
     end
 
     def binary_tempfile(basename)
-      Tempfile.new(basename).tap { |file| file.binmode }
+      Tempfile.new(basename).tap(&:binmode)
     end
   end
 end

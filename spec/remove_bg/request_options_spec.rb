@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe RemoveBg::RequestOptions do
@@ -24,15 +26,15 @@ RSpec.describe RemoveBg::RequestOptions do
     it "raises an error if neither global or per-request API key is set" do
       RemoveBg.configure { |config| config.api_key = nil }
 
-      expect{ described_class.new({}) }.
-      to raise_error RemoveBg::Error, /configure an API key/
+      expect { described_class.new({}) }
+        .to raise_error RemoveBg::Error, /configure an API key/
     end
 
     it "raises an error if the API key is empty" do
       RemoveBg.configure { |config| config.api_key = nil }
 
-      expect{ described_class.new(api_key: "") }.
-      to raise_error RemoveBg::Error, /configure an API key/
+      expect { described_class.new(api_key: "") }
+        .to raise_error RemoveBg::Error, /configure an API key/
     end
   end
 end

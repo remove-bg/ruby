@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/composite_result"
 require "securerandom"
 require "tempfile"
@@ -33,7 +35,7 @@ RSpec.describe RemoveBg::CompositeResult do
     it "raises an error if the file already exists" do
       File.write(file_path, "existing-data")
 
-      attempt_overwrite = Proc.new do
+      attempt_overwrite = proc do
         new_result(download: download).save_zip(file_path)
       end
 

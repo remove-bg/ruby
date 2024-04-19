@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe "removing the background from a URL" do
@@ -20,7 +22,7 @@ RSpec.describe "removing the background from a URL" do
 
   context "image doesn't exist" do
     it "raises an error with a helpful message" do
-      make_request = Proc.new do
+      make_request = proc do
         VCR.use_cassette("from-url-non-existent-image") do
           RemoveBg.from_url("http://example.com/404.png", api_key: api_key)
         end

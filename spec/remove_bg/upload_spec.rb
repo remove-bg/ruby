@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/upload"
 require "rspec/with_params/dsl"
 require "securerandom"
@@ -7,7 +9,7 @@ RSpec.describe RemoveBg::Upload do
   extend RSpec::WithParams::DSL
 
   with_params(
-    [:extension,  :expected_content_type],
+    %i[extension expected_content_type],
     [".jpg",      "image/jpeg"],
     [".jpeg",     "image/jpeg"],
     [".png",      "image/png"],
@@ -22,7 +24,7 @@ RSpec.describe RemoveBg::Upload do
   end
 
   it "raises an error for unsupported file types" do
-    upload_doc = Proc.new do
+    upload_doc = proc do
       upload_for_file(tmp_file(".docx"))
     end
 
@@ -32,7 +34,7 @@ RSpec.describe RemoveBg::Upload do
   it "raises an error when the file doesn't exist" do
     image_path = "./#{SecureRandom.urlsafe_base64}.png"
 
-    upload_doc = Proc.new do
+    upload_doc = proc do
       upload_for_file(image_path)
     end
 

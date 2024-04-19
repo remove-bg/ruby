@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require "remove_bg/rate_limit_info"
 
 RSpec.describe RemoveBg::RateLimitInfo do
   describe "#to_s" do
     it "displays the rate limit info in a human readable form" do
-      moment = Time.utc(2020, 05, 20, 12)
+      moment = Time.utc(2020, 5, 20, 12)
       headers = {
         "X-RateLimit-Limit" => "500",
         "X-RateLimit-Remaining" => "0",
