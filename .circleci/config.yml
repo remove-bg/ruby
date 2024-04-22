@@ -6,6 +6,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.1
   sonarcloud: sonarsource/sonarcloud@2.0
+  asdf: rynkowsg/asdf@0.1
 
 # Pipeline parameters
 parameters:
@@ -32,7 +33,6 @@ executors:
   macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
-    resource_class: macos.m1.large.gen1
 
 jobs:
 
@@ -78,6 +78,8 @@ jobs:
         type: string
         default: "3.3.0"
     executor: << parameters.os >>
+    environment:
+      RUBY_VERSION: << parameters.ruby-version >>
     steps:
       # Install dependencies based on the OS
       - when:
@@ -85,19 +87,27 @@ jobs:
             equal: [ "docker", "<< parameters.os >>" ]
           steps:
             - run:
-                name: Install ImageMagick and libvips
-                command: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips42
+                name: Install ImageMagick, libvips and libffi
+                command: |
+                  sudo apt-get update
+                  sudo apt-get -y --no-install-recommends install openssl imagemagick libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+            - asdf/install
       - when:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
             - run:
-                name: Install ImageMagick and libvips
-                command: brew install imagemagick vips
-
+                name: Install ImageMagick, libvips and libffi
+                command: |
+                  brew install openssl@3 imagemagick vips asdf libffi
       # Install requested Ruby version
-      - ruby/install:
-          version: "<< parameters.ruby-version >>"
+      - run:
+          name: Install Ruby << parameters.ruby-version >>
+          command: |
+            asdf plugin-add ruby
+            asdf install ruby << parameters.ruby-version >>
+            asdf global ruby << parameters.ruby-version >>
+            gem install --user-install executable-hooks
       # Check out code
       - checkout
       # Install dependencies using bundler
