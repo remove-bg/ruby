@@ -32,7 +32,7 @@ executors:
         <<: *common-auth
   windows:
     machine:
-      image: windows-server-2019:current
+      image: windows-server-2022-gui:stable
       shell: bash.exe
   macos: # macOS executor running Xcode
     macos:
