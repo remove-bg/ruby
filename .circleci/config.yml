@@ -31,8 +31,9 @@ executors:
       - image: cimg/base:stable
         <<: *common-auth
   windows:
-    name: win/default
-    shell: bash.exe
+    machine:
+      image: windows-server-2019:current
+      shell: bash.exe
   macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
