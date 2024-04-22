@@ -90,17 +90,17 @@ jobs:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
-            - run: brew install imagemagick vips
+            - run: brew install openssl imagemagick vips
       - when:
           condition:
             equal: [ "windows", "<< parameters.os >>" ]
           steps:
             - run: Write-Host 'Hello, Windows'
-      # Check out code
-      - checkout
       # Install requested Ruby version
       - ruby/install:
           version: "<< parameters.ruby-version >>"
+      # Check out code
+      - checkout
       # Install dependencies using bundler
       - ruby/install-deps:
           pre-install-steps:
