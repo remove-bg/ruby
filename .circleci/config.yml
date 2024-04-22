@@ -6,6 +6,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.1
   sonarcloud: sonarsource/sonarcloud@2.0
+  win: circleci/windows@2.2.0
 
 # Pipeline parameters
 parameters:
@@ -29,7 +30,8 @@ executors:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  macos: # macos executor running Xcode
+  windows: win/default # Windows executor
+  macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
 
@@ -75,7 +77,7 @@ jobs:
       # The OS to run the jobs on
       ruby-version:
         type: string
-        default: "3.3"
+        default: "3.3.0"
     executor: << parameters.os >>
     steps:
       # Install dependencies based on the OS
@@ -83,12 +85,17 @@ jobs:
           condition:
             equal: [ "docker", "<< parameters.os >>" ]
           steps:
-            - run: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips
+            - run: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips42
       - when:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
-            - run: brew install imagemagick libvips
+            - run: brew install imagemagick vips
+      - when:
+          condition:
+            equal: [ "windows", "<< parameters.os >>" ]
+          steps:
+            - run: Write-Host 'Hello, Windows'
       # Check out code
       - checkout
       # Install requested Ruby version
@@ -162,7 +169,7 @@ workflows:
             - DockerHub
           matrix:
             parameters:
-              os: ["docker", "macos"]
+              os: ["docker", "windows", "macos"]
               ruby-version: ["2.7.8", "3.0.6", "3.1.4", "3.2.3", "3.3.0"]
       # Lint Job
       - lint:
