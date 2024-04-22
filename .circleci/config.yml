@@ -7,6 +7,7 @@ orbs:
   ruby: circleci/ruby@2.1
   sonarcloud: sonarsource/sonarcloud@2.0
   asdf: rynkowsg/asdf@0.1
+  codecov: codecov/codecov@4.1
 
 # Pipeline parameters
 parameters:
@@ -129,7 +130,7 @@ jobs:
       # Store test results
       - store_test_results:
           path: rspec/rspec.xml
-      # Persist test results to workspace for default Ruby
+      # Persist test results to workspace and upload to CodeCov for default Ruby
       - when:
           condition:
             and:
@@ -141,6 +142,7 @@ jobs:
                 paths:
                   - rspec
                   - coverage
+            - codecov/upload
 
   # Sonarcloud Job
   sonarcloud:
