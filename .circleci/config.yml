@@ -49,6 +49,7 @@ jobs:
           version: "<< pipeline.parameters.default-ruby >>"
       # Install dependencies using bundler
       - ruby/install-deps:
+          bundler-version: 2.3.27 # Last bundler version to support Ruby 2.5
           pre-install-steps:
             - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
