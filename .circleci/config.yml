@@ -6,7 +6,6 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.1
   sonarcloud: sonarsource/sonarcloud@2.0
-  win: circleci/windows@2.2.0
 
 # Pipeline parameters
 parameters:
