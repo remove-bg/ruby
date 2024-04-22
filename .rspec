@@ -1,2 +1,7 @@
 --require spec_helper
 --color
+--format documentation
+--format RspecJunitFormatter
+--out rspec/rspec.xml
+--format RspecSonarqubeFormatter
+--out rspec/test-report.xml

@@ -1,0 +1,21 @@
+---
+update_strategy: security
+
+bundler:
+  update_strategy: grouped
+  update_out_of_spec: false
+  reasonably_up_to_date: true
+  automerge_method: squash
+  engine_update_strategy: minor
+  commit_message: ⬆️ Update {{dependency}} to version {{version}}
+  commit_message_grouped: ⬆️ Update {{update_type}} {{project_type}} dependencies ({{date}})
+  labels:
+    - dependencies
+    - depfu
+  security_labels:
+    - 🚨 security
+  auto_assign: otherguy
+  auto_review_team_assign: platform
+  grouped_update_schedule: biweekly
+  grouped_update_start_date: '2022-01-05' # First wednesday of the year
+  grouped_update_time: '6:00'

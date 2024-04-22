@@ -15,5 +15,5 @@ end
 
 # Latest in Faraday 1.x series
 appraise "faraday-1-x" do
-  gem "faraday", "~> 1.0"
+  gem "faraday", "~> 1"
 end

@@ -17,7 +17,7 @@ RSpec.describe RemoveBg::ApiClient do
         end
       end
 
-      expect(make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
+      expect(&make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
     end
 
     it "includes the HTTP response for further debugging" do
@@ -27,7 +27,7 @@ RSpec.describe RemoveBg::ApiClient do
         end
       end
 
-      expect(make_request).to raise_error RemoveBg::HttpError do |exception|
+      expect(&make_request).to raise_error RemoveBg::HttpError do |exception|
         expect(exception.http_response).to be_a Faraday::Response
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe RemoveBg::ApiClient do
         body: '{ "errors": [{"title": "Rate limit exceeded"}] }',
       )
 
-      expect(request).to raise_error RemoveBg::RateLimitError, "Rate limit exceeded"
+      expect(&request).to raise_error RemoveBg::RateLimitError, "Rate limit exceeded"
     end
 
     it "includes the parsed rate limit information" do
@@ -67,7 +67,7 @@ RSpec.describe RemoveBg::ApiClient do
         }
       )
 
-      expect(request).to raise_error RemoveBg::RateLimitError do |ex|
+      expect(&request).to raise_error RemoveBg::RateLimitError do |ex|
         rate_limit = ex.rate_limit
 
         expect(rate_limit.total).to eq 500
@@ -90,7 +90,7 @@ RSpec.describe RemoveBg::ApiClient do
         subject.remove_from_url("http://example.image.jpg", build_options)
       end
 
-      expect(make_request).to raise_error do |exception|
+      expect(&make_request).to raise_error do |exception|
         expect(exception).to be_a(RemoveBg::ServerHttpError)
         expect(exception.message).to eq "Unable to parse response"
         expect(exception.http_response_body).to include "Bad gateway"
@@ -106,7 +106,7 @@ RSpec.describe RemoveBg::ApiClient do
         subject.remove_from_url("http://example.image.jpg", build_options)
       end
 
-      expect(make_request).to raise_error RemoveBg::HttpError, /unknown error/
+      expect(&make_request).to raise_error RemoveBg::HttpError, /unknown error/
     end
   end
 
@@ -142,7 +142,7 @@ RSpec.describe RemoveBg::ApiClient do
         subject.remove_from_url(image_url, build_options)
       end
 
-      expect(make_request).to raise_error Faraday::ConnectionFailed
+      expect(&make_request).to raise_error Faraday::ConnectionFailed
       expect(WebMock).to have_requested(:post, /api.remove.bg/).times(3)
     end
   end
@@ -174,7 +174,7 @@ RSpec.describe RemoveBg::ApiClient do
           end
         end
 
-        expect(make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
+        expect(&make_request).to raise_error RemoveBg::HttpError, /API Key invalid/
       end
     end
   end

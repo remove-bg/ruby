@@ -9,17 +9,17 @@
 
 # Rubocop
 .rubocop-*
+rubocop-result.json
 
-# rspec failure tracking
-spec/examples.txt
-
+# Dotenv
 .env.*.local
 
-# CircleCI / RSpec JUnit formatter
-test-results
+# RSpec
+rspec/
+spec/examples.txt
 
+# Appraisals
 gemfiles/*.gemfile.lock
 
+# Examples
 examples/output
-
-.ruby-version

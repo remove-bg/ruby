@@ -28,7 +28,7 @@ RSpec.describe RemoveBg::Upload do
       upload_for_file(tmp_file(".docx"))
     end
 
-    expect(upload_doc).to raise_error RemoveBg::Error, /Unsupported file type/
+    expect(&upload_doc).to raise_error(RemoveBg::Error, /Unsupported file type/)
   end
 
   it "raises an error when the file doesn't exist" do
@@ -38,7 +38,7 @@ RSpec.describe RemoveBg::Upload do
       upload_for_file(image_path)
     end
 
-    expect(upload_doc).to raise_error RemoveBg::FileMissingError do |ex|
+    expect(&upload_doc).to raise_error RemoveBg::FileMissingError do |ex|
       expect(ex.file_path).to eq image_path
     end
   end
