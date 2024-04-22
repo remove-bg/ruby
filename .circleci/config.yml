@@ -30,7 +30,9 @@ executors:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  windows: win/default # Windows executor
+  windows:
+    name: win/default
+    shell: bash.exe
   macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
