@@ -93,7 +93,7 @@ jobs:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
-            - run: brew install openssl imagemagick vips
+            - run: brew install openssl@1.1 imagemagick vips
       - when:
           condition:
             equal: [ "windows", "<< parameters.os >>" ]
