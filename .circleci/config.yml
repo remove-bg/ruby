@@ -30,10 +30,6 @@ executors:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  windows:
-    machine:
-      image: windows-server-2022-gui:stable
-      shell: bash.exe
   macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
@@ -94,11 +90,6 @@ jobs:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
             - run: brew install openssl@1.1 imagemagick vips
-      - when:
-          condition:
-            equal: [ "windows", "<< parameters.os >>" ]
-          steps:
-            - run: Write-Host 'Hello, Windows'
       # Install requested Ruby version
       - ruby/install:
           version: "<< parameters.ruby-version >>"
@@ -172,7 +163,7 @@ workflows:
             - DockerHub
           matrix:
             parameters:
-              os: ["docker", "windows", "macos"]
+              os: ["docker", "macos"]
               ruby-version: ["2.7.8", "3.0.6", "3.1.4", "3.2.3", "3.3.0"]
       # Lint Job
       - lint:
