@@ -17,8 +17,8 @@ Gem::Specification.new do |spec|
   spec.metadata["changelog_uri"] = "https://github.com/remove-bg/ruby/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  # Require at least Ruby 2.5
-  spec.required_ruby_version = ">= 2.5"
+  # Require at least Ruby 2.
+  spec.required_ruby_version = ">= 2.7"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -37,7 +37,6 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "codecov", "~> 0.6"
-  spec.add_development_dependency "dotenv", "~> 3.1"
   spec.add_development_dependency "pry", "~> 0.14"
   spec.add_development_dependency "rake", "~> 13.2"
   spec.add_development_dependency "rspec", "~> 3.8"
@@ -46,6 +45,8 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-with_params", "~> 0.3"
   spec.add_development_dependency "rubocop", "~> 1.63"
   spec.add_development_dependency "rubocop-performance", "~> 1.21"
+  spec.add_development_dependency "rubocop-rake", "~> 0.6.0"
+  spec.add_development_dependency "rubocop-rspec", "~> 2.29"
   spec.add_development_dependency "simplecov", ">= 0.15", "< 0.22"
   spec.add_development_dependency "vcr", "~> 6.2"
   spec.add_development_dependency "vcr_better_binary", "~> 0.2"
