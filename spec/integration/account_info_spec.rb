@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe "fetching account information" do
   let(:api_key) { "test-api-key" }
   let(:image_path) do
@@ -14,15 +12,15 @@ RSpec.describe "fetching account information" do
     end
 
     expect(account.api).to have_attributes(
-      free_calls: be_a_kind_of(Numeric),
+      free_calls: be_a(Numeric),
       sizes: "all"
     )
 
     expect(account.credits).to have_attributes(
-      total: be_a_kind_of(Numeric),
-      subscription: be_a_kind_of(Numeric),
-      payg: be_a_kind_of(Numeric),
-      enterprise: be_a_kind_of(Numeric),
+      total: be_a(Numeric),
+      subscription: be_a(Numeric),
+      payg: be_a(Numeric),
+      enterprise: be_a(Numeric),
     )
   end
 end

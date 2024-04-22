@@ -1,17 +1,14 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-require "digest"
-
 RSpec.describe "using the ZIP format" do
   let(:api_key) { "test-api-key" }
   let(:image_path) do
     File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
   end
 
-  before(:each) { RemoveBg::Configuration.reset }
+  before { RemoveBg::Configuration.reset }
 
-  context "using MiniMagick" do
+  context "when using MiniMagick" do
     it "converts the ZIP to a composite PNG" do
       RemoveBg::Configuration.configuration.image_processor = :minimagick
 
@@ -27,7 +24,7 @@ RSpec.describe "using the ZIP format" do
     end
   end
 
-  context "using Vips" do
+  context "when using Vips" do
     it "converts the ZIP to a composite PNG" do
       RemoveBg::Configuration.configuration.image_processor = :vips
 

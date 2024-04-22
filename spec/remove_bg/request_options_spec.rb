@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe RemoveBg::RequestOptions do
   describe "size options" do
     it "defaults the size to 'auto'" do
@@ -20,8 +18,8 @@ RSpec.describe RemoveBg::RequestOptions do
     expect(request_options[:foo]).to eq "bar"
   end
 
-  context "invalid API key configuration" do
-    before(:each) { RemoveBg::Configuration.reset }
+  context "with invalid API key configuration" do
+    before { RemoveBg::Configuration.reset }
 
     it "raises an error if neither global or per-request API key is set" do
       RemoveBg.configure { |config| config.api_key = nil }

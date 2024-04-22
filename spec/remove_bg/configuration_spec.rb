@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
-RSpec.describe "Remove BG configuration" do
-  before(:each) do
-    RemoveBg::Configuration.reset
+RSpec.describe RemoveBg::Configuration do
+  before do
+    described_class.reset
   end
 
   describe "::configure" do
@@ -13,7 +11,7 @@ RSpec.describe "Remove BG configuration" do
         config.api_key = "an-api-key"
       end
 
-      expect(RemoveBg::Configuration.configuration.api_key).to eq "an-api-key"
+      expect(described_class.configuration.api_key).to eq "an-api-key"
     end
   end
 
@@ -22,14 +20,14 @@ RSpec.describe "Remove BG configuration" do
       config.api_key = "an-api-key"
     end
 
-    expect { RemoveBg::Configuration.reset }
-      .to change { RemoveBg::Configuration.configuration.api_key }
+    expect { described_class.reset }
+      .to change { described_class.configuration.api_key }
       .from("an-api-key").to(nil)
   end
 
   describe "image processor" do
     it "is automatically configured if there's processing library available" do
-      expect(RemoveBg::Configuration.configuration.image_processor).to eq :minimagick
+      expect(described_class.configuration.image_processor).to eq :minimagick
     end
 
     it "can be overridden" do
@@ -37,7 +35,7 @@ RSpec.describe "Remove BG configuration" do
         config.image_processor = :vips
       end
 
-      expect(RemoveBg::Configuration.configuration.image_processor).to eq :vips
+      expect(described_class.configuration.image_processor).to eq :vips
     end
   end
 end
