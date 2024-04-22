@@ -32,6 +32,7 @@ executors:
   macos: # macOS executor running Xcode
     macos:
       xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
+    resource_class: macos.m1.large.gen1
 
 jobs:
 
@@ -83,19 +84,23 @@ jobs:
           condition:
             equal: [ "docker", "<< parameters.os >>" ]
           steps:
-            - run: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips42
+            - run:
+                name: Install ImageMagick and libvips
+                command: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips42
       - when:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
-            - run: |
-                brew install openssl@1.1 imagemagick vips
-                echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> /Users/distiller/.bash_profile
+            - run:
+                name: Install OpenSSL, ImageMagick and libvips
+                command: |
+                  brew install openssl@1.1 imagemagick vips
+                  echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> /Users/distiller/.bash_profile
 
-                export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
-                export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+                  export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+                  export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
 
-                export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+                  export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
 
       # Install requested Ruby version
       - ruby/install:
