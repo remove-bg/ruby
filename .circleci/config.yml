@@ -35,7 +35,7 @@ executors:
 
 jobs:
 
-  # Lint job
+  # Lint Job
   lint:
     docker:
       - image: cimg/base:stable
@@ -49,7 +49,6 @@ jobs:
           version: "<< pipeline.parameters.default-ruby >>"
       # Install dependencies using bundler
       - ruby/install-deps:
-          bundler-version: 2.3.27 # Last bundler version to support Ruby 2.5
           pre-install-steps:
             - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
@@ -66,7 +65,7 @@ jobs:
           paths:
             - rubocop-result.json
 
-  # Test job
+  # Test Job
   test:
     parameters:
       # The OS to run the jobs on
@@ -127,7 +126,7 @@ jobs:
                   - rspec
                   - coverage
 
-  # Sonarcloud job
+  # Sonarcloud Job
   sonarcloud:
     docker:
       - image: cimg/openjdk:21.0-node
@@ -157,18 +156,21 @@ jobs:
 workflows:
   multiple-rubies:
     jobs:
+      # Test Job
       - test:
           context:
             - DockerHub
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["2.5.9", "2.6.10", "2.7.8", "3.0.6", "3.1.4", "3.2.3", "3.3.0"]
+              ruby-version: ["2.7.8", "3.0.6", "3.1.4", "3.2.3", "3.3.0"]
+      # Lint Job
       - lint:
           context:
             - DockerHub
           requires:
             - test
+      # Sonarcloud Job
       - sonarcloud:
           context:
             - DockerHub

@@ -11,9 +11,6 @@
 .rubocop-*
 rubocop-result.json
 
-# Dotenv
-.env.*.local
-
 # RSpec
 rspec/
 spec/examples.txt
