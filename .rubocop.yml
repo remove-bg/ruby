@@ -1,0 +1,21 @@
+---
+inherit_from: https://raw.githubusercontent.com/remove-bg/code-style/main/ruby/.rubocop.yml
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 2.5
+
+Layout/LineLength:
+  Max: 180
+
+Gemspec/DevelopmentDependencies:
+  EnforcedStyle: gemspec
+
+Metrics/BlockLength:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Bundler/OrderedGems:
+  Enabled: true

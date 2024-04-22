@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe RemoveBg::ApiClient do
@@ -9,7 +11,7 @@ RSpec.describe RemoveBg::ApiClient do
     let(:request_options) { build_options(api_key: "invalid-api-key") }
 
     it "raises an error with a helpful message" do
-      make_request = Proc.new do
+      make_request = proc do
         VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
           subject.remove_from_file(image_path, request_options)
         end
@@ -19,7 +21,7 @@ RSpec.describe RemoveBg::ApiClient do
     end
 
     it "includes the HTTP response for further debugging" do
-      make_request = Proc.new do
+      make_request = proc do
         VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
           subject.remove_from_file(image_path, request_options)
         end
@@ -33,18 +35,18 @@ RSpec.describe RemoveBg::ApiClient do
 
   context "invalid image URL" do
     it "raises an error" do
-      expect{ subject.remove_from_url("", build_options) }.
-        to raise_error RemoveBg::InvalidUrlError
+      expect { subject.remove_from_url("", build_options) }
+        .to raise_error RemoveBg::InvalidUrlError
     end
   end
 
   context "rate limit exceeded", :disable_vcr do
     let(:request) do
-      Proc.new { subject.remove_from_file(image_path, build_options) }
+      proc { subject.remove_from_file(image_path, build_options) }
     end
 
     it "raises a specific error, to aid rate limit implementations" do
-      stub_request(:post, %r{api.remove.bg}).to_return(
+      stub_request(:post, /api.remove.bg/).to_return(
         status: 429,
         body: '{ "errors": [{"title": "Rate limit exceeded"}] }',
       )
@@ -55,7 +57,7 @@ RSpec.describe RemoveBg::ApiClient do
     it "includes the parsed rate limit information" do
       moment = Time.now.utc
 
-      stub_request(:post, %r{api.remove.bg}).to_return(
+      stub_request(:post, /api.remove.bg/).to_return(
         status: 429,
         headers: {
           "X-RateLimit-Limit" => "500",
@@ -78,13 +80,13 @@ RSpec.describe RemoveBg::ApiClient do
 
   describe "with a non-JSON response" do
     it "raises a server error", :disable_vcr do
-      stub_request(:post, %r{api.remove.bg}).to_return(
+      stub_request(:post, /api.remove.bg/).to_return(
         body: "<html>Bad gateway</html>",
         status: 502,
         headers: { "Content-Type" => "text/html" },
       )
 
-      make_request = Proc.new do
+      make_request = proc do
         subject.remove_from_url("http://example.image.jpg", build_options)
       end
 
@@ -98,9 +100,9 @@ RSpec.describe RemoveBg::ApiClient do
 
   describe "when a response has no content" do
     it "raises an error", :disable_vcr do
-      stub_request(:post, %r{api.remove.bg}).to_return(status: 204)
+      stub_request(:post, /api.remove.bg/).to_return(status: 204)
 
-      make_request = Proc.new do
+      make_request = proc do
         subject.remove_from_url("http://example.image.jpg", build_options)
       end
 
@@ -110,12 +112,12 @@ RSpec.describe RemoveBg::ApiClient do
 
   describe "client version" do
     it "is included in the request", :disable_vcr do
-      stub_request(:post, %r{api.remove.bg}).to_return(status: 200, body: "")
+      stub_request(:post, /api.remove.bg/).to_return(status: 200, body: "")
 
       subject.remove_from_url("http://example.image.jpg", build_options)
 
-      expect(WebMock).to have_requested(:post, %r{api.remove.bg}).
-        with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
+      expect(WebMock).to have_requested(:post, /api.remove.bg/)
+        .with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
     end
   end
 
@@ -123,10 +125,10 @@ RSpec.describe RemoveBg::ApiClient do
     let(:image_url) { "http://example.image.jpg" }
 
     it "makes 3 attempts in total" do
-      stub_request(:post, %r{api.remove.bg}).
-        to_timeout.
-        to_timeout.
-        to_return(status: 200, body: "data")
+      stub_request(:post, /api.remove.bg/)
+        .to_timeout
+        .to_timeout
+        .to_return(status: 200, body: "data")
 
       result = subject.remove_from_url(image_url, build_options)
 
@@ -134,23 +136,23 @@ RSpec.describe RemoveBg::ApiClient do
     end
 
     it "stops retrying after the 3rd attempt" do
-      stub_request(:post, %r{api.remove.bg}).to_timeout
+      stub_request(:post, /api.remove.bg/).to_timeout
 
-      make_request = Proc.new do
+      make_request = proc do
         subject.remove_from_url(image_url, build_options)
       end
 
       expect(make_request).to raise_error Faraday::ConnectionFailed
-      expect(WebMock).to have_requested(:post, %r{api.remove.bg}).times(3)
+      expect(WebMock).to have_requested(:post, /api.remove.bg/).times(3)
     end
   end
 
   describe "handling binary data" do
     let(:image_url) { "http://example.image.jpg" }
-    let(:response_data) { "\xFF".force_encoding(Encoding::BINARY) }
+    let(:response_data) { (+"\xFF").force_encoding(Encoding::BINARY) }
 
     it "handles the encoding correctly" do
-      stub_request(:post, %r{api.remove.bg})
+      stub_request(:post, /api.remove.bg/)
         .to_return(status: 200, body: response_data)
 
       expect(response_data.encoding).to eq(Encoding::BINARY)
@@ -166,7 +168,7 @@ RSpec.describe RemoveBg::ApiClient do
       it "raises an error with a helpful message" do
         request_options = RemoveBg::BaseRequestOptions.new(api_key: "invalid-api-key")
 
-        make_request = Proc.new do
+        make_request = proc do
           VCR.use_cassette("account-invalid-api-key") do
             subject.account_info(request_options)
           end

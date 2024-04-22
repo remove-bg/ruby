@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg"
 
 RSpec.describe "rate limit information" do
@@ -16,7 +18,7 @@ RSpec.describe "rate limit information" do
     expect(rate_limit.total).to be >= 500
     expect(rate_limit.remaining).to be > 0
     expect(rate_limit.reset_at).to be_utc
-    expect(rate_limit.reset_at).to be > Time.utc(2020, 05, 20, 16, 00)
+    expect(rate_limit.reset_at).to be > Time.utc(2020, 5, 20, 16, 0)
     expect(rate_limit.retry_after_seconds).to be_nil
   end
 end

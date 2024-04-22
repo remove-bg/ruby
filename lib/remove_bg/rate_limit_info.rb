@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "time"
 
 module RemoveBg
@@ -15,16 +17,17 @@ module RemoveBg
 
     def reset_at
       return if reset_timestamp.nil?
+
       Time.at(reset_timestamp).utc
     end
 
     def to_s
-      "<RateLimit"\
-      " reset_at='#{reset_at.iso8601}'"\
-      " retry_after_seconds=#{retry_after_seconds}"\
-      " total=#{total}"\
-      " remaining=#{remaining}"\
-      ">"
+      "<RateLimit " \
+        "reset_at='#{reset_at.iso8601}' " \
+        "retry_after_seconds=#{retry_after_seconds} " \
+        "total=#{total} " \
+        "remaining=#{remaining}" \
+        ">"
     end
 
     private

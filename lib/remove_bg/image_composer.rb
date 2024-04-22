@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "error"
 
 module RemoveBg
@@ -12,25 +14,24 @@ module RemoveBg
     end
 
     def self.detect_image_processor(detector: DEFAULT_BINARY_DETECTOR)
-      case
-      when detector.call("magick"), detector.call("convert"), detector.call("gm")
+      if detector.call("magick") || detector.call("convert") || detector.call("gm")
         :minimagick
-      when detector.call("vips")
+      elsif detector.call("vips")
         :vips
       end
     end
 
     def compose(color_file:, alpha_file:, destination_path:)
       image = case configured_image_processor
-        when :vips
-          then vips_compose(color_file: color_file, alpha_file: alpha_file)
-        when :minimagick
-          then minimagick_compose(color_file: color_file, alpha_file: alpha_file)
-        when nil
-          raise RemoveBg::Error, "Please configure an image processor to use image composition"
-        else
-          raise RemoveBg::Error, "Unsupported image processor: #{configured_image_processor.inspect}"
-        end
+              when :vips
+                vips_compose(color_file: color_file, alpha_file: alpha_file)
+              when :minimagick
+                minimagick_compose(color_file: color_file, alpha_file: alpha_file)
+              when nil
+                raise RemoveBg::Error, "Please configure an image processor to use image composition"
+              else
+                raise RemoveBg::Error, "Unsupported image processor: #{configured_image_processor.inspect}"
+              end
 
       image.call(destination: destination_path)
     end

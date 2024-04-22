@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "fileutils"
 require "forwardable"
 require "zip"
@@ -31,18 +33,14 @@ module RemoveBg
     # @return [nil]
     #
     def save(file_path, overwrite: false)
-      if File.exist?(file_path) && !overwrite
-        raise FileOverwriteError.new(file_path)
-      end
+      raise FileOverwriteError.new(file_path) if File.exist?(file_path) && !overwrite
 
-      if overwrite
-        warn('DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save! instead)')
-      end
+      warn("DEPRECATION WARNING: overwrite: true is deprecated and will be removed from remove_bg 2.0 (use save! instead)") if overwrite
 
       FileUtils.cp(image_file, file_path)
     end
 
-    # Saves the processed image to the path specified, overwriting any existing file at the specified path 
+    # Saves the processed image to the path specified, overwriting any existing file at the specified path
     # @param file_path [string]
     # @return [nil]
     #

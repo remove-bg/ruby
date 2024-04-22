@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "remove_bg/url_validator"
 
 RSpec.describe RemoveBg::UrlValidator do
@@ -18,7 +20,7 @@ RSpec.describe RemoveBg::UrlValidator do
   end
 
   it "rejects relative URLs" do
-      expect { validate("image.png") }.to raise_invalid_url_error
+    expect { validate("image.png") }.to raise_invalid_url_error
   end
 
   private

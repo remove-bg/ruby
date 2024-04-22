@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RemoveBg
   module Api
     URL = "https://api.remove.bg"
