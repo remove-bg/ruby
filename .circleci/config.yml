@@ -1,72 +1,174 @@
 ---
-version: 2
 
-base_job: &base_job
-  steps:
-    - checkout
+version: 2.1
 
-    - restore_cache:
-        keys:
-          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+# Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
+orbs:
+  ruby: circleci/ruby@2.1
+  sonarcloud: sonarsource/sonarcloud@2.0
 
-    - run:
-        name: install dependencies
-        command: |
-          gem install bundler --version '~> 2.0'
-          bundle config set path vendor/bundle
-          bundle install --jobs=4 --retry=3
+# Pipeline parameters
+parameters:
+  # The main branch of the repository (e.g. main)
+  main-branch:
+    type: string
+    default: main
+  default-ruby:
+    type: string
+    default: "3.3"
 
-    - run:
-        name: install image processsing dependencies
-        command: |
-          sudo apt-get update
-          sudo apt install imagemagick libvips
+# Define common YAML anchors
+x-common-auth: &common-auth
+  auth:
+    username: ${DOCKERHUB_USER}
+    password: ${DOCKERHUB_PASSWORD}
 
-    - save_cache:
-        paths:
-          - ./vendor/bundle
-        key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-
-    - run:
-        name: run tests
-        command: |
-          bundle exec rspec --format progress \
-                            --format RspecJunitFormatter \
-                            --out test-results/rspec.xml
-
-    - run:
-        name: run appraisals
-        command: |
-          bundle exec appraisal install --jobs 4 --retry 3
-          bundle exec appraisal rspec
-
-    - store_test_results:
-        path: test-results
-
-################################################################################
+# Define executors
+executors:
+  docker: # Docker using the Base Convenience Image
+    docker:
+      - image: cimg/base:stable
+        <<: *common-auth
+  macos: # macos executor running Xcode
+    macos:
+      xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
 
 jobs:
-  ruby-2.5:
-    <<: *base_job
+
+  # Lint job
+  lint:
     docker:
-      - image: circleci/ruby:2.5
-  ruby-2.6:
-    <<: *base_job
+      - image: cimg/base:stable
+        <<: *common-auth
+    resource_class: small
+    steps:
+      # Check out code
+      - checkout
+      # Install requested Ruby version
+      - ruby/install:
+          version: "<< pipeline.parameters.default-ruby >>"
+      # Install dependencies using bundler
+      - ruby/install-deps:
+          pre-install-steps:
+            - run: bundle config set jobs $(nproc)
+          key: gems-v{{ .Environment.CACHE_VERSION }}
+      # Run Rubocop
+      - run:
+          name: Run Rubocop
+          command: |
+            bash -c "bundle exec rubocop --format=json --out=rubocop-result.json; [[ \$? -ne 2 ]]"
+      - store_artifacts:
+          path: rubocop-result.json
+          destination: rubocop-result.json
+      - persist_to_workspace:
+          root: .
+          paths:
+            - rubocop-result.json
+
+  # Test job
+  test:
+    parameters:
+      # The OS to run the jobs on
+      os:
+        type: string
+        default: docker
+      # The OS to run the jobs on
+      ruby-version:
+        type: string
+        default: "3.3"
+    executor: << parameters.os >>
+    steps:
+      # Install dependencies based on the OS
+      - when:
+          condition:
+            equal: [ "docker", "<< parameters.os >>" ]
+          steps:
+            - run: sudo apt-get update && sudo apt-get -y --no-install-recommends install imagemagick libvips
+      - when:
+          condition:
+            equal: [ "macos", "<< parameters.os >>" ]
+          steps:
+            - run: brew install imagemagick libvips
+      # Check out code
+      - checkout
+      # Install requested Ruby version
+      - ruby/install:
+          version: "<< parameters.ruby-version >>"
+      # Install dependencies using bundler
+      - ruby/install-deps:
+          pre-install-steps:
+            - run: bundle config set jobs $(nproc)
+          key: gems-v{{ .Environment.CACHE_VERSION }}
+      # Run RSpec tests
+      - run:
+          name: Run tests
+          command: |
+            bundle exec rspec spec
+      # Run appraisals
+      - run:
+          name: Run appraisals
+          command: |
+            bundle exec appraisal install --jobs=$(nproc) --retry 3
+            bundle exec appraisal rspec
+      # Store test results
+      - store_test_results:
+          path: rspec/rspec.xml
+      # Persist test results to workspace for default Ruby
+      - when:
+          condition:
+            and:
+              - equal: [ "docker", "<< parameters.os >>" ]
+              - equal: [ "<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>" ]
+          steps:
+            - persist_to_workspace:
+                root: .
+                paths:
+                  - rspec
+                  - coverage
+
+  # Sonarcloud job
+  sonarcloud:
     docker:
-      - image: circleci/ruby:2.6
-  ruby-2.7:
-    <<: *base_job
-    environment:
-      UPLOAD_COVERAGE: 1
-    docker:
-      - image: circleci/ruby:2.7
+      - image: cimg/openjdk:21.0-node
+        <<: *common-auth
+    resource_class: small
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          name: Replace Version
+          command: |
+            if [ -n "${CIRCLE_TAG}" ] && [ ! -z "${CIRCLE_TAG}" ] ; then
+              export APP_VERSION="${CIRCLE_TAG}"
+            elif [ -n "${CIRCLE_BRANCH}" ] && [ ! -z "${CIRCLE_BRANCH}" ] ; then
+              export APP_VERSION="${CIRCLE_BRANCH}"
+            else
+              export APP_VERSION="${CIRCLE_SHA1:0:7}"
+            fi
+            echo "Setting version to ${APP_VERSION}"
+            sed -i -e "s\\sonar.projectVersion=.*$\\sonar.projectVersion=${APP_VERSION}\\g" sonar-project.properties
+      - sonarcloud/scan
+
 
 ################################################################################
 
 workflows:
-  version: 2
   multiple-rubies:
     jobs:
-      - ruby-2.5
-      - ruby-2.6
-      - ruby-2.7
+      - lint:
+          context:
+            - DockerHub
+      - test:
+          context:
+            - DockerHub
+          matrix:
+            parameters:
+              os: ["docker", "macos"]
+              ruby-version: ["2.5", "2.6", "2.7", "3.0", "3.1", "3.2", "3.3"]
+      - sonarcloud:
+          context:
+            - DockerHub
+          requires:
+            - lint
+            - test

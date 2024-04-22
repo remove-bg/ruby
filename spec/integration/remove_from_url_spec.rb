@@ -28,8 +28,7 @@ RSpec.describe "removing the background from a URL" do
         end
       end
 
-      expect(make_request).
-        to raise_error RemoveBg::ClientHttpError, /Failed to download/
+      expect(&make_request).to raise_error RemoveBg::ClientHttpError, /Failed to download/
     end
   end
 end
