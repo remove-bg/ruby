@@ -192,6 +192,7 @@ workflows:
       - sonarcloud:
           context:
             - DockerHub
+            - SonarCloud
           requires:
             - lint
             - test
