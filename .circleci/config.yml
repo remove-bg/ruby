@@ -88,7 +88,15 @@ jobs:
           condition:
             equal: [ "macos", "<< parameters.os >>" ]
           steps:
-            - run: brew install openssl@1.1 imagemagick vips
+            - run: |
+                brew install openssl@1.1 imagemagick vips
+                echo 'export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"' >> /Users/distiller/.bash_profile
+
+                export LDFLAGS="-L/usr/local/opt/openssl@1.1/lib"
+                export CPPFLAGS="-I/usr/local/opt/openssl@1.1/include"
+
+                export PKG_CONFIG_PATH="/usr/local/opt/openssl@1.1/lib/pkgconfig"
+
       # Install requested Ruby version
       - ruby/install:
           version: "<< parameters.ruby-version >>"
