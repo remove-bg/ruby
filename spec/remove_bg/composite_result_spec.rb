@@ -39,7 +39,7 @@ RSpec.describe RemoveBg::CompositeResult do
         new_result(download: download).save_zip(file_path)
       end
 
-      expect(attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
+      expect(&attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
         expect(ex.message).to include "file already exists"
         expect(ex.file_path).to eq file_path
       end
