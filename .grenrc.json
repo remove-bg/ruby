@@ -1,0 +1,20 @@
+{
+    "dataSource": "prs",
+    "prefix": "v",
+    "onlyMilestones": false,
+    "groupBy": {
+      "🚀 Enhancements:": ["enhancement", "feature", "internal"],
+      "🐞 Bugfixes:": ["bug", "fix"],
+      "🔧 Changes:": ["closed", "documentation"],
+      "🚨 Security": ["🚨 security", "security"],
+      "🔀 Dependencies": ["dependencies", "depfu"]
+    },
+    "template": {
+      "noLabel": "closed",
+      "changelogTitle": "# Changelog\n\n",
+      "release": "## {{release}}\n\n{{body}}\n",
+      "releaseSeparator": "\n",
+      "issue": "- {{name}} [{{text}}]({{url}})"
+    },
+    "changelogFilename": "CHANGELOG.md"
+}

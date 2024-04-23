@@ -8,6 +8,8 @@ orbs:
   sonarcloud: sonarsource/sonarcloud@2.0
   asdf: rynkowsg/asdf@0.1
   codecov: codecov/codecov@4.1
+  gcr: circleci/gcp-gcr@0.16
+  github: circleci/github-cli@2.3
 
 # Pipeline parameters
 parameters:
@@ -27,13 +29,13 @@ x-common-auth: &common-auth
 
 # Define executors
 executors:
-  docker: # Docker using the Base Convenience Image
+  docker:  # Docker using the Base Convenience Image
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  macos: # macOS executor running Xcode
+  macos:  # macOS executor running Xcode
     macos:
-      xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
+      xcode: 15.3.0  # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
 
 jobs:
 
@@ -85,17 +87,18 @@ jobs:
       # Install dependencies based on the OS
       - when:
           condition:
-            equal: [ "docker", "<< parameters.os >>" ]
+            equal: ["docker", "<< parameters.os >>"]
           steps:
             - run:
                 name: Install ImageMagick, libvips and libffi
                 command: |
                   sudo apt-get update
-                  sudo apt-get -y --no-install-recommends install openssl imagemagick libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+                  sudo apt-get -y --no-install-recommends install openssl imagemagick \
+                    libvips42 libffi-dev libreadline-dev libtool libyaml-dev
             - asdf/install
       - when:
           condition:
-            equal: [ "macos", "<< parameters.os >>" ]
+            equal: ["macos", "<< parameters.os >>"]
           steps:
             - run:
                 name: Install ImageMagick, libvips and libffi
@@ -134,8 +137,8 @@ jobs:
       - when:
           condition:
             and:
-              - equal: [ "docker", "<< parameters.os >>" ]
-              - equal: [ "<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>" ]
+              - equal: ["docker", "<< parameters.os >>"]
+              - equal: ["<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>"]
           steps:
             - persist_to_workspace:
                 root: .
@@ -168,6 +171,76 @@ jobs:
             sed -i -e "s\\sonar.projectVersion=.*$\\sonar.projectVersion=${APP_VERSION}\\g" sonar-project.properties
       - sonarcloud/scan
 
+  # Release Job
+  release:
+    docker:
+      - image: cimg/base:stable
+        <<: *common-auth
+    resource_class: small
+    environment:
+      GIT_MAIN_BRANCH: << pipeline.parameters.main-branch >>
+      CHANGELOG_FILENAME: CHANGELOG.md
+    steps:
+      - setup_remote_docker
+      - checkout
+      - attach_workspace:
+          at: .
+      - github/install:
+          version: 2.47.0
+      - gcr/gcr-auth
+      - run:
+          name: Build and push gem
+          command: |
+            bundle exec rake version["${CIRCLE_TAG}"]
+            bundle exec gem build --strict
+            GEM_HOST_API_KEY="${REMOVE_BG_GEM_PUSH_KEY}" gem push "remove_bg-${CIRCLE_TAG}.gem"
+
+            # Update version to next beta version
+            NEXT_PATCH_TAG=$(echo "${CIRCLE_TAG:-0.0.0}" | awk 'BEGIN{FS=OFS="."} {$3+=1} 1')
+            BETA_TAG="${NEXT_PATCH_TAG}.pre"
+            bundle exec rake version["${BETA_TAG}"]
+      - run:
+          name: Edit Release
+          command: |
+            # Update release
+            docker run --rm -it --name=gren -v $(pwd)/.grenrc.json:/.grenrc.json \
+              eu.gcr.io/removebg-226919/github-release-notes:latest \
+              release --tags "${CIRCLE_TAG}" --override --token ${GITHUB_AUTH_TOKEN} --username ${CIRCLE_PROJECT_USERNAME} --repo ${CIRCLE_PROJECT_REPONAME}
+
+            # Get current release description
+            gh release view ${CIRCLE_TAG} --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} --json body --jq '.body' > release-body.txt
+
+            # Append to release description
+            echo "Updating release description"
+            gh release edit ${CIRCLE_TAG} --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} --notes-file release-body.txt --latest --title ${CIRCLE_TAG}
+      - run:
+          name: Generate CHANGELOG.md
+          command: |
+            # Configure git
+            git config --global credential.helper cache
+            git config --global user.email "${GITHUB_USER_EMAIL}"
+            git config --global user.name "${GITHUB_USER_NAME}"
+
+            # Check out main branch
+            git checkout --force "${GIT_MAIN_BRANCH}"
+
+            # Generate changelog
+            docker run -it --name=gren -v $(pwd)/.grenrc.json:/.grenrc.json \
+              eu.gcr.io/removebg-226919/github-release-notes:latest \
+              changelog --override --token ${GITHUB_AUTH_TOKEN} --username ${CIRCLE_PROJECT_USERNAME} --repo ${CIRCLE_PROJECT_REPONAME}
+
+            docker cp "gren:/${CHANGELOG_FILENAME}" "${CHANGELOG_FILENAME}"
+            docker rm gren
+
+            # Remove Windows line endings
+            sed -i $'s/\r$//' "${CHANGELOG_FILENAME}"
+
+            # Commit changelog and bumped version to git
+            git add "${CHANGELOG_FILENAME}"
+            git add lib/remove_bg/version.rb
+            git add Gemfile.lock
+            git commit -m "📝 Update ${CHANGELOG_FILENAME} for ${CIRCLE_TAG}" -m "[skip ci]"
+            git push -q --set-upstream origin ${GIT_MAIN_BRANCH}
 
 ################################################################################
 
@@ -182,12 +255,20 @@ workflows:
             parameters:
               os: ["docker", "macos"]
               ruby-version: ["2.7.8", "3.0.6", "3.1.4", "3.2.3", "3.3.0"]
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+
       # Lint Job
       - lint:
           context:
             - DockerHub
           requires:
             - test
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+
       # Sonarcloud Job
       - sonarcloud:
           context:
@@ -196,3 +277,22 @@ workflows:
           requires:
             - lint
             - test
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+
+      # Release Job
+      - release:
+          context:
+            - DockerHub
+            - rubygems.org
+            - Google Cloud kaleido
+          requires:
+            - lint
+            - test
+            - sonarcloud
+          filters:
+            tags:
+              only: /^\d+\.\d+\.\d+$/
+            branches:
+              ignore: /^.*$/
