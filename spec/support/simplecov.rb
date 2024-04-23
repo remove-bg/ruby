@@ -11,10 +11,7 @@ SimpleCov.formatters = [
   SimpleCov::Formatter::JSONFormatter,
 ]
 
-SimpleCov.start "rails" do
-  # ignore common ruby and ruby on rails files in test coverage
-  add_filter "Gemfile"
-
+SimpleCov.start do
   # Ignore Rails binaries
   add_filter "bin"
 

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "webmock/rspec"
 require_relative "support/simplecov"
 require_relative "support/vcr"
+require "webmock/rspec"
 
 RSpec.configure do |config|
   # rspec-mocks config goes here. You can use an alternate test double
