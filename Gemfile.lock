@@ -145,6 +145,7 @@ DEPENDENCIES
   rubocop-rspec (~> 2.29)
   simplecov (~> 0.22)
   simplecov-cobertura (~> 2.1)
+  simplecov_json_formatter (~> 0.1)
   vcr (~> 6.2)
   vcr_better_binary (~> 0.2)
   webmock (~> 3.23)

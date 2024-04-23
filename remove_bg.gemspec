@@ -10,14 +10,21 @@ Gem::Specification.new do |spec|
   spec.authors = ["Canva Austria GmbH"]
   spec.email = ["ops@kaleido.ai"]
 
+  spec.platform = Gem::Platform::RUBY
+
   spec.summary = "Remove image background - 100% automatically"
+  spec.description = "Use remove.bg with our official Ruby library to quickly, easily and 100% automatically remove the background from images."
   spec.homepage = "https://www.remove.bg/"
   spec.license = "MIT"
-  spec.metadata["source_code_uri"] = "https://github.com/remove-bg/ruby"
-  spec.metadata["changelog_uri"] = "https://github.com/remove-bg/ruby/blob/main/CHANGELOG.md"
-  spec.metadata["rubygems_mfa_required"] = "true"
+  spec.metadata = {
+    "bug_tracker_uri" => "https://github.com/remove-bg/ruby/issues",
+    "source_code_uri" => "https://github.com/remove-bg/ruby",
+    "changelog_uri" => "https://github.com/remove-bg/ruby/blob/main/CHANGELOG.md",
+    "allowed_push_host" => "https://rubygems.org",
+    "rubygems_mfa_required" => "true",
+  }
 
-  # Require at least Ruby 2.
+  # Require at least Ruby 2.7
   spec.required_ruby_version = ">= 2.7"
 
   # Specify which files should be added to the gem when it is released.
@@ -48,6 +55,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rubocop-rspec", "~> 2.29"
   spec.add_development_dependency "simplecov", "~> 0.22"
   spec.add_development_dependency "simplecov-cobertura", "~> 2.1"
+  spec.add_development_dependency "simplecov_json_formatter", "~> 0.1"
   spec.add_development_dependency "vcr", "~> 6.2"
   spec.add_development_dependency "vcr_better_binary", "~> 0.2"
   spec.add_development_dependency "webmock", "~> 3.23"
