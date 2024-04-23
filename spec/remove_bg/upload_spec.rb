@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
-require "remove_bg/upload"
 require "rspec/with_params/dsl"
-require "securerandom"
-require "tempfile"
 
 RSpec.describe RemoveBg::Upload do
   extend RSpec::WithParams::DSL

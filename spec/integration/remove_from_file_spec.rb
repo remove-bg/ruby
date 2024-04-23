@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe "removing the background from a file" do
   let(:api_key) { "test-api-key" }
   let(:image_path) do
@@ -14,7 +12,7 @@ RSpec.describe "removing the background from a file" do
     end
 
     expect(result).to be_a RemoveBg::Result
-    expect(result.data).to_not be_empty
+    expect(result.data).not_to be_empty
     expect(result.data.encoding).to eq(Encoding::BINARY)
     expect(result.type).to eq "person"
     expect(result.height).to eq 333

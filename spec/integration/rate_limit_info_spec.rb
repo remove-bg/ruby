@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe "rate limit information" do
   let(:api_key) { "test-api-key" }
   let(:image_path) do

@@ -1,10 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg/composite_result"
-require "securerandom"
-require "tempfile"
-require "tmpdir"
-
 RSpec.describe RemoveBg::CompositeResult do
   let(:tmp_dir) { Dir.mktmpdir("remove_bg") }
   let(:file_path) { File.join(tmp_dir, "#{SecureRandom.urlsafe_base64}.txt") }
@@ -16,7 +11,7 @@ RSpec.describe RemoveBg::CompositeResult do
     file
   end
 
-  after(:each) do
+  after do
     download.close
     download.unlink
     FileUtils.rm_rf(tmp_dir)

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe "removing the background from a URL" do
   let(:api_key) { "test-api-key" }
   let(:image_url) { "https://static.remove.bg/sample-gallery/people/adult-blue-boy-1438275-thumbnail.jpg" }
@@ -12,7 +10,7 @@ RSpec.describe "removing the background from a URL" do
     end
 
     expect(result).to be_a RemoveBg::Result
-    expect(result.data).to_not be_empty
+    expect(result.data).not_to be_empty
     expect(result.data.encoding).to eq(Encoding::BINARY)
     expect(result.type).to eq "person"
     expect(result.height).to eq 1080
@@ -20,7 +18,7 @@ RSpec.describe "removing the background from a URL" do
     expect(result.credits_charged).to be_a(Float).and(be >= 0)
   end
 
-  context "image doesn't exist" do
+  context "when image doesn't exist" do
     it "raises an error with a helpful message" do
       make_request = proc do
         VCR.use_cassette("from-url-non-existent-image") do

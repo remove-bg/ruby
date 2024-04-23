@@ -1,18 +1,14 @@
 # frozen_string_literal: true
 
-require "remove_bg/configuration"
-require "remove_bg/error"
-require "remove_bg/image_composer"
-
 RSpec.describe RemoveBg::ImageComposer do
-  before(:each) { RemoveBg::Configuration.reset }
+  before { RemoveBg::Configuration.reset }
 
   let(:alpha_file) { instance_double(File, "alpha") }
   let(:color_file) { instance_double(File, "color") }
-  let(:destination_path) { double("Destination path") }
+  let(:destination_path) { instance_double(Pathname, "Destination path") }
 
-  context "configured to use MiniMagick" do
-    before(:each) { RemoveBg::Configuration.configuration.image_processor = :minimagick }
+  context "when using MiniMagick" do
+    before { RemoveBg::Configuration.configuration.image_processor = :minimagick }
 
     it "uses MiniMagick by default" do
       require "image_processing/mini_magick"
@@ -25,8 +21,8 @@ RSpec.describe RemoveBg::ImageComposer do
     end
   end
 
-  context "configured to use Vips" do
-    before(:each) { RemoveBg::Configuration.configuration.image_processor = :vips }
+  context "when using Vips" do
+    before { RemoveBg::Configuration.configuration.image_processor = :vips }
 
     it "uses Vips" do
       require "image_processing/vips"
@@ -39,8 +35,8 @@ RSpec.describe RemoveBg::ImageComposer do
     end
   end
 
-  context "configured with an unknown processor" do
-    before(:each) { RemoveBg::Configuration.configuration.image_processor = :foo }
+  context "when configured with an unknown processor" do
+    before { RemoveBg::Configuration.configuration.image_processor = :foo }
 
     it "raises an error" do
       expect { perform_composition }
@@ -48,8 +44,8 @@ RSpec.describe RemoveBg::ImageComposer do
     end
   end
 
-  context "not configured" do
-    before(:each) { RemoveBg::Configuration.configuration.image_processor = nil }
+  context "when not configured" do
+    before { RemoveBg::Configuration.configuration.image_processor = nil }
 
     it "raises an error" do
       expect { perform_composition }
@@ -58,7 +54,7 @@ RSpec.describe RemoveBg::ImageComposer do
   end
 
   describe "::detect_image_processor" do
-    let(:binary_detector) { double("binary_detector", call: false) }
+    let(:binary_detector) { instance_double(Proc, "binary_detector", call: false) }
 
     let(:detected) do
       described_class.detect_image_processor(detector: binary_detector)
@@ -90,7 +86,7 @@ RSpec.describe RemoveBg::ImageComposer do
   private
 
   def spy_on_image_processing(klass)
-    spy(klass.to_s).tap do |processing_spy|
+    spy(klass.to_s).tap do |processing_spy| # rubocop:disable RSpec/VerifiedDoubles
       allow(klass).to receive(:source).and_return(processing_spy)
     end
   end

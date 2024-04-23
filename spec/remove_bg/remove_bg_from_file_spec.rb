@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
-RSpec.describe "RemoveBg::from_file" do
+RSpec.describe "RemoveBg::from_file" do # rubocop:disable RSpec/DescribeClass
   let(:image_path) { "image.png" }
 
   describe "using global API key" do
-    before(:each) { RemoveBg::Configuration.reset }
+    before { RemoveBg::Configuration.reset }
 
     it "allows the inline API key to omitted" do
       api_key = "an-api_key"

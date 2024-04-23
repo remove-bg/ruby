@@ -1,10 +1,8 @@
 # frozen_string_literal: true
 
-require "remove_bg/url_validator"
-
 RSpec.describe RemoveBg::UrlValidator do
   it "permits valid, absolute URLs" do
-    expect { validate("http://example.com/image.png") }.to_not raise_error
+    expect { validate("http://example.com/image.png") }.not_to raise_error
   end
 
   it "rejects nil URLs" do

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "remove_bg"
-
 RSpec.describe RemoveBg::ApiClient do
+  subject(:api_client) { described_class.new }
+
   let(:image_path) do
     File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
   end
@@ -13,7 +13,7 @@ RSpec.describe RemoveBg::ApiClient do
     it "raises an error with a helpful message" do
       make_request = proc do
         VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-          subject.remove_from_file(image_path, request_options)
+          api_client.remove_from_file(image_path, request_options)
         end
       end
 
@@ -23,7 +23,7 @@ RSpec.describe RemoveBg::ApiClient do
     it "includes the HTTP response for further debugging" do
       make_request = proc do
         VCR.use_cassette("from-file-person-in-field-invalid-api-key") do
-          subject.remove_from_file(image_path, request_options)
+          api_client.remove_from_file(image_path, request_options)
         end
       end
 
@@ -33,16 +33,16 @@ RSpec.describe RemoveBg::ApiClient do
     end
   end
 
-  context "invalid image URL" do
+  context "with invalid image URL" do
     it "raises an error" do
-      expect { subject.remove_from_url("", build_options) }
+      expect { api_client.remove_from_url("", build_options) }
         .to raise_error RemoveBg::InvalidUrlError
     end
   end
 
-  context "rate limit exceeded", :disable_vcr do
+  context "when rate limit exceeded", :disable_vcr do
     let(:request) do
-      proc { subject.remove_from_file(image_path, build_options) }
+      proc { api_client.remove_from_file(image_path, build_options) }
     end
 
     it "raises a specific error, to aid rate limit implementations" do
@@ -87,7 +87,7 @@ RSpec.describe RemoveBg::ApiClient do
       )
 
       make_request = proc do
-        subject.remove_from_url("http://example.image.jpg", build_options)
+        api_client.remove_from_url("http://example.image.jpg", build_options)
       end
 
       expect(&make_request).to raise_error do |exception|
@@ -103,7 +103,7 @@ RSpec.describe RemoveBg::ApiClient do
       stub_request(:post, /api.remove.bg/).to_return(status: 204)
 
       make_request = proc do
-        subject.remove_from_url("http://example.image.jpg", build_options)
+        api_client.remove_from_url("http://example.image.jpg", build_options)
       end
 
       expect(&make_request).to raise_error RemoveBg::HttpError, /unknown error/
@@ -114,7 +114,7 @@ RSpec.describe RemoveBg::ApiClient do
     it "is included in the request", :disable_vcr do
       stub_request(:post, /api.remove.bg/).to_return(status: 200, body: "")
 
-      subject.remove_from_url("http://example.image.jpg", build_options)
+      api_client.remove_from_url("http://example.image.jpg", build_options)
 
       expect(WebMock).to have_requested(:post, /api.remove.bg/)
         .with(headers: { "User-Agent" => "remove-bg-ruby-#{RemoveBg::VERSION}" })
@@ -130,7 +130,7 @@ RSpec.describe RemoveBg::ApiClient do
         .to_timeout
         .to_return(status: 200, body: "data")
 
-      result = subject.remove_from_url(image_url, build_options)
+      result = api_client.remove_from_url(image_url, build_options)
 
       expect(result.data).to eq "data"
     end
@@ -139,7 +139,7 @@ RSpec.describe RemoveBg::ApiClient do
       stub_request(:post, /api.remove.bg/).to_timeout
 
       make_request = proc do
-        subject.remove_from_url(image_url, build_options)
+        api_client.remove_from_url(image_url, build_options)
       end
 
       expect(&make_request).to raise_error Faraday::ConnectionFailed
@@ -157,7 +157,7 @@ RSpec.describe RemoveBg::ApiClient do
 
       expect(response_data.encoding).to eq(Encoding::BINARY)
 
-      result = subject.remove_from_url(image_url, build_options)
+      result = api_client.remove_from_url(image_url, build_options)
 
       expect(result.data.encoding).to eq(Encoding::BINARY)
     end
@@ -170,7 +170,7 @@ RSpec.describe RemoveBg::ApiClient do
 
         make_request = proc do
           VCR.use_cassette("account-invalid-api-key") do
-            subject.account_info(request_options)
+            api_client.account_info(request_options)
           end
         end
 

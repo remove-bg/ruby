@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg/rate_limit_info"
-
 RSpec.describe RemoveBg::RateLimitInfo do
   describe "#to_s" do
     it "displays the rate limit info in a human readable form" do

@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require "remove_bg/http_connection"
-
 RSpec.describe RemoveBg::HttpConnection do
   let(:options) { described_class.build.options }
 

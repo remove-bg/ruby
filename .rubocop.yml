@@ -31,3 +31,13 @@ Metrics/MethodLength:
 
 Bundler/OrderedGems:
   Enabled: true
+
+RSpec/DescribeClass:
+  Exclude:
+    - spec/integration/*
+
+RSpec/ExampleLength:
+  Max: 25
+
+RSpec/MultipleExpectations:
+  Max: 10
