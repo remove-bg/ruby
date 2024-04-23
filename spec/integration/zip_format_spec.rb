@@ -4,7 +4,7 @@ require "remove_bg"
 require "digest"
 
 RSpec.describe "using the ZIP format" do
-  let(:api_key) { ENV.fetch("REMOVE_BG_API_KEY") }
+  let(:api_key) { "test-api-key" }
   let(:image_path) do
     File.expand_path("../fixtures/images/person-in-field.jpg", __dir__)
   end

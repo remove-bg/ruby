@@ -7,22 +7,22 @@ require "remove_bg/version"
 Gem::Specification.new do |spec|
   spec.name = "remove_bg"
   spec.version = RemoveBg::VERSION
-  spec.authors = ["Oliver Peate"]
-  spec.email = ["team@remove.bg"]
+  spec.authors = ["Canva Austria GmbH"]
+  spec.email = ["ops@kaleido.ai"]
 
   spec.summary = "Remove image background - 100% automatically"
   spec.homepage = "https://www.remove.bg/"
   spec.license = "MIT"
   spec.metadata["source_code_uri"] = "https://github.com/remove-bg/ruby"
-  spec.metadata["changelog_uri"] = "https://github.com/remove-bg/ruby/blob/master/CHANGELOG.md"
+  spec.metadata["changelog_uri"] = "https://github.com/remove-bg/ruby/blob/main/CHANGELOG.md"
   spec.metadata["rubygems_mfa_required"] = "true"
 
-  # Require at least Ruby 2.5
-  spec.required_ruby_version = ">= 2.5"
+  # Require at least Ruby 2.
+  spec.required_ruby_version = ">= 2.7"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files = Dir.chdir(File.expand_path('..', __FILE__)) do
+  spec.files = Dir.chdir(File.expand_path(__dir__)) do
     `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features|examples)/}) }
   end
   spec.bindir = "exe"
@@ -33,17 +33,23 @@ Gem::Specification.new do |spec|
   spec.add_dependency "image_processing", ">= 1.9", "< 2"
   spec.add_dependency "rubyzip", ">= 2.0", "< 3"
 
+  spec.add_development_dependency "appraisal", "~> 2.5"
+
   spec.add_development_dependency "bundler", "~> 2.0"
-  spec.add_development_dependency "codecov"
-  spec.add_development_dependency "dotenv"
-  spec.add_development_dependency "pry"
-  spec.add_development_dependency "rake"
-  spec.add_development_dependency "rspec_junit_formatter"
-  spec.add_development_dependency "rspec-with_params"
+  spec.add_development_dependency "pry", "~> 0.14"
+  spec.add_development_dependency "rake", "~> 13.2"
   spec.add_development_dependency "rspec", "~> 3.8"
-  spec.add_development_dependency "simplecov"
-  spec.add_development_dependency "vcr_better_binary"
-  spec.add_development_dependency "vcr"
-  spec.add_development_dependency "webmock"
-  spec.add_development_dependency "yard"
+  spec.add_development_dependency "rspec_junit_formatter", "~> 0.6"
+  spec.add_development_dependency "rspec-sonarqube-formatter", "~> 1.5"
+  spec.add_development_dependency "rspec-with_params", "~> 0.3"
+  spec.add_development_dependency "rubocop", "~> 1.63"
+  spec.add_development_dependency "rubocop-performance", "~> 1.21"
+  spec.add_development_dependency "rubocop-rake", "~> 0.6.0"
+  spec.add_development_dependency "rubocop-rspec", "~> 2.29"
+  spec.add_development_dependency "simplecov", "~> 0.22"
+  spec.add_development_dependency "simplecov-cobertura", "~> 2.1"
+  spec.add_development_dependency "vcr", "~> 6.2"
+  spec.add_development_dependency "vcr_better_binary", "~> 0.2"
+  spec.add_development_dependency "webmock", "~> 3.23"
+  spec.add_development_dependency "yard", "~> 0.9"
 end

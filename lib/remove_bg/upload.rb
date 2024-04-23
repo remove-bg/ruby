@@ -23,8 +23,14 @@ module RemoveBg
 
     private_class_method :determine_content_type
 
-    # UploadIO for Faraday < 0.16.0
-    FARADAY_FILE = defined?(Faraday::FilePart) ? Faraday::FilePart : Faraday::UploadIO
+    # UploadIO for Faraday < 0.16.0, Faraday::FilePart for 1.x and File for 2.x
+    FARADAY_FILE = if defined?(Faraday::FilePart)
+                     Faraday::FilePart
+                   elsif defined?(Faraday::UploadIO)
+                     Faraday::UploadIO
+                   else
+                     File
+                   end
     private_constant :FARADAY_FILE
   end
 end

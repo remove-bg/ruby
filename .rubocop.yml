@@ -1,9 +1,21 @@
 ---
 inherit_from: https://raw.githubusercontent.com/remove-bg/code-style/main/ruby/.rubocop.yml
 
+require:
+  - rubocop-performance
+  - rubocop-rspec
+  - rubocop-rake
+
+inherit_mode:
+  merge:
+    - Exclude
+
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 2.5
+  TargetRubyVersion: 2.7
+  Exclude:
+    - gemfiles/**/*
+    - vendor/bundle/**/*
 
 Layout/LineLength:
   Max: 180

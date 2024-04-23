@@ -3,7 +3,7 @@
 require "remove_bg"
 
 RSpec.describe "removing the background from a URL" do
-  let(:api_key) { ENV.fetch("REMOVE_BG_API_KEY") }
+  let(:api_key) { "test-api-key" }
   let(:image_url) { "https://static.remove.bg/sample-gallery/people/adult-blue-boy-1438275-thumbnail.jpg" }
 
   it "succeeds with a valid API key" do
@@ -28,8 +28,7 @@ RSpec.describe "removing the background from a URL" do
         end
       end
 
-      expect(make_request).
-        to raise_error RemoveBg::ClientHttpError, /Failed to download/
+      expect(&make_request).to raise_error RemoveBg::ClientHttpError, /Failed to download/
     end
   end
 end
