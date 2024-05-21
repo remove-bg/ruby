@@ -4,6 +4,10 @@ require "faraday"
 require_relative "api"
 require_relative "version"
 
+if Gem.loaded_specs["faraday"].version >= Gem::Version.new("2.0")
+  require "faraday/retry"
+end
+
 module RemoveBg
   class HttpConnection
     USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
@@ -13,13 +17,18 @@ module RemoveBg
     # @return [Faraday::Connection]
     #
     def self.build(api_url = RemoveBg::Api::URL)
+      exceptions = if Gem.loaded_specs["faraday"].version >= Gem::Version.new("2.0")
+                     Faraday::Retry::Middleware::DEFAULT_EXCEPTIONS
+                   else
+                     Faraday::Request::Retry::DEFAULT_EXCEPTIONS
+                   end
+
       retry_options = {
         max: 2,
         interval: 0.2,
         backoff_factor: 2,
         methods: [:post],
-        exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-                    [Faraday::ConnectionFailed],
+        exceptions: exceptions + [Faraday::ConnectionFailed],
       }
 
       request_options = Faraday::RequestOptions.new.tap do |req_options|
