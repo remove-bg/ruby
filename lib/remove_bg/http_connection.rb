@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "faraday"
+require "faraday/retry"
 require_relative "api"
 require_relative "version"
 
@@ -18,7 +19,7 @@ module RemoveBg
         interval: 0.2,
         backoff_factor: 2,
         methods: [:post],
-        exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
+        exceptions: Faraday::Retry::Middleware::DEFAULT_EXCEPTIONS +
                     [Faraday::ConnectionFailed],
       }
 
