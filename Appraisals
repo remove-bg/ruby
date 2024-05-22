@@ -14,3 +14,8 @@ end
 appraise "faraday-1-x" do
   gem "faraday", "~> 1"
 end
+
+# Latest in Faraday 2.x series
+appraise "faraday-2-x" do
+  gem "faraday", "~> 2"
+end
