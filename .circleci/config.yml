@@ -1,5 +1,4 @@
 ---
-
 version: 2.1
 
 # Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
@@ -29,16 +28,16 @@ x-common-auth: &common-auth
 
 # Define executors
 executors:
-  docker:  # Docker using the Base Convenience Image
+  docker: # Docker using the Base Convenience Image
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  macos:  # macOS executor running Xcode
+  macos: # macOS executor running Xcode
     macos:
-      xcode: 15.3.0  # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
+      # https://circleci.com/developer/machine/image/xcode
+      xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
 
 jobs:
-
   # Lint Job
   lint:
     docker:
