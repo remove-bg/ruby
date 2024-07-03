@@ -1,14 +1,32 @@
-[![RemoveBG](resources/logo_black.png)](https://www.remove.bg/)
+[![RemoveBG](resources/removebgByCanva.svg)](https://www.remove.bg/)
 
-# Ruby library
+# remove.bg Ruby Gem
 
-[![CircleCI](https://circleci.com/gh/remove-bg/ruby/tree/master.svg?style=shield)](https://circleci.com/gh/remove-bg/ruby/tree/master) [![Gem Version](https://badge.fury.io/rb/remove_bg.svg)](https://rubygems.org/gems/remove_bg) [![codecov](https://codecov.io/gh/remove-bg/ruby/branch/master/graph/badge.svg)](https://codecov.io/gh/remove-bg/ruby)
+<p align="center">
 
-## Quickstart installation
+[![Gem Version](https://img.shields.io/gem/v/remove_bg?style=for-the-badge&logo=rubygems&logoColor=aaa&color=367cd3)](https://rubygems.org/gems/remove_bg)
+[![Gem Total Downloads](https://img.shields.io/gem/dt/remove_bg?style=for-the-badge&logo=ruby&logoColor=aaa&color=367cd3)](https://rubygems.org/gems/remove_bg)
+[![CircleCI](https://img.shields.io/circleci/build/github/remove-bg/ruby?style=for-the-badge&logo=circleci&logoColor=aaa)](https://circleci.com/gh/remove-bg/ruby/tree/main)
+[![GitHub License](https://img.shields.io/github/license/remove-bg/ruby?style=for-the-badge&logo=readthedocs&logoColor=aaa)](https://github.com/remove-bg/ruby/blob/main/LICENSE.md)
+[![Codecov](https://img.shields.io/codecov/c/github/remove-bg/ruby?style=for-the-badge&logo=codecov&logoColor=aaa)](https://app.codecov.io/gh/remove-bg/ruby)
+[![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/remove-bg_ruby?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarcloud&logoColor=aaa)](https://sonarcloud.io/summary/overall?id=remove-bg_ruby)
+[![Violations](https://img.shields.io/sonar/violations/remove-bg_ruby?server=https%3A%2F%2Fsonarcloud.io&format=short&style=for-the-badge&logo=sonarcloud&logoColor=aaa)](https://sonarcloud.io/summary/overall?id=remove-bg_ruby)
+![Depfu](https://img.shields.io/depfu/dependencies/github/remove-bg%2Fruby?style=for-the-badge&logo=dependabot&logoColor=aaa)
+
+</p>
+
+## Requirements
+
+This gem is compatible with Ruby 2.7 or 3+ and can be used with
+[Faraday](https://rubygems.org/gems/faraday/) 0.16, 0.17, 1.x or 2.x.
+
+An API key (free) from [remove.bg](https://www.remove.bg/api) is required.
+
+## Quickstart Installation
 
 Add the gem to your `Gemfile` and run `bundle install`:
 
-```
+```ruby
 gem "remove_bg"
 ```
 
@@ -30,8 +48,8 @@ Please install one of the following libraries:
 - [GraphicsMagick](http://www.graphicsmagick.org/)
 - [libvips](http://libvips.github.io/libvips/)
 
-The gem will auto-detect any image processing libraries present. However you may
-prefer to explicitly configure which library to use:
+The gem will auto-detect any image processing libraries present. However, you can
+also explicitly configure which library to use:
 
 ```ruby
 RemoveBg.configure do |config|
@@ -109,7 +127,7 @@ There's also a `#save` convenience method:
 ```ruby
 result.save("processed/image.png")
 # Overwrite any existing file
-result.save!("processed/image.png") 
+result.save!("processed/image.png")
 ```
 
 ## Producing transparent images over 10 megapixels
