@@ -54,8 +54,8 @@ module RemoveBg
       extract_parts
 
       ImageComposer.new.compose(
-        color_file: color_file,
-        alpha_file: alpha_file,
+        color_file:,
+        alpha_file:,
         destination_path: destination.path
       )
     end

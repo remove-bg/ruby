@@ -8,7 +8,7 @@ require_relative "version"
 
 module RemoveBg
   class HttpConnection
-    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
+    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}".freeze
     HTTP_BASE_TIMEOUT = 20
     HTTP_WRITE_TIMEOUT = 120
 

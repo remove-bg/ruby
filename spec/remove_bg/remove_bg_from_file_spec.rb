@@ -13,7 +13,7 @@ RSpec.describe "RemoveBg::from_file" do # rubocop:disable RSpec/DescribeClass
       RemoveBg.configure { |config| config.api_key = api_key }
       RemoveBg.from_file(image_path)
 
-      expected_request_options = having_attributes(api_key: api_key)
+      expected_request_options = having_attributes(api_key:)
 
       expect(api_client).to have_received(:remove_from_file)
         .with(image_path, expected_request_options)

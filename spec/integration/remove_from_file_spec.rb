@@ -8,7 +8,7 @@ RSpec.describe "removing the background from a file" do
 
   it "succeeds with a valid API key" do
     result = VCR.use_cassette("from-file-person-in-field") do
-      RemoveBg.from_file(image_path, api_key: api_key)
+      RemoveBg.from_file(image_path, api_key:)
     end
 
     expect(result).to be_a RemoveBg::Result

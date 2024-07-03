@@ -43,7 +43,7 @@ module RemoveBg
     #
     def remove_from_url(image_url, options)
       RemoveBg::UrlValidator.validate(image_url)
-      data = options.data.merge(image_url: image_url)
+      data = options.data.merge(image_url:)
       request_remove_bg(data, options.api_key)
     end
 
@@ -84,12 +84,12 @@ module RemoveBg
       download.rewind
 
       if response.status == 200
-        parse_image_result(headers: response.headers, download: download)
+        parse_image_result(headers: response.headers, download:)
       else
         response_body = download.read
         download.close
         download.unlink
-        handle_http_error(response: response, body: response_body)
+        handle_http_error(response:, body: response_body)
       end
     end
 
@@ -101,7 +101,7 @@ module RemoveBg
       if response.status == 200
         parse_account_result(response)
       else
-        handle_http_error(response: response, body: response.body)
+        handle_http_error(response:, body: response.body)
       end
     end
 
@@ -123,7 +123,7 @@ module RemoveBg
 
     def parse_image_result(headers:, download:)
       result_for_content_type(headers["Content-Type"]).new(
-        download: download,
+        download:,
         metadata: ResultMetadata.new(headers),
         rate_limit: RateLimitInfo.new(headers)
       )

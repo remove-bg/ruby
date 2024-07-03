@@ -8,7 +8,7 @@ RSpec.describe "rate limit information" do
 
   it "makes the rate limit information accessible" do
     result = VCR.use_cassette("from-file-person-in-field") do
-      RemoveBg.from_file(image_path, api_key: api_key)
+      RemoveBg.from_file(image_path, api_key:)
     end
 
     rate_limit = result.rate_limit

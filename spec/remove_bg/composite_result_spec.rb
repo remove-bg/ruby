@@ -21,7 +21,7 @@ RSpec.describe RemoveBg::CompositeResult do
     it "writes the data to the specified path" do
       expect(File.exist?(file_path)).to be false
 
-      new_result(download: download).save_zip(file_path)
+      new_result(download:).save_zip(file_path)
 
       expect(File.exist?(file_path)).to be true
       expect(File.read(file_path)).to include "zip-data"
@@ -31,7 +31,7 @@ RSpec.describe RemoveBg::CompositeResult do
       File.write(file_path, "existing-data")
 
       attempt_overwrite = proc do
-        new_result(download: download).save_zip(file_path)
+        new_result(download:).save_zip(file_path)
       end
 
       expect(&attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
@@ -45,7 +45,7 @@ RSpec.describe RemoveBg::CompositeResult do
     it "allows the file to be overwritten" do
       File.write(file_path, "existing-data")
 
-      new_result(download: download).save_zip!(file_path)
+      new_result(download:).save_zip!(file_path)
 
       expect(File.read(file_path)).to include "zip-data"
     end
@@ -54,6 +54,6 @@ RSpec.describe RemoveBg::CompositeResult do
   private
 
   def new_result(download:)
-    described_class.new(download: download, metadata: nil, rate_limit: nil)
+    described_class.new(download:, metadata: nil, rate_limit: nil)
   end
 end

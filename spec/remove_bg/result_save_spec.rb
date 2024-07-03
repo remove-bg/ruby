@@ -20,7 +20,7 @@ RSpec.describe RemoveBg::Result, "#save" do
   it "writes the data to the specified path" do
     expect(File.exist?(file_path)).to be false
 
-    new_result(download: download).save(file_path)
+    new_result(download:).save(file_path)
 
     expect(File.exist?(file_path)).to be true
     expect(File.read(file_path)).to include "test-data"
@@ -30,7 +30,7 @@ RSpec.describe RemoveBg::Result, "#save" do
     File.write(file_path, "existing-data")
 
     attempt_overwrite = proc do
-      new_result(download: download).save(file_path)
+      new_result(download:).save(file_path)
     end
 
     expect(&attempt_overwrite).to raise_error RemoveBg::FileOverwriteError do |ex|
@@ -44,7 +44,7 @@ RSpec.describe RemoveBg::Result, "#save" do
   it "allows the file to be overwritten" do
     File.write(file_path, "existing-data")
 
-    new_result(download: download).save!(file_path)
+    new_result(download:).save!(file_path)
 
     expect(File.read(file_path)).to include "test-data"
   end
@@ -52,6 +52,6 @@ RSpec.describe RemoveBg::Result, "#save" do
   private
 
   def new_result(download:)
-    described_class.new(download: download, metadata: nil, rate_limit: nil)
+    described_class.new(download:, metadata: nil, rate_limit: nil)
   end
 end

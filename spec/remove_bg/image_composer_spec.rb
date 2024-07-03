@@ -93,9 +93,9 @@ RSpec.describe RemoveBg::ImageComposer do
 
   def perform_composition
     subject.compose(
-      color_file: color_file,
-      alpha_file: alpha_file,
-      destination_path: destination_path
+      color_file:,
+      alpha_file:,
+      destination_path:
     )
   end
 end
