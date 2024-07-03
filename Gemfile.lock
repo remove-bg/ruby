@@ -4,8 +4,7 @@ PATH
     remove_bg (2.0.0.pre)
       faraday (>= 2, <= 3)
       faraday-multipart (~> 1.0)
-      faraday-retry (>= 2, <= 3)
-      ffi (~> 1.16)
+      faraday-retry (~> 2.2)
       image_processing (~> 1.12)
       rubyzip (>= 2.0, < 3)
 
