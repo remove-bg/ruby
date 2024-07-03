@@ -2,6 +2,8 @@
 
 require "faraday"
 require "faraday/retry"
+require 'faraday/net_http'
+
 require_relative "api"
 require_relative "version"
 
