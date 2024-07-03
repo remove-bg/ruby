@@ -28,14 +28,14 @@ x-common-auth: &common-auth
 
 # Define executors
 executors:
-  docker: # Docker using the Base Convenience Image
+  docker:  # Docker using the Base Convenience Image
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-  macos: # macOS executor running Xcode
+  macos:  # macOS executor running Xcode
     macos:
       # https://circleci.com/developer/machine/image/xcode
-      xcode: 15.3.0 # Xcode 15.3 (15E204a), macOS Sonoma14.3.1
+      xcode: 15.4.0
 
 jobs:
   # Lint Job
@@ -253,7 +253,7 @@ workflows:
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["3.1.6", "3.2.3", "3.3.3"]
+              ruby-version: ["3.0.6", "3.1.6", "3.2.3", "3.3.3"]
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/

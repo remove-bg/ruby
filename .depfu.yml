@@ -17,5 +17,5 @@ bundler:
   auto_assign: otherguy
   auto_review_team_assign: platform
   grouped_update_schedule: biweekly
-  grouped_update_start_date: '2022-01-05' # First wednesday of the year
+  grouped_update_start_date: '2022-01-05'  # First wednesday of the year
   grouped_update_time: '6:00'

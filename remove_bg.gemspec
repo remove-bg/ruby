@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
     "rubygems_mfa_required" => "true",
   }
 
-  # Require at least Ruby 2.7
-  spec.required_ruby_version = ">= 2.7"
+  # Require at least Ruby 3
+  spec.required_ruby_version = ">= 3.0"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday", ">= 2", "<= 3"
   spec.add_dependency "faraday-multipart", "~> 1.0"
   spec.add_dependency "faraday-retry", ">= 2", "<= 3"
+  spec.add_dependency "ffi", "~> 1.16"
 
   spec.add_dependency "image_processing", "~> 1.12"
   spec.add_dependency "rubyzip", ">= 2.0", "< 3"
