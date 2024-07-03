@@ -18,7 +18,7 @@ parameters:
     default: main
   default-ruby:
     type: string
-    default: "3.3.0"
+    default: "3.3.3"
 
 # Define common YAML anchors
 x-common-auth: &common-auth
@@ -78,7 +78,7 @@ jobs:
       # The OS to run the jobs on
       ruby-version:
         type: string
-        default: "3.3.0"
+        default: "3.3.3"
     executor: << parameters.os >>
     environment:
       RUBY_VERSION: << parameters.ruby-version >>
