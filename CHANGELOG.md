@@ -1,6 +1,7 @@
 # Changelog
 
 ## 2.0.0
+ - Remove support for 2.7, and making Ruby 3.0 the minimum version.
  - Upgrade Faraday version to support faraday v2
  - Increase default timeout to 20 seconds
  - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
