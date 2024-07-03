@@ -2,8 +2,8 @@ PATH
   remote: .
   specs:
     remove_bg (1.5.1.pre)
-      faraday (>= 0.15, < 2)
-      image_processing (>= 1.9, < 2)
+      faraday (>= 0.15)
+      image_processing (~> 1.12)
       rubyzip (>= 2.0, < 3)
 
 GEM

@@ -78,7 +78,7 @@ module RemoveBg
         end
       end
 
-      # Faraday v0.15 / v0.17
+      # Faraday v0.17
       download.write(response.body) unless streaming
 
       download.rewind
