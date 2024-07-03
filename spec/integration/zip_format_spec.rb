@@ -13,7 +13,7 @@ RSpec.describe "using the ZIP format" do
       RemoveBg::Configuration.configuration.image_processor = :minimagick
 
       result = VCR.use_cassette("zip-person-in-field") do
-        RemoveBg.from_file(image_path, format: "zip", api_key: api_key)
+        RemoveBg.from_file(image_path, format: "zip", api_key:)
       end
 
       expect(result).to be_a_composite_result
@@ -29,7 +29,7 @@ RSpec.describe "using the ZIP format" do
       RemoveBg::Configuration.configuration.image_processor = :vips
 
       result = VCR.use_cassette("zip-person-in-field") do
-        RemoveBg.from_file(image_path, format: "zip", api_key: api_key)
+        RemoveBg.from_file(image_path, format: "zip", api_key:)
       end
 
       expect(result).to be_a_composite_result
@@ -45,7 +45,7 @@ RSpec.describe "using the ZIP format" do
       RemoveBg::Configuration.configuration.image_processor = :minimagick
 
       result = VCR.use_cassette("zip-upgrade") do
-        RemoveBg.from_file(image_path, format: "png", api_key: api_key)
+        RemoveBg.from_file(image_path, format: "png", api_key:)
       end
 
       expect(result).to be_a_composite_result
@@ -55,7 +55,7 @@ RSpec.describe "using the ZIP format" do
       RemoveBg::Configuration.configuration.image_processor = nil
 
       result = VCR.use_cassette("no-zip-upgrade") do
-        RemoveBg.from_file(image_path, format: "png", api_key: api_key)
+        RemoveBg.from_file(image_path, format: "png", api_key:)
       end
 
       expect(result).to be_a_plain_result
@@ -66,7 +66,7 @@ RSpec.describe "using the ZIP format" do
       RemoveBg::Configuration.configuration.auto_upgrade_png_to_zip = false
 
       result = VCR.use_cassette("zip-upgrade-off") do
-        RemoveBg.from_file(image_path, format: "png", api_key: api_key)
+        RemoveBg.from_file(image_path, format: "png", api_key:)
       end
 
       expect(result).to be_a_plain_result

@@ -24,8 +24,8 @@ Gem::Specification.new do |spec|
     "rubygems_mfa_required" => "true",
   }
 
-  # Require at least Ruby 2.7
-  spec.required_ruby_version = ">= 2.7"
+  # Require at least Ruby 3.1
+  spec.required_ruby_version = ">= 3.1"
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
@@ -36,8 +36,11 @@ Gem::Specification.new do |spec|
   spec.executables = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
 
-  spec.add_dependency "faraday", ">= 0.15", "< 2"
-  spec.add_dependency "image_processing", ">= 1.9", "< 2"
+  spec.add_dependency "faraday", ">= 2", "<= 3"
+  spec.add_dependency "faraday-multipart", "~> 1.0"
+  spec.add_dependency "faraday-retry", "~> 2.2"
+
+  spec.add_dependency "image_processing", "~> 1.12"
   spec.add_dependency "rubyzip", ">= 2.0", "< 3"
 
   spec.add_development_dependency "appraisal", "~> 2.5"
@@ -45,14 +48,14 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "bundler", "~> 2.0"
   spec.add_development_dependency "pry", "~> 0.14"
   spec.add_development_dependency "rake", "~> 13.2"
-  spec.add_development_dependency "rspec", "~> 3.8"
+  spec.add_development_dependency "rspec", "~> 3.13"
   spec.add_development_dependency "rspec_junit_formatter", "~> 0.6"
   spec.add_development_dependency "rspec-sonarqube-formatter", "~> 1.5"
   spec.add_development_dependency "rspec-with_params", "~> 0.3"
-  spec.add_development_dependency "rubocop", "~> 1.63"
+  spec.add_development_dependency "rubocop", "~> 1.64"
   spec.add_development_dependency "rubocop-performance", "~> 1.21"
-  spec.add_development_dependency "rubocop-rake", "~> 0.6.0"
-  spec.add_development_dependency "rubocop-rspec", "~> 2.29"
+  spec.add_development_dependency "rubocop-rake", "~> 0.6"
+  spec.add_development_dependency "rubocop-rspec", "~> 3.0"
   spec.add_development_dependency "simplecov", "~> 0.22"
   spec.add_development_dependency "simplecov-cobertura", "~> 2.1"
   spec.add_development_dependency "simplecov_json_formatter", "~> 0.1"

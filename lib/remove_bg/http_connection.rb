@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 require "faraday"
+require "faraday/retry"
+
 require_relative "api"
 require_relative "version"
 
 module RemoveBg
   class HttpConnection
-    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}"
-    HTTP_BASE_TIMEOUT = 10
+    USER_AGENT = "remove-bg-ruby-#{RemoveBg::VERSION}".freeze
+    HTTP_BASE_TIMEOUT = 20
     HTTP_WRITE_TIMEOUT = 120
 
     # @return [Faraday::Connection]
@@ -18,8 +20,7 @@ module RemoveBg
         interval: 0.2,
         backoff_factor: 2,
         methods: [:post],
-        exceptions: Faraday::Request::Retry::DEFAULT_EXCEPTIONS +
-                    [Faraday::ConnectionFailed],
+        exceptions: Faraday::Retry::Middleware::DEFAULT_EXCEPTIONS + [Faraday::ConnectionFailed],
       }
 
       request_options = Faraday::RequestOptions.new.tap do |req_options|
