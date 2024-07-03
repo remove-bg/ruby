@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "faraday"
+require "faraday/multipart"
 require_relative "error"
 
 module RemoveBg
@@ -23,9 +24,7 @@ module RemoveBg
 
     private_class_method :determine_content_type
 
-    # UploadIO for Faraday <= 0.16.0, Faraday::FilePart for 1.x and File for 2.x
-    FARADAY_FILE = Faraday::UploadIO if defined?(Faraday::UploadIO)
-    FARADAY_FILE = Faraday::FilePart if defined?(Faraday::FilePart)
+    FARADAY_FILE = Faraday::Multipart::FilePart if defined?(Faraday::Multipart::FilePart)
     FARADAY_FILE = File unless defined?(FARADAY_FILE)
 
     private_constant :FARADAY_FILE

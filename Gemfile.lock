@@ -1,8 +1,10 @@
 PATH
   remote: .
   specs:
-    remove_bg (1.5.1.pre)
-      faraday (>= 0.15, < 2)
+    remove_bg (1.6.0.pre)
+      faraday (>= 2, < 3)
+      faraday-multipart (~> 1.0)
+      faraday-retry (~> 2.2, >= 2)
       image_processing (>= 1.9, < 2)
       rubyzip (>= 2.0, < 3)
 
@@ -23,9 +25,14 @@ GEM
       rexml
     diff-lcs (1.5.1)
     docile (1.4.0)
-    faraday (1.2.0)
-      multipart-post (>= 1.2, < 3)
-      ruby2_keywords
+    faraday (2.9.2)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (3.1.0)
+      net-http
+    faraday-retry (2.2.1)
+      faraday (~> 2.0)
     ffi (1.16.3)
     hashdiff (1.1.0)
     htmlentities (4.3.4)
@@ -37,6 +44,8 @@ GEM
     method_source (1.1.0)
     mini_magick (4.12.0)
     multipart-post (2.4.0)
+    net-http (0.4.1)
+      uri
     parallel (1.24.0)
     parser (3.3.0.5)
       ast (~> 2.4.1)
@@ -102,7 +111,6 @@ GEM
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.1)
       ffi (~> 1.12)
-    ruby2_keywords (0.0.5)
     rubyzip (2.3.2)
     simplecov (0.22.0)
       docile (~> 1.1)
@@ -115,6 +123,7 @@ GEM
     simplecov_json_formatter (0.1.4)
     thor (1.3.1)
     unicode-display_width (2.5.0)
+    uri (0.13.0)
     vcr (6.2.0)
     vcr_better_binary (0.2.0)
       vcr (>= 5.0)
@@ -152,4 +161,4 @@ DEPENDENCIES
   yard (~> 0.9)
 
 BUNDLED WITH
-   2.4.19
+   2.4.22

@@ -1,7 +1,7 @@
 # Changelog
 
-## Unreleased
-
+## 2.0.0
+ - Upgrade Faraday version to support faraday v2
  - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
 
 ## 1.5.0
