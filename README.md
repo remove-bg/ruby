@@ -11,7 +11,7 @@
 [![Codecov](https://img.shields.io/codecov/c/github/remove-bg/ruby?style=for-the-badge&logo=codecov&logoColor=aaa)](https://app.codecov.io/gh/remove-bg/ruby)
 [![Sonar Quality Gate](https://img.shields.io/sonar/quality_gate/remove-bg_ruby?server=https%3A%2F%2Fsonarcloud.io&style=for-the-badge&logo=sonarcloud&logoColor=aaa)](https://sonarcloud.io/summary/overall?id=remove-bg_ruby)
 [![Violations](https://img.shields.io/sonar/violations/remove-bg_ruby?server=https%3A%2F%2Fsonarcloud.io&format=short&style=for-the-badge&logo=sonarcloud&logoColor=aaa)](https://sonarcloud.io/summary/overall?id=remove-bg_ruby)
-![Depfu](https://img.shields.io/depfu/dependencies/github/remove-bg%2Fruby?style=for-the-badge&logo=dependabot&logoColor=aaa)
+[![Dependencies](https://img.shields.io/depfu/dependencies/github/remove-bg%2Fruby?style=for-the-badge&logo=dependabot&logoColor=aaa)](https://github.com/remove-bg/ruby/network/dependencies)
 
 </p>
 
@@ -37,7 +37,7 @@ Please note the base configuration has the following resolution limits:
 | Output format | Resolution limit |
 |---------------|------------------|
 | PNG           | 10 megapixels    |
-| JPG           | 25 megapixels    |
+| JPG           | 50 megapixels    |
 
 ## Full installation
 
@@ -59,7 +59,7 @@ RemoveBg.configure do |config|
 end
 ```
 
-The API has the following resolution limits:
+The full installation has the following resolution limits:
 
 | Output format | Resolution limit |
 |---------------|------------------|

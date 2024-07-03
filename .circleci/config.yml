@@ -4,10 +4,10 @@ version: 2.1
 # Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
 orbs:
   ruby: circleci/ruby@2.1
+  node: circleci/node@5.2
   sonarcloud: sonarsource/sonarcloud@2.0
   asdf: rynkowsg/asdf@0.1
   codecov: codecov/codecov@4.1
-  gcr: circleci/gcp-gcr@0.16
   github: circleci/github-cli@2.3
 
 # Pipeline parameters
@@ -144,7 +144,13 @@ jobs:
                 paths:
                   - rspec
                   - coverage
-            - codecov/upload
+            - when:
+                condition:
+                  equal: ["<< pipeline.git.tag >>", ""]
+                steps:
+                  - codecov/upload:
+                      cli_args: --verbose
+                      validate: true
 
   # Sonarcloud Job
   sonarcloud:
@@ -175,69 +181,102 @@ jobs:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-    resource_class: small
+    resource_class: medium+
     environment:
       GIT_MAIN_BRANCH: << pipeline.parameters.main-branch >>
       CHANGELOG_FILENAME: CHANGELOG.md
     steps:
-      - setup_remote_docker
-      - checkout
-      - attach_workspace:
-          at: .
       - github/install:
-          version: 2.47.0
-      - gcr/gcr-auth
+          version: 2.52.0
+      - node/install:
+          node-version: latest
+      - run:
+          name: Install ImageMagick, libvips and libffi
+          command: |
+            sudo apt-get update
+            sudo apt-get -y --no-install-recommends install openssl imagemagick \
+              libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+      - asdf/install
+      # Install requested Ruby version
+      - run:
+          name: Install Ruby << pipeline.parameters.default-ruby >>
+          command: |
+            asdf plugin-add ruby
+            asdf install ruby << pipeline.parameters.default-ruby >>
+            asdf global ruby << pipeline.parameters.default-ruby >>
+            gem install --user-install executable-hooks
+      - checkout
+      - run:
+          name: Check out main branch
+          command: git checkout --force "${GIT_MAIN_BRANCH}"
+      # Install dependencies using bundler
+      - ruby/install-deps:
+          pre-install-steps:
+            - run: bundle config set jobs $(nproc)
+          key: gems-v{{ .Environment.CACHE_VERSION }}
       - run:
           name: Build and push gem
           command: |
+            bundle config set frozen false
             bundle exec rake version["${CIRCLE_TAG}"]
             bundle exec gem build --strict
-            GEM_HOST_API_KEY="${REMOVE_BG_GEM_PUSH_KEY}" gem push "remove_bg-${CIRCLE_TAG}.gem"
+            GEM_HOST_API_KEY="${REMOVE_BG_GEM_PUSH_KEY}" gem push "remove_bg-${CIRCLE_TAG}.gem" || true
 
             # Update version to next beta version
             NEXT_PATCH_TAG=$(echo "${CIRCLE_TAG:-0.0.0}" | awk 'BEGIN{FS=OFS="."} {$3+=1} 1')
             BETA_TAG="${NEXT_PATCH_TAG}.pre"
             bundle exec rake version["${BETA_TAG}"]
       - run:
-          name: Edit Release
-          command: |
-            # Update release
-            docker run --rm -it --name=gren -v $(pwd)/.grenrc.json:/.grenrc.json \
-              eu.gcr.io/removebg-226919/github-release-notes:latest \
-              release --tags "${CIRCLE_TAG}" --override --token ${GITHUB_AUTH_TOKEN} --username ${CIRCLE_PROJECT_USERNAME} --repo ${CIRCLE_PROJECT_REPONAME}
-
-            # Get current release description
-            gh release view ${CIRCLE_TAG} --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} --json body --jq '.body' > release-body.txt
-
-            # Append to release description
-            echo "Updating release description"
-            gh release edit ${CIRCLE_TAG} --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} --notes-file release-body.txt --latest --title ${CIRCLE_TAG}
-      - run:
-          name: Generate CHANGELOG.md
+          name: Edit Release and generate CHANGELOG.md
           command: |
             # Configure git
             git config --global credential.helper cache
             git config --global user.email "${GITHUB_USER_EMAIL}"
             git config --global user.name "${GITHUB_USER_NAME}"
 
-            # Check out main branch
-            git checkout --force "${GIT_MAIN_BRANCH}"
+            # Install GitHub Release Notes
+            npm install github-release-notes -g
 
-            # Generate changelog
-            docker run -it --name=gren -v $(pwd)/.grenrc.json:/.grenrc.json \
-              eu.gcr.io/removebg-226919/github-release-notes:latest \
-              changelog --override --token ${GITHUB_AUTH_TOKEN} --username ${CIRCLE_PROJECT_USERNAME} --repo ${CIRCLE_PROJECT_REPONAME}
+            # Get current release description
+            gh release view ${CIRCLE_TAG} \
+              --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --json body --jq '.body' > release-body.txt
 
-            docker cp "gren:/${CHANGELOG_FILENAME}" "${CHANGELOG_FILENAME}"
-            docker rm gren
+            # Create release notes
+            gren release \
+              --override \
+              --tags "${CIRCLE_TAG}" \
+              --token ${GITHUB_AUTH_TOKEN} \
+              --username ${CIRCLE_PROJECT_USERNAME} \
+              --repo ${CIRCLE_PROJECT_REPONAME}
+
+            # Get current release description
+            gh release view ${CIRCLE_TAG} \
+              --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --json body --jq '.body' > release-append.txt
+
+            echo -e "$(cat release-body.txt)\n\n---\n\n$(cat release-append.txt)" > release.txt
+
+            # Append to release description
+            echo "Updating release description"
+            gh release edit ${CIRCLE_TAG} \
+              --repo ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} \
+              --notes-file release.txt --latest --title ${CIRCLE_TAG}
+
+            # Generate CHANGELOG.md
+            gren changelog \
+              --override \
+              --token ${GITHUB_AUTH_TOKEN} \
+              --username ${CIRCLE_PROJECT_USERNAME} \
+              --repo ${CIRCLE_PROJECT_REPONAME}
 
             # Remove Windows line endings
             sed -i $'s/\r$//' "${CHANGELOG_FILENAME}"
 
             # Commit changelog and bumped version to git
-            git add "${CHANGELOG_FILENAME}"
-            git add lib/remove_bg/version.rb
-            git add Gemfile.lock
+            git add "${CHANGELOG_FILENAME}" lib/remove_bg/version.rb Gemfile.lock
+            git diff --name-only --cached
+
             git commit -m "📝 Update ${CHANGELOG_FILENAME} for ${CIRCLE_TAG}" -m "[skip ci]"
             git push -q --set-upstream origin ${GIT_MAIN_BRANCH}
 
@@ -284,6 +323,7 @@ workflows:
       - release:
           context:
             - DockerHub
+            - GitHub
             - rubygems.org
             - Google Cloud kaleido
           requires:
