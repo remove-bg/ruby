@@ -10,7 +10,7 @@ module RemoveBg
       raise RemoveBg::FileMissingError.new(file_path) unless File.exist?(file_path)
 
       content_type = determine_content_type(file_path)
-      File.new(file_path, content_type)
+      FARADAY_FILE.new(file_path, content_type)
     end
 
     def self.determine_content_type(file_path)
@@ -23,5 +23,10 @@ module RemoveBg
     end
 
     private_class_method :determine_content_type
+
+    FARADAY_FILE = File
+    FARADAY_FILE = Faraday::Multipart::FilePart if defined?(Faraday::Multipart::FilePart)
+
+    private_constant :FARADAY_FILE
   end
 end
