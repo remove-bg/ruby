@@ -2,6 +2,7 @@
 
 ## 2.0.0
  - Upgrade Faraday version to support faraday v2
+ - Increase default timeout to 20 seconds
  - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
 
 ## 1.5.0
