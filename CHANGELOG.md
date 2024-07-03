@@ -1,8 +1,11 @@
 # Changelog
 
-## Unreleased
+## 2.0.0
 
- - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
+- Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
+- Remove support for Ruby 2.5, 2.6, 2.7 and 3.0 which are EOL
+- Deprecate Faraday < 2, add support for all Faraday 2.x versions
+- Increase default timeout to 20 seconds
 
 ## 1.5.0
 

@@ -1,6 +1,6 @@
 # Security Policy
 
-We take the security of our software products and services seriously, including all of 
+We take the security of our software products and services seriously, including all of
 the open source code repositories managed through our organization.
 
 ## Supported Versions
@@ -14,15 +14,15 @@ We currently support these versions of this library with security updates.
 
 ## Reporting a Vulnerability
 
-If you believe you have found a security vulnerability in this repository, please report 
+If you believe you have found a security vulnerability in this repository, please report
 it to us through coordinated disclosure.
 
-Please do not report security vulnerabilities through public GitHub issues, discussions, 
+Please do not report security vulnerabilities through public GitHub issues, discussions,
 or pull requests.
 
 Instead, please contact us at https://www.remove.bg/support/contact
 
-Please include as much of the information listed below as you can to help us better 
+Please include as much of the information listed below as you can to help us better
 understand and resolve the issue:
 
 - The type of issue (e.g., buffer overflow, issue in a dependency,...)

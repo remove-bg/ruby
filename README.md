@@ -17,8 +17,8 @@
 
 ## Requirements
 
-This gem is compatible with Ruby 2.7 or 3+ and can be used with
-[Faraday](https://rubygems.org/gems/faraday/) 0.16, 0.17, 1.x or 2.x.
+This gem is compatible with Ruby 3.1+ and can be used with
+[Faraday](https://rubygems.org/gems/faraday/) version 2 and above
 
 An API key (free) from [remove.bg](https://www.remove.bg/api) is required.
 
@@ -59,13 +59,13 @@ RemoveBg.configure do |config|
 end
 ```
 
-The full installation has the following resolution limits:
+The API has the following resolution limits:
 
 | Output format | Resolution limit |
 |---------------|------------------|
-| PNG           | 25 megapixels    |
-| JPG           | 25 megapixels    |
-| ZIP           | 25 megapixels    |
+| PNG           | 10 megapixels    |
+| JPG           | 50 megapixels    |
+| ZIP           | 50 megapixels    |
 
 # Usage
 
