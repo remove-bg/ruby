@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "faraday"
+require "faraday/multipart"
 require_relative "error"
 
 module RemoveBg
@@ -9,7 +10,7 @@ module RemoveBg
       raise RemoveBg::FileMissingError.new(file_path) unless File.exist?(file_path)
 
       content_type = determine_content_type(file_path)
-      FARADAY_FILE.new(file_path, content_type)
+      File.new(file_path, content_type)
     end
 
     def self.determine_content_type(file_path)
@@ -22,12 +23,5 @@ module RemoveBg
     end
 
     private_class_method :determine_content_type
-
-    # UploadIO for Faraday <= 0.16.0, Faraday::FilePart for 1.x and File for 2.x
-    FARADAY_FILE = Faraday::UploadIO if defined?(Faraday::UploadIO)
-    FARADAY_FILE = Faraday::FilePart if defined?(Faraday::FilePart)
-    FARADAY_FILE = File unless defined?(FARADAY_FILE)
-
-    private_constant :FARADAY_FILE
   end
 end
