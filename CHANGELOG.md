@@ -3,9 +3,21 @@
 ## 2.0.0
 
 - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
-- Remove support for Ruby 2.5, 2.6, 2.7 and 3.0 which are EOL
+- Remove support for Ruby 2.5, 2.6, 2.7 and 3.0 [which are EOL](https://www.ruby-lang.org/en/downloads/branches/)
 - Deprecate Faraday < 2, add support for all Faraday 2.x versions
 - Increase default timeout to 20 seconds
+
+---
+
+
+#### 🚀 Enhancements:
+
+- Add support for Faraday 2.x [#31](https://github.com/remove-bg/ruby/pull/31)
+
+#### 🚨 Security
+
+- 🚨 [security] Update rexml 3.2.6 → 3.2.8 (patch) [#27](https://github.com/remove-bg/ruby/pull/27)
+
 
 ## 1.5.0
 
@@ -19,7 +31,7 @@
 ## 1.4.0
 
 - Adds support for images up to 25 megapixels ([documentation](https://github.com/remove-bg/ruby#processing-images-over-10-megapixels))
-  - Requires an image processing library to be configured (ImageMagick, GraphicsMagick or libvips)
+- Requires an image processing library to be configured (ImageMagick, GraphicsMagick or libvips)
 
 ## 1.3.0
 
