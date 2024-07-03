@@ -220,12 +220,13 @@ jobs:
             bundle config set frozen false
             bundle exec rake version["${CIRCLE_TAG}"]
             bundle exec gem build --strict
-            GEM_HOST_API_KEY="${REMOVE_BG_GEM_PUSH_KEY}" gem push "remove_bg-${CIRCLE_TAG}.gem" || true
+            GEM_HOST_API_KEY="${REMOVE_BG_GEM_PUSH_KEY}" gem push "remove_bg-${CIRCLE_TAG}.gem"
 
             # Update version to next beta version
             NEXT_PATCH_TAG=$(echo "${CIRCLE_TAG:-0.0.0}" | awk 'BEGIN{FS=OFS="."} {$3+=1} 1')
             BETA_TAG="${NEXT_PATCH_TAG}.pre"
             bundle exec rake version["${BETA_TAG}"]
+            bundle install
       - run:
           name: Edit Release and generate CHANGELOG.md
           command: |
