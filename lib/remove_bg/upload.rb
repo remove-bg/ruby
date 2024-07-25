@@ -24,8 +24,11 @@ module RemoveBg
 
     private_class_method :determine_content_type
 
-    FARADAY_FILE = File
-    FARADAY_FILE = Faraday::Multipart::FilePart if defined?(Faraday::Multipart::FilePart)
+    FARADAY_FILE = if defined?(Faraday::Multipart::FilePart)
+                     Faraday::Multipart::FilePart
+                   else
+                     File
+                   end.freeze
 
     private_constant :FARADAY_FILE
   end
