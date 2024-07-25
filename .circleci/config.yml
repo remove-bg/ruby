@@ -48,8 +48,14 @@ jobs:
       # Check out code
       - checkout
       # Install requested Ruby version
-      - ruby/install:
-          version: "<< pipeline.parameters.default-ruby >>"
+      - asdf/install
+      - run:
+          name: Install Ruby << pipeline.parameters.default-ruby >>
+          command: |
+            asdf plugin-add ruby
+            asdf install ruby << pipeline.parameters.default-ruby >>
+            asdf global ruby << pipeline.parameters.default-ruby >>
+            gem install --user-install executable-hooks
       # Install dependencies using bundler
       - ruby/install-deps:
           pre-install-steps:
@@ -136,8 +142,12 @@ jobs:
       - when:
           condition:
             and:
-              - equal: ["docker", "<< parameters.os >>"]
-              - equal: ["<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>"]
+              - equal:
+                  - "docker"
+                  - "<< parameters.os >>"
+              - equal:
+                  - "<< pipeline.parameters.default-ruby >>"
+                  - "<< parameters.ruby-version >>"
           steps:
             - persist_to_workspace:
                 root: .
@@ -186,16 +196,16 @@ jobs:
       GIT_MAIN_BRANCH: << pipeline.parameters.main-branch >>
       CHANGELOG_FILENAME: CHANGELOG.md
     steps:
-      - github/install:
-          version: 2.52.0
+      - github/install
       - node/install:
           node-version: latest
       - run:
           name: Install ImageMagick, libvips and libffi
           command: |
             sudo apt-get update
-            sudo apt-get -y --no-install-recommends install openssl imagemagick \
-              libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+            sudo apt-get -y --no-install-recommends install \
+              imagemagick libvips42 libffi-dev libreadline-dev \
+              libyaml-dev openssl libtool
       - asdf/install
       # Install requested Ruby version
       - run:
