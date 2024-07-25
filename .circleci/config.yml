@@ -43,7 +43,7 @@ jobs:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-    resource_class: small
+    resource_class: medium
     steps:
       # Check out code
       - checkout
