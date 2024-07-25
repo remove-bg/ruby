@@ -48,14 +48,8 @@ jobs:
       # Check out code
       - checkout
       # Install requested Ruby version
-      - asdf/install
-      - run:
-          name: Install Ruby << pipeline.parameters.default-ruby >>
-          command: |
-            asdf plugin-add ruby
-            asdf install ruby << pipeline.parameters.default-ruby >>
-            asdf global ruby << pipeline.parameters.default-ruby >>
-            gem install --user-install executable-hooks
+      - ruby/install:
+          version: "<< pipeline.parameters.default-ruby >>"
       # Install dependencies using bundler
       - ruby/install-deps:
           pre-install-steps:
@@ -84,7 +78,6 @@ jobs:
       # The OS to run the jobs on
       ruby-version:
         type: string
-        default: "3.3.4"
     executor: << parameters.os >>
     environment:
       RUBY_VERSION: << parameters.ruby-version >>
@@ -146,7 +139,7 @@ jobs:
                   - "docker"
                   - "<< parameters.os >>"
               - equal:
-                  - "<< pipeline.parameters.default-ruby >>"
+                  - "3.3.4"
                   - "<< parameters.ruby-version >>"
           steps:
             - persist_to_workspace:
