@@ -1,5 +1,26 @@
 # Changelog
 
+## 2.0.1
+
+
+
+---
+
+
+#### 🚀 Enhancements:
+
+- Remove deprecated File [#37](https://github.com/remove-bg/ruby/pull/37)
+- Update Ruby to 3.3.4 [#36](https://github.com/remove-bg/ruby/pull/36)
+
+#### 🐞 Bugfixes:
+
+- Fix redefined constant warning [#35](https://github.com/remove-bg/ruby/pull/35)
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2024-07-17) [#34](https://github.com/remove-bg/ruby/pull/34)
+
+
 ## 2.0.0
 
 - Deprecate `overwrite: true` in favour of `save!` and `save_zip!`
