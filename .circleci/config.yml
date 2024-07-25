@@ -18,7 +18,7 @@ parameters:
     default: main
   default-ruby:
     type: string
-    default: "3.3.3"
+    default: "3.3.4"
 
 # Define common YAML anchors
 x-common-auth: &common-auth
@@ -43,7 +43,7 @@ jobs:
     docker:
       - image: cimg/base:stable
         <<: *common-auth
-    resource_class: small
+    resource_class: medium
     steps:
       # Check out code
       - checkout
@@ -78,7 +78,6 @@ jobs:
       # The OS to run the jobs on
       ruby-version:
         type: string
-        default: "3.3.3"
     executor: << parameters.os >>
     environment:
       RUBY_VERSION: << parameters.ruby-version >>
@@ -92,8 +91,9 @@ jobs:
                 name: Install ImageMagick, libvips and libffi
                 command: |
                   sudo apt-get update
-                  sudo apt-get -y --no-install-recommends install openssl imagemagick \
-                    libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+                  sudo apt-get -y --no-install-recommends install \
+                    imagemagick libvips42 libffi-dev libreadline-dev \
+                    libyaml-dev openssl libtool
             - asdf/install
       - when:
           condition:
@@ -136,8 +136,12 @@ jobs:
       - when:
           condition:
             and:
-              - equal: ["docker", "<< parameters.os >>"]
-              - equal: ["<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>"]
+              - equal:
+                  - "docker"
+                  - "<< parameters.os >>"
+              - equal:
+                  - "<< pipeline.parameters.default-ruby >>"
+                  - "<< parameters.ruby-version >>"
           steps:
             - persist_to_workspace:
                 root: .
@@ -186,16 +190,16 @@ jobs:
       GIT_MAIN_BRANCH: << pipeline.parameters.main-branch >>
       CHANGELOG_FILENAME: CHANGELOG.md
     steps:
-      - github/install:
-          version: 2.52.0
+      - github/install
       - node/install:
           node-version: latest
       - run:
           name: Install ImageMagick, libvips and libffi
           command: |
             sudo apt-get update
-            sudo apt-get -y --no-install-recommends install openssl imagemagick \
-              libvips42 libffi-dev libreadline-dev libtool libyaml-dev
+            sudo apt-get -y --no-install-recommends install \
+              imagemagick libvips42 libffi-dev libreadline-dev \
+              libyaml-dev openssl libtool
       - asdf/install
       # Install requested Ruby version
       - run:
@@ -293,7 +297,7 @@ workflows:
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["3.1.6", "3.2.3", "3.3.3"]
+              ruby-version: ["3.1.6", "3.2.3", "3.3.4"]
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
