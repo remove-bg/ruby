@@ -1,11 +1,23 @@
 # Changelog
 
-## 2.0.1
+## 2.0.2
 
 
 
 ---
 
+
+#### 🚨 Security
+
+- 🚨 [security] Update rexml 3.3.2 → 3.3.4 (patch) [#39](https://github.com/remove-bg/ruby/pull/39)
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2024-08-22) [#40](https://github.com/remove-bg/ruby/pull/40)
+- Update all Bundler dependencies (2024-07-31) [#38](https://github.com/remove-bg/ruby/pull/38)
+
+
+## 2.0.1
 
 #### 🚀 Enhancements:
 
