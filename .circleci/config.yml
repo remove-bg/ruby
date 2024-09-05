@@ -4,6 +4,7 @@ version: 2.1
 # Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
 orbs:
   ruby: circleci/ruby@2.1
+  node: circleci/node@5.2
   sonarcloud: sonarsource/sonarcloud@2.0
   asdf: rynkowsg/asdf@0.1
   codecov: codecov/codecov@4.1
@@ -166,7 +167,7 @@ jobs:
   # Sonarcloud Job
   sonarcloud:
     docker:
-      - image: cimg/openjdk:21.0
+      - image: cimg/openjdk:21.0-node
         <<: *common-auth
     resource_class: small
     steps:
@@ -198,6 +199,8 @@ jobs:
       CHANGELOG_FILENAME: CHANGELOG.md
     steps:
       - github/install
+      - node/install:
+          node-version: latest
       - run:
           name: Install ImageMagick, libvips and libffi
           command: |
