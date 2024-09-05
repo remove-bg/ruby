@@ -39,16 +39,11 @@ executors:
 jobs:
   # Lint Job
   lint:
-    docker:
-      - image: cimg/base:stable
-        <<: *common-auth
+    executor: docker
     resource_class: medium
     steps:
       # Check out code
       - checkout
-      # Install requested Ruby version
-      - ruby/install:
-          version: "<< pipeline.parameters.default-ruby >>"
       # Install ImageMagick, libvips and libffi
       - run:
           name: Install ImageMagick, libvips and libffi
@@ -56,7 +51,15 @@ jobs:
             sudo apt-get update
             sudo apt-get -y --no-install-recommends install \
               imagemagick libvips42 libffi-dev libreadline-dev \
-              libyaml-dev openssl libtool libz-dev
+              libyaml-dev openssl libtool
+      # Install requested Ruby version
+      - run:
+          name: Install Ruby << pipeline.parameters.default-ruby >>
+          command: |
+            asdf plugin-add ruby
+            asdf install ruby << pipeline.parameters.default-ruby >>
+            asdf global ruby << pipeline.parameters.default-ruby >>
+            gem install --user-install executable-hooks
       # Install dependencies using bundler
       - ruby/install-deps:
           pre-install-steps:
@@ -100,7 +103,7 @@ jobs:
                   sudo apt-get update
                   sudo apt-get -y --no-install-recommends install \
                     imagemagick libvips42 libffi-dev libreadline-dev \
-                    libyaml-dev openssl libtool libz-dev
+                    libyaml-dev openssl libtool
             - asdf/install
       - when:
           condition:
@@ -143,12 +146,8 @@ jobs:
       - when:
           condition:
             and:
-              - equal:
-                  - "docker"
-                  - "<< parameters.os >>"
-              - equal:
-                  - "<< pipeline.parameters.default-ruby >>"
-                  - "<< parameters.ruby-version >>"
+              - equal: ["docker", "<< parameters.os >>"]
+              - equal: ["<< pipeline.parameters.default-ruby >>", "<< parameters.ruby-version >>"]
           steps:
             - persist_to_workspace:
                 root: .
@@ -204,7 +203,8 @@ jobs:
             sudo apt-get update
             sudo apt-get -y --no-install-recommends install \
               imagemagick libvips42 libffi-dev libreadline-dev \
-              libyaml-dev openssl libtool libz-dev
+              libyaml-dev openssl libtool libz-dev libjemalloc-dev \
+              libgmp-dev build-essential ruby-dev libssl-dev zlib1g-dev
       - asdf/install
       # Install requested Ruby version
       - run:
