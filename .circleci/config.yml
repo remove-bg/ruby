@@ -52,6 +52,7 @@ jobs:
             sudo apt-get -y --no-install-recommends install \
               imagemagick libvips42 libffi-dev libreadline-dev \
               libyaml-dev openssl libtool
+      - asdf/install
       # Install requested Ruby version
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
