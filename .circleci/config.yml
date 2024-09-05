@@ -49,6 +49,14 @@ jobs:
       # Install requested Ruby version
       - ruby/install:
           version: "<< pipeline.parameters.default-ruby >>"
+      # Install ImageMagick, libvips and libffi
+      - run:
+          name: Install ImageMagick, libvips and libffi
+          command: |
+            sudo apt-get update
+            sudo apt-get -y --no-install-recommends install \
+              imagemagick libvips42 libffi-dev libreadline-dev \
+              libyaml-dev openssl libtool libz-dev
       # Install dependencies using bundler
       - ruby/install-deps:
           pre-install-steps:
@@ -92,7 +100,7 @@ jobs:
                   sudo apt-get update
                   sudo apt-get -y --no-install-recommends install \
                     imagemagick libvips42 libffi-dev libreadline-dev \
-                    libyaml-dev openssl libtool
+                    libyaml-dev openssl libtool libz-dev
             - asdf/install
       - when:
           condition:
@@ -196,7 +204,7 @@ jobs:
             sudo apt-get update
             sudo apt-get -y --no-install-recommends install \
               imagemagick libvips42 libffi-dev libreadline-dev \
-              libyaml-dev openssl libtool
+              libyaml-dev openssl libtool libz-dev
       - asdf/install
       # Install requested Ruby version
       - run:
