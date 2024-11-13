@@ -18,7 +18,7 @@ parameters:
     default: main
   default-ruby:
     type: string
-    default: "3.3.5"
+    default: "3.3.6"
 
 # Define common YAML anchors
 x-common-auth: &common-auth
