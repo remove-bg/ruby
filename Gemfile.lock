@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    remove_bg (2.0.3.pre)
+    remove_bg (2.0.5.pre)
       faraday (>= 2, <= 3)
       faraday-multipart (~> 1.0)
       faraday-retry (~> 2.2)
