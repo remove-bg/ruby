@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.0.5
+
+
+
+---
+
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2025-01-01) [#49](https://github.com/remove-bg/ruby/pull/49)
+- Update all Bundler dependencies (2024-12-19) [#48](https://github.com/remove-bg/ruby/pull/48)
+- Update all Bundler dependencies (2024-12-04) [#47](https://github.com/remove-bg/ruby/pull/47)
+
+
 ## 2.0.4
 
 
