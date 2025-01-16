@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.0.6
+
+## What's Changed
+* Update all Bundler dependencies (2025-01-15) by @depfu in https://github.com/remove-bg/ruby/pull/50
+
+
+**Full Changelog**: https://github.com/remove-bg/ruby/compare/2.0.5...2.0.6
+
+---
+
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2025-01-15) [#50](https://github.com/remove-bg/ruby/pull/50)
+
+
 ## 2.0.5
 
 
