@@ -3,12 +3,12 @@ version: 2.1
 
 # Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
 orbs:
-  ruby: circleci/ruby@2.1
-  node: circleci/node@5.2
+  ruby: circleci/ruby@2.5
+  node: circleci/node@7.1
   sonarcloud: sonarsource/sonarcloud@2.0
-  asdf: rynkowsg/asdf@0.1
-  codecov: codecov/codecov@4.1
-  github: circleci/github-cli@2.4
+  asdf: rynkowsg/asdf@0.2
+  codecov: codecov/codecov@5.2
+  github: circleci/github-cli@2.7
 
 # Pipeline parameters
 parameters:
@@ -35,7 +35,7 @@ executors:
   macos:  # macOS executor running Xcode
     macos:
       # https://circleci.com/developer/machine/image/xcode
-      xcode: 15.4.0
+      xcode: 16.2.0
 
 jobs:
   # Lint Job
@@ -58,14 +58,12 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
-            asdf plugin-add ruby
+            asdf plugin add ruby
             asdf install ruby << pipeline.parameters.default-ruby >>
-            asdf global ruby << pipeline.parameters.default-ruby >>
+            echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       # Run Rubocop
       - run:
@@ -119,16 +117,14 @@ jobs:
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: |
-            asdf plugin-add ruby
+            asdf plugin add ruby
             asdf install ruby << parameters.ruby-version >>
-            asdf global ruby << parameters.ruby-version >>
+            echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       # Check out code
       - checkout
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       # Run RSpec tests
       - run:
@@ -139,7 +135,7 @@ jobs:
       - run:
           name: Run appraisals
           command: |
-            bundle exec appraisal install --jobs=$(nproc) --retry 3
+            bundle exec appraisal install --retry 3
             bundle exec appraisal rspec
       # Store test results
       - store_test_results:
@@ -160,9 +156,8 @@ jobs:
                 condition:
                   equal: ["<< pipeline.git.tag >>", ""]
                 steps:
-                  - codecov/upload:
-                      cli_args: --verbose
-                      validate: true
+                  - codecov/upload
+
 
   # Sonarcloud Job
   sonarcloud:
@@ -214,9 +209,9 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
-            asdf plugin-add ruby
+            asdf plugin add ruby
             asdf install ruby << pipeline.parameters.default-ruby >>
-            asdf global ruby << pipeline.parameters.default-ruby >>
+            echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       - checkout
       - run:
@@ -224,8 +219,6 @@ jobs:
           command: git checkout --force "${GIT_MAIN_BRANCH}"
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       - run:
           name: Build and push gem
