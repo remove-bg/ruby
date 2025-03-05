@@ -213,7 +213,20 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
-            asdf plugin-add ruby
+
+            # After the 0.16 asdf rewrite, the `plugin-add`` command was
+            # changed to `plugin add`. This conditional is to support both
+            # versions of asdf.
+            ASDF_VERSION=$(asdf --version | awk '{print $NF}')
+            VERSION_MAJOR=$(echo $ASDF_VERSION | cut -d. -f1)
+            VERSION_MINOR=$(echo $ASDF_VERSION | cut -d. -f2)
+
+            if [ "$VERSION_MAJOR" -eq 0 ] && [ "$VERSION_MINOR" -lt 16 ]; then
+              asdf plugin-add ruby
+            else
+              asdf plugin add ruby
+            fi
+
             asdf install ruby << pipeline.parameters.default-ruby >>
             asdf global ruby << pipeline.parameters.default-ruby >>
             gem install --user-install executable-hooks
