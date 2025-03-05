@@ -58,14 +58,12 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
-            asdf plugin-add ruby
+            asdf plugin add ruby
             asdf install ruby << pipeline.parameters.default-ruby >>
-            asdf global ruby << pipeline.parameters.default-ruby >>
+            echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       # Run Rubocop
       - run:
@@ -119,16 +117,14 @@ jobs:
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: |
-            asdf plugin-add ruby
+            asdf plugin add ruby
             asdf install ruby << parameters.ruby-version >>
-            asdf global ruby << parameters.ruby-version >>
+            echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       # Check out code
       - checkout
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       # Run RSpec tests
       - run:
@@ -139,7 +135,7 @@ jobs:
       - run:
           name: Run appraisals
           command: |
-            bundle exec appraisal install --jobs=$(nproc) --retry 3
+            bundle exec appraisal install --retry 3
             bundle exec appraisal rspec
       # Store test results
       - store_test_results:
@@ -213,22 +209,9 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
-
-            # After the 0.16 asdf rewrite, the `plugin-add`` command was
-            # changed to `plugin add`. This conditional is to support both
-            # versions of asdf.
-            ASDF_VERSION=$(asdf --version | awk '{print $NF}')
-            VERSION_MAJOR=$(echo $ASDF_VERSION | cut -d. -f1)
-            VERSION_MINOR=$(echo $ASDF_VERSION | cut -d. -f2)
-
-            if [ "$VERSION_MAJOR" -eq 0 ] && [ "$VERSION_MINOR" -lt 16 ]; then
-              asdf plugin-add ruby
-            else
-              asdf plugin add ruby
-            fi
-
+            asdf plugin add ruby
             asdf install ruby << pipeline.parameters.default-ruby >>
-            asdf global ruby << pipeline.parameters.default-ruby >>
+            echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
             gem install --user-install executable-hooks
       - checkout
       - run:
@@ -236,8 +219,6 @@ jobs:
           command: git checkout --force "${GIT_MAIN_BRANCH}"
       # Install dependencies using bundler
       - ruby/install-deps:
-          pre-install-steps:
-            - run: bundle config set jobs $(nproc)
           key: gems-v{{ .Environment.CACHE_VERSION }}
       - run:
           name: Build and push gem
