@@ -3,12 +3,12 @@ version: 2.1
 
 # Used Orbs (https://circleci.com/docs/2.0/using-orbs/)
 orbs:
-  ruby: circleci/ruby@2.1
-  node: circleci/node@5.2
+  ruby: circleci/ruby@2.5
+  node: circleci/node@7.1
   sonarcloud: sonarsource/sonarcloud@2.0
-  asdf: rynkowsg/asdf@0.1
-  codecov: codecov/codecov@4.1
-  github: circleci/github-cli@2.4
+  asdf: rynkowsg/asdf@0.2
+  codecov: codecov/codecov@5.2
+  github: circleci/github-cli@2.7
 
 # Pipeline parameters
 parameters:
@@ -35,7 +35,7 @@ executors:
   macos:  # macOS executor running Xcode
     macos:
       # https://circleci.com/developer/machine/image/xcode
-      xcode: 15.4.0
+      xcode: 16.2.0
 
 jobs:
   # Lint Job
@@ -160,9 +160,8 @@ jobs:
                 condition:
                   equal: ["<< pipeline.git.tag >>", ""]
                 steps:
-                  - codecov/upload:
-                      cli_args: --verbose
-                      validate: true
+                  - codecov/upload
+
 
   # Sonarcloud Job
   sonarcloud:
