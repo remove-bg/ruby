@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module RemoveBg
-  VERSION = "2.0.7.pre"
+  VERSION = "2.1.1.pre"
 end

@@ -1,15 +1,28 @@
 # Changelog
 
-## 2.0.6
+## 2.1.0
 
 ## What's Changed
-* Update all Bundler dependencies (2025-01-15) by @depfu in https://github.com/remove-bg/ruby/pull/50
+* Update Ruby 3.3.6 → 3.3.7 by @depfu in https://github.com/remove-bg/ruby/pull/51
+* Update all Bundler dependencies (2025-01-29) by @depfu in https://github.com/remove-bg/ruby/pull/52
+* Update all Bundler dependencies (2025-02-12) by @depfu in https://github.com/remove-bg/ruby/pull/53
+* Update all Bundler dependencies (2025-03-05) by @depfu in https://github.com/remove-bg/ruby/pull/55
 
 
-**Full Changelog**: https://github.com/remove-bg/ruby/compare/2.0.5...2.0.6
+**Full Changelog**: https://github.com/remove-bg/ruby/compare/2.0.6...2.1.0
 
 ---
 
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2025-03-05) [#55](https://github.com/remove-bg/ruby/pull/55)
+- Update all Bundler dependencies (2025-02-12) [#53](https://github.com/remove-bg/ruby/pull/53)
+- Update all Bundler dependencies (2025-01-29) [#52](https://github.com/remove-bg/ruby/pull/52)
+- Update Ruby 3.3.6 → 3.3.7 [#51](https://github.com/remove-bg/ruby/pull/51)
+
+
+## 2.0.6
 
 #### 🔀 Dependencies
 
