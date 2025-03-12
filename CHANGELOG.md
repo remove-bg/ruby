@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.1.1
+
+
+
+---
+
+
+#### 🚨 Security
+
+- 🚨 [security] Update json 2.10.1 → 2.10.2 (patch) [#57](https://github.com/remove-bg/ruby/pull/57)
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2025-03-12) [#56](https://github.com/remove-bg/ruby/pull/56)
+
+
 ## 2.1.0
 
 ## What's Changed
