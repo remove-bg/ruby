@@ -34,3 +34,4 @@ understand and resolve the issue:
 - Impact of the issue, including how an attacker might exploit the issue
 
 This information will help us triage your report more quickly.
+no editing or syncing
