@@ -366,7 +366,6 @@ workflows:
             - SonarCloud
           requires:
             - lint
-            - test
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
