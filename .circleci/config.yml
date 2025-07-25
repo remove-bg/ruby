@@ -5,9 +5,9 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@2.5
   node: circleci/node@7.1
-  sonarcloud: sonarsource/sonarcloud@2.0
+  sonarcloud: sonarsource/sonarcloud@3.0
   asdf: rynkowsg/asdf@0.2
-  codecov: codecov/codecov@5.2
+  codecov: codecov/codecov@5.4
   github: circleci/github-cli@2.7
 
 # Pipeline parameters
@@ -18,7 +18,7 @@ parameters:
     default: main
   default-ruby:
     type: string
-    default: "3.3.7"
+    default: 3.4.5
 
 # Define common YAML anchors
 x-common-auth: &common-auth
@@ -299,7 +299,7 @@ workflows:
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["3.3.7", "3.2.3", "3.1.6"]
+              ruby-version: ["3.4.5", "3.3.8", "3.2.9", "3.1.7"]
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/

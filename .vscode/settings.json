@@ -1,0 +1,6 @@
+{
+    "sonarlint.connectedMode.project": {
+        "connectionId": "remove-bg",
+        "projectKey": "remove-bg_ruby"
+    }
+}
