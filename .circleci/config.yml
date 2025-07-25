@@ -56,12 +56,12 @@ jobs:
       - asdf/install
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
-          command: echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+          command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
       # Restore ASDF cache
       - restore_cache:
           name: Restore ASDF cache
           keys:
-            - asdf-docker-{{ checksum "~/.tool-versions" }}
+            - asdf-docker-<< pipeline.parameters.default-ruby >>
       # Install requested Ruby version
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
@@ -72,7 +72,7 @@ jobs:
       # Save ASDF cache
       - save_cache:
           name: Save ASDF cache
-          key: asdf-docker-{{ checksum "~/.tool-versions" }}
+          key: asdf-docker-<< pipeline.parameters.default-ruby >>
           paths:
             - ~/.asdf/installs
             - ~/.asdf/plugins
@@ -135,7 +135,7 @@ jobs:
       - restore_cache:
           name: Restore ASDF cache
           keys:
-            - asdf-<< parameters.os >>-{{ checksum "~/.tool-versions" }}
+            - asdf-<< parameters.os >>-<< parameters.ruby-version >>
       # Install requested Ruby version
       - run:
           name: Install Ruby << parameters.ruby-version >>
@@ -146,7 +146,7 @@ jobs:
       # Save ASDF cache
       - save_cache:
           name: Save ASDF cache
-          key: asdf-<< parameters.os >>-{{ checksum "~/.tool-versions" }}
+          key: asdf-<< parameters.os >>-<< parameters.ruby-version >>
           paths:
             - ~/.asdf/installs
             - ~/.asdf/plugins
@@ -237,12 +237,12 @@ jobs:
       - asdf/install
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
-          command: echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+          command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
       # Restore ASDF cache
       - restore_cache:
           name: Restore ASDF cache
           keys:
-            - asdf-docker-{{ checksum "~/.tool-versions" }}
+            - asdf-docker-<< pipeline.parameters.default-ruby >>
       # Install requested Ruby version
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
@@ -253,7 +253,7 @@ jobs:
       # Save ASDF cache
       - save_cache:
           name: Save ASDF cache
-          key: asdf-docker-{{ checksum "~/.tool-versions" }}
+          key: asdf-docker-<< pipeline.parameters.default-ruby >>
           paths:
             - ~/.asdf/installs
             - ~/.asdf/plugins
