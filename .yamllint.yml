@@ -1,0 +1,19 @@
+---
+
+extends: default
+
+yaml-files:
+  - '*.yaml'
+  - '*.yml'
+
+rules:
+  line-length:
+    max: 250
+    level: warning
+
+ignore: |
+  rspec
+  resources
+  gemfiles
+  examples
+  .git
