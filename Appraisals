@@ -50,6 +50,26 @@ appraise "faraday-2-9" do
   gem "faraday", "~> 2.9.0"
 end
 
+# Faraday 2.10
+appraise "faraday-2-10" do
+  gem "faraday", "~> 2.10.0"
+end
+
+# Faraday 2.11
+appraise "faraday-2-11" do
+  gem "faraday", "~> 2.11.0"
+end
+
+# Faraday 2.12
+appraise "faraday-2-12" do
+  gem "faraday", "~> 2.12.0"
+end
+
+# Faraday 2.13
+appraise "faraday-2-13" do
+  gem "faraday", "~> 2.13.0"
+end
+
 # Latest in Faraday 2.x series
 appraise "faraday-2-x" do
   gem "faraday", "~> 2", "< 3"
