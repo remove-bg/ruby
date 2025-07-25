@@ -35,7 +35,7 @@ executors:
   macos:  # macOS executor running Xcode
     macos:
       # https://circleci.com/developer/machine/image/xcode
-      xcode: 16.2.0
+      xcode: 16.4.0
 
 jobs:
   # Lint Job
@@ -54,17 +54,32 @@ jobs:
               imagemagick libvips42 libffi-dev libreadline-dev \
               libyaml-dev openssl libtool
       - asdf/install
+      - run:
+          name: Set default Ruby to << pipeline.parameters.default-ruby >>
+          command: echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+      # Restore ASDF cache
+      - restore_cache:
+          name: Restore ASDF cache
+          keys:
+            - asdf-{{ checksum ".tool-versions" }}
       # Install requested Ruby version
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
             asdf plugin add ruby
-            asdf install ruby << pipeline.parameters.default-ruby >>
-            echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+            ASDF_RUBY_BUILD_VERSION=master asdf install ruby << pipeline.parameters.default-ruby >>
             gem install --user-install executable-hooks
+      # Save ASDF cache
+      - save_cache:
+          name: Save ASDF cache
+          key: asdf-{{ checksum ".tool-versions" }}
+          paths:
+            - ~/.asdf/installs
+            - ~/.asdf/plugins
+            - ~/.asdf/shims
       # Install dependencies using bundler
       - ruby/install-deps:
-          key: gems-v{{ .Environment.CACHE_VERSION }}
+          key: gems-v{{ .Environment.CACHE_VERSION }}-{{ checksum ".tool-versions" }}
       # Run Rubocop
       - run:
           name: Run Rubocop
@@ -113,19 +128,32 @@ jobs:
                 name: Install ImageMagick, libvips and libffi
                 command: |
                   brew install openssl@3 imagemagick vips asdf libffi
+      - run: echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
+      # Restore ASDF cache
+      - restore_cache:
+          name: Restore ASDF cache
+          keys:
+            - asdf-{{ checksum ".tool-versions" }}
       # Install requested Ruby version
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: |
             asdf plugin add ruby
-            asdf install ruby << parameters.ruby-version >>
-            echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
+            ASDF_RUBY_BUILD_VERSION=master asdf install ruby << parameters.ruby-version >>
             gem install --user-install executable-hooks
+      # Save ASDF cache
+      - save_cache:
+          name: Save ASDF cache
+          key: asdf-{{ checksum ".tool-versions" }}
+          paths:
+            - ~/.asdf/installs
+            - ~/.asdf/plugins
+            - ~/.asdf/shims
       # Check out code
       - checkout
       # Install dependencies using bundler
       - ruby/install-deps:
-          key: gems-v{{ .Environment.CACHE_VERSION }}
+          key: gems-v{{ .Environment.CACHE_VERSION }}-{{ checksum ".tool-versions" }}
       # Run RSpec tests
       - run:
           name: Run tests
@@ -162,7 +190,7 @@ jobs:
   # Sonarcloud Job
   sonarcloud:
     docker:
-      - image: cimg/openjdk:21.0-node
+      - image: cimg/base:stable
         <<: *common-auth
     resource_class: small
     steps:
@@ -205,21 +233,36 @@ jobs:
               libyaml-dev openssl libtool libz-dev libjemalloc-dev \
               libgmp-dev build-essential ruby-dev libssl-dev zlib1g-dev
       - asdf/install
+      - run:
+          name: Set default Ruby to << pipeline.parameters.default-ruby >>
+          command: echo "ruby  << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+      # Restore ASDF cache
+      - restore_cache:
+          name: Restore ASDF cache
+          keys:
+            - asdf-{{ checksum ".tool-versions" }}
       # Install requested Ruby version
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
             asdf plugin add ruby
-            asdf install ruby << pipeline.parameters.default-ruby >>
-            echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
+            ASDF_RUBY_BUILD_VERSION=master asdf install ruby << pipeline.parameters.default-ruby >>
             gem install --user-install executable-hooks
+      # Save ASDF cache
+      - save_cache:
+          name: Save ASDF cache
+          key: asdf-{{ checksum ".tool-versions" }}
+          paths:
+            - ~/.asdf/installs
+            - ~/.asdf/plugins
+            - ~/.asdf/shims
       - checkout
       - run:
           name: Check out main branch
           command: git checkout --force "${GIT_MAIN_BRANCH}"
       # Install dependencies using bundler
       - ruby/install-deps:
-          key: gems-v{{ .Environment.CACHE_VERSION }}
+          key: gems-v{{ .Environment.CACHE_VERSION }}-{{ checksum ".tool-versions" }}
       - run:
           name: Build and push gem
           command: |
