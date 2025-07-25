@@ -30,7 +30,7 @@ x-common-auth: &common-auth
 executors:
   docker:  # Docker using the Base Convenience Image
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
         <<: *common-auth
   macos:  # macOS executor running Xcode
     macos:
@@ -128,12 +128,14 @@ jobs:
                 name: Install ImageMagick, libvips and libffi
                 command: |
                   brew install openssl@3 imagemagick vips asdf libffi
-      - run: echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
+      - run:
+          name: Install Ruby << parameters.ruby-version >>
+          command: echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
       # Restore ASDF cache
       - restore_cache:
           name: Restore ASDF cache
           keys:
-            - asdf-{{ pipeline.parameters.os }}-{{ checksum "~/.tool-versions" }}
+            - asdf-<< parameters.os >>-{{ checksum "~/.tool-versions" }}
       # Install requested Ruby version
       - run:
           name: Install Ruby << parameters.ruby-version >>
@@ -144,7 +146,7 @@ jobs:
       # Save ASDF cache
       - save_cache:
           name: Save ASDF cache
-          key: asdf-{{ pipeline.parameters.os }}-{{ checksum "~/.tool-versions" }}
+          key: asdf-<< parameters.os >>-{{ checksum "~/.tool-versions" }}
           paths:
             - ~/.asdf/installs
             - ~/.asdf/plugins
@@ -190,7 +192,7 @@ jobs:
   # Sonarcloud Job
   sonarcloud:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
         <<: *common-auth
     resource_class: small
     steps:
@@ -214,7 +216,7 @@ jobs:
   # Release Job
   release:
     docker:
-      - image: cimg/base:stable
+      - image: cimg/base:current
         <<: *common-auth
     resource_class: medium+
     environment:
