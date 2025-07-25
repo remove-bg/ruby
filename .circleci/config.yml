@@ -299,7 +299,7 @@ workflows:
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["3.4.5", "3.3.8", "3.2.9", "3.1.7"]
+              ruby-version: ["3.4.5", "3.3.9", "3.2.9", "3.1.7"]
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
