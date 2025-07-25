@@ -133,7 +133,7 @@ jobs:
       - restore_cache:
           name: Restore ASDF cache
           keys:
-            - asdf-{{ parameters.os }}-{{ checksum "~/.tool-versions" }}
+            - asdf-{{ pipeline.parameters.os }}-{{ checksum "~/.tool-versions" }}
       # Install requested Ruby version
       - run:
           name: Install Ruby << parameters.ruby-version >>
@@ -144,7 +144,7 @@ jobs:
       # Save ASDF cache
       - save_cache:
           name: Save ASDF cache
-          key: asdf-{{ parameters.os }}-{{ checksum "~/.tool-versions" }}
+          key: asdf-{{ pipeline.parameters.os }}-{{ checksum "~/.tool-versions" }}
           paths:
             - ~/.asdf/installs
             - ~/.asdf/plugins
