@@ -1,21 +1,27 @@
 # Changelog
 
-## 2.2.0
-
-## What's Changed
-* Update all Bundler dependencies (2025-03-26) by @depfu[bot] in https://github.com/remove-bg/ruby/pull/58
-* Update all Bundler dependencies (2025-04-09) by @depfu[bot] in https://github.com/remove-bg/ruby/pull/59
-* 🚨 [security] Update thor 1.3.2 → 1.4.0 (minor) by @depfu[bot] in https://github.com/remove-bg/ruby/pull/64
-* Update all Bundler dependencies (2025-05-02) by @depfu[bot] in https://github.com/remove-bg/ruby/pull/63
-* Update Ruby 3.3.7 → 3.3.8 by @depfu[bot] in https://github.com/remove-bg/ruby/pull/60
-* Update all Bundler dependencies (2025-07-25) by @depfu[bot] in https://github.com/remove-bg/ruby/pull/65
-* Add Ruby 3.4 support and newer Faraday versions by @otherguy in https://github.com/remove-bg/ruby/pull/66
+## 2.2.1
 
 
-**Full Changelog**: https://github.com/remove-bg/ruby/compare/2.1.1...2.2.0
 
 ---
 
+
+#### 🚨 Security
+
+- 🚨 [security] Update rexml 3.4.1 → 3.4.4 (patch) [#70](https://github.com/remove-bg/ruby/pull/70)
+
+#### 🔀 Dependencies
+
+- Update Ruby 3.4.5 → 3.4.7 [#72](https://github.com/remove-bg/ruby/pull/72)
+- Update all Bundler dependencies (2025-10-22) [#74](https://github.com/remove-bg/ruby/pull/74)
+- Update all Bundler dependencies (2025-10-17) [#73](https://github.com/remove-bg/ruby/pull/73)
+- Update all Bundler dependencies (2025-09-16) [#69](https://github.com/remove-bg/ruby/pull/69)
+- Update all Bundler dependencies (2025-08-13) [#68](https://github.com/remove-bg/ruby/pull/68)
+- Update all Bundler dependencies (2025-07-30) [#67](https://github.com/remove-bg/ruby/pull/67)
+
+
+## 2.2.0
 
 #### 🚀 Enhancements:
 
