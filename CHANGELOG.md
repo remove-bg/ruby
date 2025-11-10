@@ -1,5 +1,17 @@
 # Changelog
 
+## 2.2.2
+
+
+
+---
+
+
+#### 🔀 Dependencies
+
+- Update all Bundler dependencies (2025-11-05) [#75](https://github.com/remove-bg/ruby/pull/75)
+
+
 ## 2.2.1
 
 
