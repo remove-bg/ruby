@@ -2,5 +2,9 @@
     "sonarlint.connectedMode.project": {
         "connectionId": "remove-bg",
         "projectKey": "remove-bg_ruby"
-    }
+    },
+    "debug.javascript.defaultRuntimeExecutable": {
+        "pwa-node": "/Users/ag/.local/share/mise/shims/node"
+    },
+    "python.defaultInterpreterPath": "/Users/ag/.local/share/mise/installs/python/3.12.2/bin/python"
 }

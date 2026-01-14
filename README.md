@@ -17,7 +17,7 @@
 
 ## Requirements
 
-This gem is compatible with Ruby 3.1+ and can be used with
+This gem is compatible with Ruby 3.2+ and can be used with
 [Faraday](https://rubygems.org/gems/faraday/) version 2 and above
 
 An API key (free) from [remove.bg](https://www.remove.bg/api) is required.
