@@ -14,7 +14,7 @@ bundler:
     - depfu
   security_labels:
     - 🚨 security
-  auto_assign: otherguy
+  auto_assign: SxDx
   auto_review_team_assign: platform
   grouped_update_schedule: biweekly
   grouped_update_start_date: '2022-01-05'  # First wednesday of the year
