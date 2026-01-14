@@ -213,7 +213,9 @@ jobs:
       - checkout
       - run:
           name: Fetch full git history for SonarCloud blame analysis
-          command: git fetch --unshallow || true
+          command: |
+            git fetch --unshallow origin || true
+            git fetch --all --tags
       - attach_workspace:
           at: .
       - run:
