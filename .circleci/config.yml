@@ -211,6 +211,9 @@ jobs:
     resource_class: small
     steps:
       - checkout
+      - run:
+          name: Fetch full git history for SonarCloud blame analysis
+          command: git fetch --unshallow || true
       - attach_workspace:
           at: .
       - run:
