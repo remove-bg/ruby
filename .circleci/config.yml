@@ -56,7 +56,7 @@ jobs:
           name: Install asdf v0.15.0
           command: |
             git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
-            echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+            echo '. "$HOME/.asdf/asdf.sh"' >> "$BASH_ENV"
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
           command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
@@ -127,7 +127,7 @@ jobs:
                 name: Install asdf v0.15.0
                 command: |
                   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
-                  echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+                  echo '. "$HOME/.asdf/asdf.sh"' >> "$BASH_ENV"
       - when:
           condition:
             equal: ["macos", "<< parameters.os >>"]
@@ -140,7 +140,7 @@ jobs:
                 name: Install asdf v0.15.0
                 command: |
                   git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
-                  echo '. "$HOME/.asdf/asdf.sh"' >> ~/.zshrc
+                  echo '. "$HOME/.asdf/asdf.sh"' >> "$BASH_ENV"
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
@@ -252,7 +252,7 @@ jobs:
           name: Install asdf v0.15.0
           command: |
             git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
-            echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
+            echo '. "$HOME/.asdf/asdf.sh"' >> "$BASH_ENV"
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
           command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
