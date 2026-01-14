@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require "image_processing/mini_magick"
+require "image_processing/vips"
+
 RSpec.describe RemoveBg::ImageComposer do
   before { RemoveBg::Configuration.reset }
 
@@ -11,8 +14,6 @@ RSpec.describe RemoveBg::ImageComposer do
     before { RemoveBg::Configuration.configuration.image_processor = :minimagick }
 
     it "uses MiniMagick by default" do
-      require "image_processing/mini_magick"
-
       processing_spy = spy_on_image_processing(ImageProcessing::MiniMagick)
 
       perform_composition
@@ -25,8 +26,6 @@ RSpec.describe RemoveBg::ImageComposer do
     before { RemoveBg::Configuration.configuration.image_processor = :vips }
 
     it "uses Vips" do
-      require "image_processing/vips"
-
       processing_spy = spy_on_image_processing(ImageProcessing::Vips)
 
       perform_composition
