@@ -6,7 +6,6 @@ orbs:
   ruby: circleci/ruby@2.5
   node: circleci/node@7.1
   sonarcloud: sonarsource/sonarcloud@3.0
-  asdf: rynkowsg/asdf@0.2
   codecov: codecov/codecov@5.4
   github: circleci/github-cli@2.7
 
@@ -53,7 +52,11 @@ jobs:
             sudo apt-get -y --no-install-recommends install \
               imagemagick libvips42 libffi-dev libreadline-dev \
               libyaml-dev openssl libtool
-      - asdf/install
+      - run:
+          name: Install asdf v0.15.0
+          command: |
+            git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+            echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
           command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
@@ -66,6 +69,7 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
+            . "$HOME/.asdf/asdf.sh"
             asdf plugin add ruby
             ASDF_RUBY_BUILD_VERSION=master asdf install ruby << pipeline.parameters.default-ruby >>
             gem install --user-install executable-hooks
@@ -119,7 +123,11 @@ jobs:
                   sudo apt-get -y --no-install-recommends install \
                     imagemagick libvips42 libffi-dev libreadline-dev \
                     libyaml-dev openssl libtool
-            - asdf/install
+            - run:
+                name: Install asdf v0.15.0
+                command: |
+                  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+                  echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
       - when:
           condition:
             equal: ["macos", "<< parameters.os >>"]
@@ -127,7 +135,12 @@ jobs:
             - run:
                 name: Install ImageMagick, libvips and libffi
                 command: |
-                  brew install openssl@3 imagemagick vips asdf libffi
+                  brew install openssl@3 imagemagick vips libffi
+            - run:
+                name: Install asdf v0.15.0
+                command: |
+                  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+                  echo '. "$HOME/.asdf/asdf.sh"' >> ~/.zshrc
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: echo "ruby << parameters.ruby-version >>" > ~/.tool-versions
@@ -140,6 +153,7 @@ jobs:
       - run:
           name: Install Ruby << parameters.ruby-version >>
           command: |
+            . "$HOME/.asdf/asdf.sh"
             asdf plugin add ruby
             ASDF_RUBY_BUILD_VERSION=master asdf install ruby << parameters.ruby-version >>
             gem install --user-install executable-hooks
@@ -234,7 +248,11 @@ jobs:
               imagemagick libvips42 libffi-dev libreadline-dev \
               libyaml-dev openssl libtool libz-dev libjemalloc-dev \
               libgmp-dev build-essential ruby-dev libssl-dev zlib1g-dev
-      - asdf/install
+      - run:
+          name: Install asdf v0.15.0
+          command: |
+            git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.15.0
+            echo '. "$HOME/.asdf/asdf.sh"' >> ~/.bashrc
       - run:
           name: Set default Ruby to << pipeline.parameters.default-ruby >>
           command: echo "ruby << pipeline.parameters.default-ruby >>" > ~/.tool-versions
@@ -247,6 +265,7 @@ jobs:
       - run:
           name: Install Ruby << pipeline.parameters.default-ruby >>
           command: |
+            . "$HOME/.asdf/asdf.sh"
             asdf plugin add ruby
             ASDF_RUBY_BUILD_VERSION=master asdf install ruby << pipeline.parameters.default-ruby >>
             gem install --user-install executable-hooks
@@ -344,7 +363,7 @@ workflows:
           matrix:
             parameters:
               os: ["docker", "macos"]
-              ruby-version: ["3.4.8", "3.3.9", "3.2.9", "3.1.7"]
+              ruby-version: ["3.4.8", "3.3.9", "3.2.9"]
           filters:
             tags:
               only: /^\d+\.\d+\.\d+$/
