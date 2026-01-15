@@ -1,5 +1,19 @@
 # Changelog
 
+## 2.3.0
+
+**⚠️ This release drops support for Ruby 3.1.x**
+
+---
+
+
+#### 🔀 Dependencies
+
+- Update Ruby 3.4.7 → 3.4.8 [#77](https://github.com/remove-bg/ruby/pull/77)
+- Update all Bundler dependencies (2026-01-14) [#78](https://github.com/remove-bg/ruby/pull/78)
+- Update all Bundler dependencies (2025-11-19) [#76](https://github.com/remove-bg/ruby/pull/76)
+
+
 ## 2.2.2
 
 
