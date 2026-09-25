@@ -7,7 +7,7 @@ PATH
       faraday-multipart (~> 1.0)
       faraday-retry (~> 2.2)
       image_processing (~> 1.12)
-      rubyzip (>= 2.0, < 3)
+      rubyzip (>= 2.0, <= 3.7.0)
 
 GEM
   remote: https://rubygems.org/
@@ -121,7 +121,7 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
-    rubyzip (2.4.1)
+    rubyzip (3.7.0)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
