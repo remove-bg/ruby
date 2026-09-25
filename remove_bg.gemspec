@@ -42,7 +42,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency "faraday-retry", "~> 2.2"
 
   spec.add_dependency "image_processing", "~> 1.12"
-  spec.add_dependency "rubyzip", ">= 2.0", "< 3"
+  spec.add_dependency "rubyzip", ">= 2.0", "<= 3.7.0"
 
   spec.add_development_dependency "appraisal", "~> 2.5"
 
