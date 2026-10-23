@@ -3,7 +3,7 @@
 require_relative "base_request_options"
 
 module RemoveBg
-  # Options for image processing requests. Arbitary options are passed directly to the API.
+  # Options for image processing requests. Arbitrary options are passed directly to the API.
   #
   class RequestOptions < BaseRequestOptions
     SIZE_REGULAR = "regular"
