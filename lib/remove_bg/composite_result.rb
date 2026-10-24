@@ -22,7 +22,7 @@ module RemoveBg
       FileUtils.cp(download, file_path)
     end
 
-    # Saves the ZIP archive containing the alpha.png and color.jpg files, overwriting any exisiting files
+    # Saves the ZIP archive containing the alpha.png and color.jpg files, overwriting any existing files
     # (useful if you want to handle composition yourself)
     # @param file_path [string]
     # @return [nil]
